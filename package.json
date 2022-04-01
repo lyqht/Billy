@@ -12,6 +12,8 @@
   "dependencies": {
     "@eva-design/eva": "^2.1.0",
     "@notifee/react-native": "^5.0.3",
+    "@react-navigation/native": "^6.0.8",
+    "@react-navigation/native-stack": "^6.5.2",
     "@supabase/supabase-js": "^1.33.2",
     "@ui-kitten/components": "5.1.2",
     "@ui-kitten/eva-icons": "5.1.2",
