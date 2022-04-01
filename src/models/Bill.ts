@@ -1,7 +1,8 @@
 export type Bill = {
-  id: string;
+  id?: string;
   payee: string;
   amount: number;
   category: string;
   deadline: Date;
+  userId?: string;
 };

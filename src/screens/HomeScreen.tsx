@@ -7,28 +7,28 @@ import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import dayjs from 'dayjs';
-import Cache from '../services/Cache';
+import Cache, {STORAGE_KEYS} from '../services/Cache';
 
 const PlusIcon = (
   props?: Partial<ImageProps>,
 ): React.ReactElement<ImageProps> => <Icon {...props} name="plus-outline" />;
 
 const HomeScreen: React.FC = () => {
-  const [bills, setBills] = useState<Bill[]>([]);
-  const lastSyncDateFromCache = Cache.getLastSyncDate();
-  let lastSyncDate = null;
-
-  if (lastSyncDateFromCache) {
-    lastSyncDate = dayjs(JSON.parse(lastSyncDateFromCache)).format(
-      'DD MMM YYYY',
-    );
-  }
   const navigator = useNavigation<NavigationProps>();
+  const [bills, setBills] = useState<Bill[]>([]);
+  const [lastSyncDate, setLastSyncDate] = useState<string>('');
 
   useEffect(() => {
     const init = async () => {
       const retrievedBills = await BillService.getBills();
       setBills(retrievedBills);
+
+      const lastSyncDateFromCache = Cache.getLastSyncDate();
+      if (lastSyncDateFromCache) {
+        setLastSyncDate(
+          dayjs(JSON.parse(lastSyncDateFromCache)).format('DD MMM YYYY'),
+        );
+      }
     };
 
     init();
@@ -41,9 +41,12 @@ const HomeScreen: React.FC = () => {
           <View>
             <Text category="h2">Upcoming Bills</Text>
             {lastSyncDate ? (
-              <Text category="s1">Last Sync Date: {lastSyncDate}</Text>
+              <Text category="p1">Last Sync Date: {lastSyncDate}</Text>
             ) : (
-              <Text category="s1">Not synced yet</Text>
+              <Text category="p1">
+                Not synced yet
+                <Icon name="alert-circle-outline" />
+              </Text>
             )}
           </View>
           <Button

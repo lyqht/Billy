@@ -3,13 +3,16 @@ import dayjs from 'dayjs';
 import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {v4} from 'uuid';
+import 'react-native-get-random-values';
 import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
 import {CustomDatepicker} from '../components/BillForm/CustomDatePicker';
 import {CustomInput} from '../components/BillForm/CustomInput';
 import {Bill} from '../models/Bill';
 import BillService from '../services/BillService';
-
+import Toast from 'react-native-toast-message';
+import {ToastShowParams} from 'react-native-toast-message';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps} from '../routes';
 interface Props {
   bill?: Bill;
 }
@@ -21,7 +24,12 @@ interface FormData {
   deadline: Date;
 }
 
+const showToast = (toastParams: ToastShowParams) => {
+  Toast.show({...toastParams, position: 'bottom'});
+};
+
 const BillFormScreen: React.FC<Props> = () => {
+  const navigator = useNavigation<NavigationProps>();
   const {
     control,
     handleSubmit,
@@ -37,15 +45,16 @@ const BillFormScreen: React.FC<Props> = () => {
     },
   });
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     console.log('Submitting form');
     const bill: Bill = {
       ...getValues(),
       amount: parseInt(getValues().amount),
-      id: v4(),
     };
 
-    BillService.addBill(bill);
+    const toastParams = await BillService.addBill(bill);
+    showToast(toastParams);
+    navigator.goBack();
   };
 
   return (

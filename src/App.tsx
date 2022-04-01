@@ -5,6 +5,7 @@ import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import {SupabaseContextProvider} from 'use-supabase';
 import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
@@ -33,6 +34,7 @@ const App: React.FC = () => {
           </SafeAreaProvider>
         </SupabaseContextProvider>
       </ApplicationProvider>
+      <Toast />
     </>
   );
 };
