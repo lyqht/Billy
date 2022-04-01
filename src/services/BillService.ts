@@ -1,7 +1,7 @@
 import {SUPABASE_KEY, SUPABASE_URL} from '@env';
 import {createClient} from '@supabase/supabase-js';
 import {Bill} from '../models/Bill';
-import storage from './Storage';
+import Cache from './Cache';
 class BillService {
   private client;
   private bills: Bill[];
@@ -16,7 +16,7 @@ class BillService {
   getClient = () => this.client;
 
   getBills = async (): Promise<Bill[]> => {
-    const billsFromCache = storage.getString('bills');
+    const billsFromCache = Cache.getBills();
     if (billsFromCache) {
       console.debug('returning bills from cache!');
       this.bills = JSON.parse(billsFromCache);
@@ -30,14 +30,23 @@ class BillService {
       throw new Error('Error retrieving bills');
     }
 
-    storage.set('bills', JSON.stringify(bills));
+    Cache.setBills(bills!);
+    Cache.setLastSyncDateAsNow();
     this.bills = bills!;
     return this.bills;
   };
 
   addBill = async (bill: Bill): Promise<Bill> => {
     const updatedBills = [...this.bills, bill];
-    storage.set('bills', JSON.stringify(updatedBills));
+    Cache.setBills(updatedBills);
+
+    const {data, error} = await this.client.from<Bill>('bills').insert(bill);
+
+    if (error) {
+      throw new Error('Error syncing bills');
+    }
+
+    Cache.setLastSyncDateAsNow();
 
     return bill;
   };

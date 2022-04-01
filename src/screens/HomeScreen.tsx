@@ -5,7 +5,9 @@ import {ImageProps, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard} from '../components/BillCard';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
-import SupbaseClient from '../services/BillService';
+import BillService from '../services/BillService';
+import dayjs from 'dayjs';
+import Cache from '../services/Cache';
 
 const PlusIcon = (
   props?: Partial<ImageProps>,
@@ -13,11 +15,19 @@ const PlusIcon = (
 
 const HomeScreen: React.FC = () => {
   const [bills, setBills] = useState<Bill[]>([]);
+  const lastSyncDateFromCache = Cache.getLastSyncDate();
+  let lastSyncDate = null;
+
+  if (lastSyncDateFromCache) {
+    lastSyncDate = dayjs(JSON.parse(lastSyncDateFromCache)).format(
+      'DD MMM YYYY',
+    );
+  }
   const navigator = useNavigation<NavigationProps>();
 
   useEffect(() => {
     const init = async () => {
-      const retrievedBills = await SupbaseClient.getBills();
+      const retrievedBills = await BillService.getBills();
       setBills(retrievedBills);
     };
 
@@ -28,7 +38,14 @@ const HomeScreen: React.FC = () => {
     <SafeAreaView>
       <Layout>
         <View style={styles.header}>
-          <Text category="h2">Upcoming Bills</Text>
+          <View>
+            <Text category="h2">Upcoming Bills</Text>
+            {lastSyncDate ? (
+              <Text category="s1">Last Sync Date: {lastSyncDate}</Text>
+            ) : (
+              <Text category="s1">Not synced yet</Text>
+            )}
+          </View>
           <Button
             size="small"
             accessoryRight={PlusIcon}
