@@ -5,12 +5,10 @@ import storage from './Storage';
 
 class BillService {
   private client;
-  private storage;
   constructor() {
     const supabaseUrl = SUPABASE_URL || '';
     const supabaseKey = SUPABASE_KEY || '';
     this.client = createClient(supabaseUrl, supabaseKey);
-    this.storage = storage;
   }
 
   getClient = () => this.client;
