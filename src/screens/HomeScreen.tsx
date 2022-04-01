@@ -5,7 +5,7 @@ import {ImageProps, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard} from '../components/BillCard';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
-import SupbaseClient from '../services/supabase';
+import SupbaseClient from '../services/BillService';
 
 const PlusIcon = (
   props?: Partial<ImageProps>,

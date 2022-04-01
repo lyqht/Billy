@@ -5646,6 +5646,21 @@ react-native-eva-icons@^1.3.1:
   resolved "https://registry.yarnpkg.com/react-native-eva-icons/-/react-native-eva-icons-1.3.1.tgz#1e6e019b0fd3cb1669db50bd6bbdaa6d89327593"
   integrity sha512-emd/aYXuOacuDVTx0SJoLi+xsOdCNdljQB3PTNCM9AQ3m/smG0X1TN0+ihelPO7MqoHzaH0h6lbANtwxGUy8Fw==
 
+react-native-flipper@^0.140.0:
+  version "0.140.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.140.0.tgz#fcda8e4b0c634a7f7da7bb3744796f5b339031b5"
+  integrity sha512-dsDMEU0+NPOYq5U30xTwvdCUQC9yJ6ADu61W260er4ROggrwJyFJlRQ36rBdcys0A/p8I2LI82teyhiO9RNoFQ==
+
+react-native-mmkv-flipper-plugin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv-flipper-plugin/-/react-native-mmkv-flipper-plugin-1.0.0.tgz#f87f747d8cea51d2b12a1e711287feff5f212788"
+  integrity sha512-e3owMIBzXez45Wz8Ac84Vf1FmfwMXFVUpf/gCDWDLq19w7iCipVezQjlZo8ISVza8aQf1G4ggaK/r+qqtGmRlg==
+
+react-native-mmkv@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.3.0.tgz#ec46a35fa467fbb762cf6fe8212f5984789b6116"
+  integrity sha512-c1gqljiDkDHYAV+9CEZEwp2uQQVi4lGgHJB8dn7Nj/RbvGFaJk6/sJdfVvj7VKE6AdW7Jqf4Hc0XjSFDttkl+Q==
+
 react-native-safe-area-context@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.2.4.tgz#4df42819759c4d3c74252c8678c2772cfa2271a6"
@@ -6497,6 +6512,11 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
+swr@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/swr/-/swr-1.2.2.tgz#6cae09928d30593a7980d80f85823e57468fac5d"
+  integrity sha512-ky0BskS/V47GpW8d6RU7CPsr6J8cr7mQD6+do5eky3bM0IyJaoi3vO8UhvrzJaObuTlGhPl2szodeB2dUd76Xw==
+
 symbol-tree@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
@@ -6804,6 +6824,13 @@ use-subscription@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/use-subscription/-/use-subscription-1.6.0.tgz#86ace4f60675a4c360712975c4933ac95c7e7f35"
   integrity sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==
+
+use-supabase@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/use-supabase/-/use-supabase-2.0.1.tgz#b756d6bead8eece749a372635e8c0c128876e988"
+  integrity sha512-/k/jBracORzCRZlLyYXyYU11bhsVh/4ReZCG2lzqgHpTSV/lh9aH1RtS1g4IPT6xPcVRxY4lbZ8GFyhYYFHr7A==
+  dependencies:
+    swr "^1.2.2"
 
 use@^3.1.0:
   version "3.1.1"

@@ -1,24 +1,37 @@
 import {createClient} from '@supabase/supabase-js';
 import {Bill} from '../models/Bill';
 import {SUPABASE_URL, SUPABASE_KEY} from '@env';
+import storage from './Storage';
 
-class SupabaseClient {
+class BillService {
   private client;
+  private storage;
   constructor() {
     const supabaseUrl = SUPABASE_URL || '';
     const supabaseKey = SUPABASE_KEY || '';
     this.client = createClient(supabaseUrl, supabaseKey);
+    this.storage = storage;
   }
 
+  getClient = () => this.client;
+
   getBills = async (): Promise<Bill[]> => {
+    const billsFromCache = storage.getString('bills');
+    if (billsFromCache) {
+      console.debug('returning bills from cache!');
+      return JSON.parse(billsFromCache);
+    }
+
     let {data: bills, error} = await this.client
       .from<Bill>('bills')
       .select('*');
     if (error) {
       throw new Error('Error retrieving bills');
     }
+
+    storage.set('bills', JSON.stringify(bills));
     return bills!;
   };
 }
 
-export default new SupabaseClient();
+export default new BillService();

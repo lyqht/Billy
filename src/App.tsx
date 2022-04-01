@@ -5,9 +5,11 @@ import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SupabaseContextProvider} from 'use-supabase';
 import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
+import BillService from './services/BillService';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,11 +25,13 @@ const App: React.FC = () => {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <NavStack />
-          </NavigationContainer>
-        </SafeAreaProvider>
+        <SupabaseContextProvider client={BillService.getClient()}>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <NavStack />
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </SupabaseContextProvider>
       </ApplicationProvider>
     </>
   );
