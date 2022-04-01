@@ -6,20 +6,14 @@ import {ImageProps} from 'react-native';
 interface Props {
   label: string;
   placeholder: string;
+  date: Date;
+  onSelect: (x: any) => void;
 }
 
 export const CustomDatepicker: React.FC<Props> = props => {
   const AccessoryIcon: RenderProp<Partial<ImageProps>> = iconProps => (
     <Icon {...iconProps} name={'calendar'} />
   );
-  const [date, setDate] = React.useState('');
 
-  return (
-    <Datepicker
-      {...props}
-      date={date}
-      onSelect={nextDate => setDate(nextDate)}
-      accessoryRight={AccessoryIcon}
-    />
-  );
+  return <Datepicker {...props} accessoryRight={AccessoryIcon} />;
 };

@@ -28,6 +28,8 @@ interface Props {
   label: string;
   placeholder: string;
   icon: string;
+  value: string;
+  onChange: (x: string) => void;
 }
 
 const filter = (item: Item, query: string) =>
@@ -42,8 +44,8 @@ const renderOption = (item: Item, index: number) => (
   />
 );
 
-export const CustomAutoComplete: React.FC<Props> = ({icon, ...props}) => {
-  const [value, setValue] = React.useState<string>('');
+export const CustomAutoComplete: React.FC<Props> = props => {
+  const {icon, value, placeholder, onChange} = props;
   const [data, setData] = React.useState(testAutocompleteItems);
   const [placement, setPlacement] = React.useState('bottom');
 
@@ -63,37 +65,36 @@ export const CustomAutoComplete: React.FC<Props> = ({icon, ...props}) => {
   });
 
   const onChangeText = (query: string) => {
-    setValue(query);
+    onChange(query);
     setData(testAutocompleteItems.filter(item => filter(item, query)));
   };
 
-  const AccessoryIcon: RenderProp<Partial<ImageProps>> = iconProps => (
-    <Icon {...iconProps} name={icon} />
-  );
-
   const accessoryRight: RenderProp<Partial<ImageProps>> = iconProps => {
-    return (
-      <TouchableWithoutFeedback onPress={clearInput}>
-        <Icon {...iconProps} name="close" />
-      </TouchableWithoutFeedback>
-    );
+    if (value) {
+      return (
+        <TouchableWithoutFeedback onPress={clearInput}>
+          <Icon {...iconProps} name="close" />
+        </TouchableWithoutFeedback>
+      );
+    }
+
+    return <Icon {...iconProps} name={icon} />;
   };
 
   const clearInput = () => {
-    setValue('');
+    onChange('');
     setData(testAutocompleteItems);
   };
 
-  const extraProps = {...props, ...(value && accessoryRight)};
+  const auto = {placeholder, value, accessoryRight};
 
   return (
     <Autocomplete
-      {...extraProps}
+      {...auto}
       value={value}
-      accessoryRight={AccessoryIcon}
       onChangeText={onChangeText}
       placement={placement}
-      onSelect={index => setValue(data[index].title)}>
+      onSelect={index => onChange(data[index].title)}>
       {data.map(renderOption)}
     </Autocomplete>
   );
