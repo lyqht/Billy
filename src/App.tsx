@@ -7,17 +7,29 @@ import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import {SupabaseContextProvider} from 'use-supabase';
+import supabase from './api/supabase';
 import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
-import BillService from './services/BillService';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 const NavStack = () => (
   <RootStack.Navigator initialRouteName="Home">
-    <RootStack.Screen name={'Home'} component={HomeScreen} />
-    <RootStack.Screen name={'BillForm'} component={BillFormScreen} />
+    <RootStack.Screen
+      name={'Home'}
+      component={HomeScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <RootStack.Screen
+      name={'BillForm'}
+      component={BillFormScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
   </RootStack.Navigator>
 );
 
@@ -26,7 +38,7 @@ const App: React.FC = () => {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <SupabaseContextProvider client={BillService.getClient()}>
+        <SupabaseContextProvider client={supabase}>
           <SafeAreaProvider>
             <NavigationContainer>
               <NavStack />

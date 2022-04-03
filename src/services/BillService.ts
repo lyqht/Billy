@@ -1,20 +1,13 @@
-import {SUPABASE_KEY, SUPABASE_URL} from '@env';
-import {createClient} from '@supabase/supabase-js';
 import {ToastShowParams} from 'react-native-toast-message';
+import supabase from '../api/supabase';
 import {Bill} from '../models/Bill';
 import Cache from './Cache';
 class BillService {
-  private client;
   private bills: Bill[];
 
   constructor() {
-    const supabaseUrl = SUPABASE_URL || '';
-    const supabaseKey = SUPABASE_KEY || '';
-    this.client = createClient(supabaseUrl, supabaseKey);
     this.bills = [];
   }
-
-  getClient = () => this.client;
 
   getBills = async (): Promise<Bill[]> => {
     const billsFromCache = Cache.getBills();
@@ -27,7 +20,7 @@ class BillService {
     let userId = Cache.getUserId();
     if (userId) {
       console.debug('Retrieving bills from DB');
-      let {data: bills, error} = await this.client
+      let {data: bills, error} = await supabase
         .from<Bill>('bills')
         .select('*')
         .eq('userId', userId);
@@ -45,7 +38,7 @@ class BillService {
   addBill = async (bill: Bill): Promise<ToastShowParams> => {
     let userId = Cache.getUserId();
     if (userId) {
-      const {data, error} = await this.client
+      const {data, error} = await supabase
         .from<Bill>('bills')
         .insert({...bill, userId});
 
