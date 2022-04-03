@@ -1,18 +1,17 @@
+import {useNavigation} from '@react-navigation/native';
 import {Button, Layout, Text} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import 'react-native-get-random-values';
+import Toast, {ToastShowParams} from 'react-native-toast-message';
 import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
 import {CustomDatepicker} from '../components/BillForm/CustomDatePicker';
 import {CustomInput} from '../components/BillForm/CustomInput';
 import {Bill} from '../models/Bill';
-import BillService from '../services/BillService';
-import Toast from 'react-native-toast-message';
-import {ToastShowParams} from 'react-native-toast-message';
-import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from '../routes';
+import BillService from '../services/BillService';
 interface Props {
   bill?: Bill;
 }
@@ -49,7 +48,7 @@ const BillFormScreen: React.FC<Props> = () => {
     console.log('Submitting form');
     const bill: Bill = {
       ...getValues(),
-      amount: parseInt(getValues().amount),
+      amount: parseInt(getValues().amount, 10),
     };
 
     const toastParams = await BillService.addBill(bill);

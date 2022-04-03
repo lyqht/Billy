@@ -1,12 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
-import {Button, Icon, Layout, List, Text} from '@ui-kitten/components';
+import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
+import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {ImageProps, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard} from '../components/BillCard';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
-import dayjs from 'dayjs';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 
 const PlusIcon = (
@@ -15,6 +15,7 @@ const PlusIcon = (
 
 const HomeScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
+  const listRef = React.useRef<List>(null);
   const [bills, setBills] = useState<Bill[]>([]);
   const [lastSyncDate, setLastSyncDate] = useState<string>('');
 
@@ -30,12 +31,34 @@ const HomeScreen: React.FC = () => {
         );
       }
     };
+    const listener = Cache.getStorage().addOnValueChangedListener(
+      changedKey => {
+        const newValue = Cache.getStorage().getString(changedKey);
+        const parsedValue = JSON.parse(newValue!);
+        switch (changedKey) {
+          case STORAGE_KEYS.BILLS:
+            setBills([...parsedValue]);
+            break;
+          case STORAGE_KEYS.LAST_SYNC_DATE:
+            setLastSyncDate(dayjs(parsedValue).format('DD MMM YYYY'));
+            break;
+        }
+      },
+    );
 
     init();
+
+    return () => {
+      listener.remove();
+    };
   }, []);
 
+  const scrollToTop = () => {
+    listRef.current?.scrollToOffset({animated: true, offset: 0});
+  };
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.main}>
       <Layout>
         <View style={styles.header}>
           <View>
@@ -57,13 +80,28 @@ const HomeScreen: React.FC = () => {
             Add Bill
           </Button>
         </View>
+        <Divider />
         <List
+          ref={listRef}
           data={bills}
           renderItem={({item}) => (
             <View style={styles.listItemWrapper}>
               <BillCard {...item} />
             </View>
           )}
+          ListFooterComponent={
+            <Button
+              size={'large'}
+              appearance={'ghost'}
+              accessoryLeft={<Icon name="corner-left-up-outline" />}
+              status={'basic'}
+              onPress={() => {
+                scrollToTop();
+              }}>
+              Scroll back to top
+            </Button>
+          }
+          contentContainerStyle={styles.listWrapper}
         />
       </Layout>
     </SafeAreaView>
@@ -71,22 +109,25 @@ const HomeScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  likeButton: {
-    margin: 16,
-    padding: 16,
-  },
-  listItemWrapper: {
-    margin: 12,
+    flexDirection: 'column',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  likeButton: {
+    margin: 16,
+    padding: 16,
+  },
+  listWrapper: {
+    paddingBottom: 60,
+  },
+  listItemWrapper: {
+    padding: 12,
   },
 });
 

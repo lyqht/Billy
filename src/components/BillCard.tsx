@@ -26,7 +26,7 @@ export const BillCard: React.FC<Bill> = ({
           )}
         </View>
         <View style={styles.rightColumn}>
-          <Text category={'h4'}>${amount}</Text>
+          <Text category={'h6'}>${amount}</Text>
           <Text>Due: {dayjs(deadline).format('DD MMM YYYY')}</Text>
         </View>
       </View>
