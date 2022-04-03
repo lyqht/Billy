@@ -24,14 +24,6 @@ const hideEvent: KeyboardEventName = Platform.select({
   default: 'keyboardWillHide',
 });
 
-interface Props {
-  label: string;
-  placeholder: string;
-  icon: string;
-  value: string;
-  onChange: (x: string) => void;
-}
-
 const filter = (item: Item, query: string) =>
   item.title.toLowerCase().includes(query.toLowerCase());
 
@@ -43,9 +35,16 @@ const renderOption = (item: Item, index: number) => (
     accessoryLeft={ItemAccesoryIcon}
   />
 );
+interface Props {
+  label: string;
+  placeholder: string;
+  icon: string;
+  value: string;
+  onChange: (x: string) => void;
+}
 
 export const CustomAutoComplete: React.FC<Props> = props => {
-  const {icon, value, placeholder, onChange} = props;
+  const {label, icon, value, placeholder, onChange} = props;
   const [data, setData] = React.useState(testAutocompleteItems);
   const [placement, setPlacement] = React.useState('bottom');
 
@@ -86,11 +85,11 @@ export const CustomAutoComplete: React.FC<Props> = props => {
     setData(testAutocompleteItems);
   };
 
-  const auto = {placeholder, value, accessoryRight};
+  const autocompleteProps = {label, icon, value, placeholder, accessoryRight};
 
   return (
     <Autocomplete
-      {...auto}
+      {...autocompleteProps}
       value={value}
       onChangeText={onChangeText}
       placement={placement}
