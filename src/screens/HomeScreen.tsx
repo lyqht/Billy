@@ -2,30 +2,40 @@ import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
-import {ImageProps, SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard} from '../components/BillCard';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 
-const PlusIcon = (
-  props?: Partial<ImageProps>,
-): React.ReactElement<ImageProps> => <Icon {...props} name="plus-outline" />;
+const getSortedBills = (bills: Bill[]) => {
+  const billsSortedByDeadline = bills
+    .filter(a => dayjs(a.deadline).isAfter(dayjs()))
+    .sort((a, b) => (dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1));
+
+  const completedBills = billsSortedByDeadline.filter(a => a.completedDate);
+  const uncompletedBills = billsSortedByDeadline.filter(
+    a => a.completedDate === null,
+  );
+
+  return [...uncompletedBills, ...completedBills];
+};
 
 const HomeScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
-  const listRef = React.useRef<List>(null);
   const [bills, setBills] = useState<Bill[]>([]);
+  const [numMissedBills, setNumMissedBills] = useState<number>(0);
   const [lastSyncDate, setLastSyncDate] = useState<string>('');
+  const listRef = React.useRef<List>(null);
 
   useEffect(() => {
     const init = async () => {
       const retrievedBills = await BillService.getBills();
-      const sortedBills = retrievedBills.sort((a, b) =>
-        dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1,
-      );
+      const sortedBills = getSortedBills(retrievedBills);
+
       setBills(sortedBills);
+      setNumMissedBills(retrievedBills.length - sortedBills.length);
 
       const lastSyncDateFromCache = Cache.getLastSyncDate();
       if (lastSyncDateFromCache) {
@@ -40,7 +50,7 @@ const HomeScreen: React.FC = () => {
         const parsedValue = JSON.parse(newValue!);
         switch (changedKey) {
           case STORAGE_KEYS.BILLS:
-            setBills([...parsedValue]);
+            setBills(getSortedBills([...parsedValue]));
             break;
           case STORAGE_KEYS.LAST_SYNC_DATE:
             setLastSyncDate(dayjs(parsedValue).format('DD MMM YYYY'));
@@ -77,18 +87,30 @@ const HomeScreen: React.FC = () => {
           </View>
           <Button
             size="small"
-            accessoryRight={PlusIcon}
+            accessoryRight={<Icon name="plus-outline" />}
             onPress={() => navigator.navigate('BillForm')}
-            style={styles.likeButton}>
+            style={styles.addBillButton}>
             Add Bill
           </Button>
         </View>
         <Divider />
+        {numMissedBills > 0 && (
+          <Button
+            status={'warning'}
+            accessoryLeft={
+              <Icon name="alert-triangle" style={styles.alertIcon} />
+            }
+            style={styles.alertWrapper}>
+            <Text>
+              You have {numMissedBills} missed bills, review them here
+            </Text>
+          </Button>
+        )}
         <List
           ref={listRef}
           data={bills}
           renderItem={({item}) => (
-            <View style={styles.listItemWrapper}>
+            <View key={item.id} style={styles.listItemWrapper}>
               <BillCard {...item} />
             </View>
           )}
@@ -122,7 +144,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
-  likeButton: {
+  addBillButton: {
     margin: 16,
     padding: 16,
   },
@@ -131,6 +153,15 @@ const styles = StyleSheet.create({
   },
   listItemWrapper: {
     padding: 12,
+  },
+  alertWrapper: {
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    alignItems: 'center',
+  },
+  alertIcon: {
+    width: 24,
+    height: 24,
   },
 });
 
