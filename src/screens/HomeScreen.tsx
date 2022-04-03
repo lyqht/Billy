@@ -22,7 +22,10 @@ const HomeScreen: React.FC = () => {
   useEffect(() => {
     const init = async () => {
       const retrievedBills = await BillService.getBills();
-      setBills(retrievedBills);
+      const sortedBills = retrievedBills.sort((a, b) =>
+        dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1,
+      );
+      setBills(sortedBills);
 
       const lastSyncDateFromCache = Cache.getLastSyncDate();
       if (lastSyncDateFromCache) {
