@@ -83,24 +83,22 @@ const BillFormScreen: React.FC<Props> = () => {
             )}
           </View>
           <View style={styles.formField}>
-            <View style={styles.formField}>
-              <Controller
-                name="amount"
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({field: {onChange, value}}) => (
-                  <CustomInput
-                    label="Amount"
-                    placeholder="Enter an amount"
-                    icon="pricetags-outline"
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-              />
-            </View>
+            <Controller
+              name="amount"
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, value}}) => (
+                <CustomInput
+                  label="Amount"
+                  placeholder="Enter an amount"
+                  icon="pricetags-outline"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
             {errors.amount && (
               <Text category={'label'}>This field is required</Text>
             )}
