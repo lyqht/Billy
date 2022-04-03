@@ -46,7 +46,7 @@ const BillFormScreen: React.FC<Props> = () => {
 
   const onSubmit = async () => {
     console.log('Submitting form');
-    const bill: Bill = {
+    const bill: Partial<Bill> = {
       ...getValues(),
       amount: parseInt(getValues().amount, 10),
     };

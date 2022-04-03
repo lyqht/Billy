@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {ToastShowParams} from 'react-native-toast-message';
 import supabase from '../api/supabase';
 import {Bill} from '../models/Bill';
@@ -35,29 +36,28 @@ class BillService {
     return this.bills;
   };
 
-  addBill = async (bill: Bill): Promise<ToastShowParams> => {
+  addBill = async (bill: Partial<Bill>): Promise<ToastShowParams> => {
     let userId = Cache.getUserId();
+    const updatedBill = {...bill, userId};
     if (userId) {
       const {data, error} = await supabase
         .from<Bill>('bills')
-        .insert({...bill, userId});
+        .insert(updatedBill);
 
       if (error) {
+        console.debug({error});
         return {
-          type: 'warning',
+          type: 'error',
           text1: 'Ops!',
           text2:
             'This bill has been saved locally, but failed to sync to cloud. We will try this again in the background!',
         };
       }
 
-      console.log('Added new bill to DB, new data for this user:');
-      console.log({data});
-
       Cache.setBills([...this.bills, ...data]);
       Cache.setLastSyncDateAsNow();
     } else {
-      const updatedBills = [...this.bills, bill];
+      const updatedBills = [...this.bills, updatedBill];
       Cache.setBills(updatedBills);
     }
 
@@ -65,6 +65,36 @@ class BillService {
       type: 'success',
       text1: 'Bill saved!',
     };
+  };
+
+  setBillCompleteStatus = async (
+    completedStatus: boolean,
+    id: string,
+  ): Promise<void> => {
+    const billIndex = this.bills.findIndex(bill => bill.id === id);
+    if (billIndex === -1) {
+      throw Error('Cannot find bill');
+    }
+    const updatedBill = this.bills[billIndex];
+    let completedDate = null;
+    if (completedStatus) {
+      completedDate = dayjs().toDate();
+    }
+
+    updatedBill.completedDate = completedDate;
+    Cache.setBills(this.bills);
+
+    let userId = Cache.getUserId();
+    if (userId) {
+      const {error} = await supabase
+        .from<Bill>('bills')
+        .update({completedDate})
+        .eq('id', id);
+
+      if (error) {
+        throw Error('Error syncing to cloud');
+      }
+    }
   };
 }
 

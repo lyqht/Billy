@@ -36,7 +36,7 @@ class Cache {
     return this.storage.getString(STORAGE_KEYS.BILLS);
   }
 
-  setBills(bills: Bill[]): void {
+  setBills(bills: Partial<Bill>[]): void {
     this.storage.set(STORAGE_KEYS.BILLS, JSON.stringify(bills));
   }
 
