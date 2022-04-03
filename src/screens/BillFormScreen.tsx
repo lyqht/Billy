@@ -79,7 +79,9 @@ const BillFormScreen: React.FC<Props> = () => {
               )}
             />
             {errors.payee && (
-              <Text category={'label'}>This field is required</Text>
+              <Text category={'label'} status="warning">
+                This field is required
+              </Text>
             )}
           </View>
           <View style={styles.formField}>
@@ -100,7 +102,9 @@ const BillFormScreen: React.FC<Props> = () => {
               )}
             />
             {errors.amount && (
-              <Text category={'label'}>This field is required</Text>
+              <Text category={'label'} status="warning">
+                This field is required
+              </Text>
             )}
           </View>
           <View style={styles.formField}>
@@ -123,6 +127,9 @@ const BillFormScreen: React.FC<Props> = () => {
             <Controller
               name="deadline"
               control={control}
+              rules={{
+                required: true,
+              }}
               render={({field: {onChange, value}}) => (
                 <CustomDatepicker
                   label="Deadline"
@@ -133,9 +140,6 @@ const BillFormScreen: React.FC<Props> = () => {
               )}
             />
           </View>
-          {errors.deadline && (
-            <Text category={'label'}>This field is required</Text>
-          )}
         </View>
         <Button size="medium" onPress={handleSubmit(onSubmit)}>
           Submit
