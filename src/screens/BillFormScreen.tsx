@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import 'react-native-get-random-values';
 import Toast, {ToastShowParams} from 'react-native-toast-message';
 import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
 import {CustomDatepicker} from '../components/BillForm/CustomDatePicker';

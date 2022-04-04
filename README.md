@@ -8,7 +8,7 @@
 ## MVP Feature Checklist
 
 - [x] View bills
-- [ ] Add bills
+- [x] Add bills
 - [ ] Create notifications
 - [ ] Delete bills
 - [ ] Edit bills
