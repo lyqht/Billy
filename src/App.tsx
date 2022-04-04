@@ -11,6 +11,7 @@ import supabase from './api/supabase';
 import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
+import MissedBillsScreen from './screens/MissedBillsScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -28,6 +29,13 @@ const NavStack = () => (
       component={BillFormScreen}
       options={{
         headerShown: false,
+      }}
+    />
+    <RootStack.Screen
+      name={'MissedBills'}
+      component={MissedBillsScreen}
+      options={{
+        headerTitle: 'Missed Bills',
       }}
     />
   </RootStack.Navigator>

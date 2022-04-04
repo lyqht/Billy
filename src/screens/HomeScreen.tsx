@@ -3,13 +3,13 @@ import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {BillCard} from '../components/BillCard';
+import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 
-const getSortedBills = (bills: Bill[]) => {
+const getUpcomingBills = (bills: Bill[]) => {
   const billsSortedByDeadline = bills
     .filter(a => dayjs(a.deadline).isAfter(dayjs()))
     .sort((a, b) => (dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1));
@@ -22,20 +22,28 @@ const getSortedBills = (bills: Bill[]) => {
   return [...uncompletedBills, ...completedBills];
 };
 
+const getMissedBills = (bills: Bill[]) => {
+  return bills.filter(
+    bill =>
+      bill.completedDate === null && dayjs(bill.deadline).isBefore(dayjs()),
+  );
+};
+
 const HomeScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
   const [bills, setBills] = useState<Bill[]>([]);
-  const [numMissedBills, setNumMissedBills] = useState<number>(0);
+  const [missedBills, setmissedBills] = useState<Bill[]>([]);
   const [lastSyncDate, setLastSyncDate] = useState<string>('');
   const listRef = React.useRef<List>(null);
 
   useEffect(() => {
     const init = async () => {
       const retrievedBills = await BillService.getBills();
-      const sortedBills = getSortedBills(retrievedBills);
+      const upcomingBills = getUpcomingBills(retrievedBills);
+      const retrievedMissedBills = getMissedBills(retrievedBills);
 
-      setBills(sortedBills);
-      setNumMissedBills(retrievedBills.length - sortedBills.length);
+      setBills(upcomingBills);
+      setmissedBills(retrievedMissedBills);
 
       const lastSyncDateFromCache = Cache.getLastSyncDate();
       if (lastSyncDateFromCache) {
@@ -50,7 +58,7 @@ const HomeScreen: React.FC = () => {
         const parsedValue = JSON.parse(newValue!);
         switch (changedKey) {
           case STORAGE_KEYS.BILLS:
-            setBills(getSortedBills([...parsedValue]));
+            setBills(getUpcomingBills([...parsedValue]));
             break;
           case STORAGE_KEYS.LAST_SYNC_DATE:
             setLastSyncDate(dayjs(parsedValue).format('DD MMM YYYY'));
@@ -72,7 +80,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.main}>
-      <Layout>
+      <Layout style={styles.layoutContainer}>
         <View style={styles.header}>
           <View>
             <Text category="h2">Upcoming Bills</Text>
@@ -94,15 +102,18 @@ const HomeScreen: React.FC = () => {
           </Button>
         </View>
         <Divider />
-        {numMissedBills > 0 && (
+        {missedBills.length > 0 && (
           <Button
             status={'warning'}
             accessoryLeft={
               <Icon name="alert-triangle" style={styles.alertIcon} />
             }
-            style={styles.alertWrapper}>
+            style={styles.alertWrapper}
+            onPress={() => {
+              navigator.navigate('MissedBills', {bills: missedBills});
+            }}>
             <Text>
-              You have {numMissedBills} missed bills, review them here
+              You have {missedBills.length} missed bills, review them here
             </Text>
           </Button>
         )}
@@ -111,20 +122,24 @@ const HomeScreen: React.FC = () => {
           data={bills}
           renderItem={({item}) => (
             <View key={item.id} style={styles.listItemWrapper}>
-              <BillCard {...item} />
+              <BillCard billCardType={BillCardType.UPCOMING_BILL} {...item} />
             </View>
           )}
           ListFooterComponent={
-            <Button
-              size={'large'}
-              appearance={'ghost'}
-              accessoryLeft={<Icon name="corner-left-up-outline" />}
-              status={'basic'}
-              onPress={() => {
-                scrollToTop();
-              }}>
-              Scroll back to top
-            </Button>
+            bills.length > 5 ? (
+              <Button
+                size={'large'}
+                appearance={'ghost'}
+                accessoryLeft={<Icon name="corner-left-up-outline" />}
+                status={'basic'}
+                onPress={() => {
+                  scrollToTop();
+                }}>
+                Scroll back to top
+              </Button>
+            ) : (
+              <></>
+            )
           }
           contentContainerStyle={styles.listWrapper}
         />
@@ -138,6 +153,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  layoutContainer: {
+    height: '100%',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -148,9 +166,7 @@ const styles = StyleSheet.create({
     margin: 16,
     padding: 16,
   },
-  listWrapper: {
-    paddingBottom: 60,
-  },
+  listWrapper: {},
   listItemWrapper: {
     padding: 12,
   },
