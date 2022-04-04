@@ -9,6 +9,13 @@ class UserService {
       password,
     });
 
+    if (error) {
+      console.debug({error});
+      throw Error('Not able to sign up user');
+    }
+
+    Cache.setUser(user!);
+
     return user;
   };
 
@@ -17,12 +24,24 @@ class UserService {
       email,
       password,
     });
+
+    if (error) {
+      console.debug({error});
+      throw Error('Not able to sign in user');
+    }
+
+    Cache.setUser(user!);
+
     return user;
   };
 
   logOutUser = async () => {
-    Cache.setUserId('');
+    Cache.deleteUser();
     let {error} = await supabase.auth.signOut();
+    if (error) {
+      console.debug({error});
+      throw Error('Not able to sign out user');
+    }
   };
 
   getUser = async (): Promise<User | null> => {

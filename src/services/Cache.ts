@@ -12,6 +12,7 @@ export enum STORAGE_KEYS {
 class Cache {
   private storage;
   constructor() {
+    ('');
     this.storage = new MMKV();
     if (__DEV__) {
       initializeMMKVFlipper({default: this.storage});
@@ -42,10 +43,6 @@ class Cache {
     this.storage.set(STORAGE_KEYS.BILLS, JSON.stringify(bills));
   }
 
-  getUserId(): string | undefined {
-    return this.storage.getString(STORAGE_KEYS.USER_ID);
-  }
-
   getUser(): User | null {
     const user = this.storage.getString(STORAGE_KEYS.USER);
     if (user) {
@@ -55,8 +52,14 @@ class Cache {
     return null;
   }
 
-  setUserId(userId: string): void {
-    this.storage.set(STORAGE_KEYS.USER_ID, userId);
+  setUser(user: User): void {
+    this.storage.set(STORAGE_KEYS.USER, JSON.stringify(user));
+  }
+
+  deleteUser(): void {
+    if (this.storage.contains(STORAGE_KEYS.USER)) {
+      this.storage.delete(STORAGE_KEYS.USER);
+    }
   }
 }
 

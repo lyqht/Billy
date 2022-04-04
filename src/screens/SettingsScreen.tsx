@@ -24,7 +24,7 @@ const SettingsScreen: React.FC = () => {
 
   const renderGreetingText = () => {
     if (user) {
-      if (user.user_metadata) {
+      if (user.user_metadata.name) {
         return `Hello ${user.user_metadata.name}`;
       }
       return `Hello ${user.email}`;
@@ -50,7 +50,11 @@ const SettingsScreen: React.FC = () => {
             <Button
               style={styles.listItem}
               status={'warning'}
-              accessoryLeft={<Icon name="corner-down-right" />}>
+              accessoryLeft={<Icon name="corner-down-right" />}
+              onPress={() => {
+                UserService.logOutUser();
+                navigation.navigate('UpcomingBills');
+              }}>
               Log out
             </Button>
           ) : (

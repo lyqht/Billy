@@ -18,13 +18,14 @@ class BillService {
       return this.bills;
     }
 
-    let userId = Cache.getUserId();
-    if (userId) {
+    const user = Cache.getUser();
+
+    if (user) {
       console.debug('Retrieving bills from DB');
       let {data: bills, error} = await supabase
         .from<Bill>('bills')
         .select('*')
-        .eq('userId', userId);
+        .eq('userId', user.id);
 
       if (error) {
         throw new Error('Error retrieving bills');
@@ -37,9 +38,9 @@ class BillService {
   };
 
   addBill = async (bill: Partial<Bill>): Promise<ToastShowParams> => {
-    let userId = Cache.getUserId();
-    const updatedBill = {...bill, userId};
-    if (userId) {
+    const user = Cache.getUser();
+    const updatedBill = {...bill, userId: user?.id};
+    if (user) {
       const {data, error} = await supabase
         .from<Bill>('bills')
         .insert(updatedBill);
@@ -84,8 +85,8 @@ class BillService {
     updatedBill.completedDate = completedDate;
     Cache.setBills(this.bills);
 
-    let userId = Cache.getUserId();
-    if (userId) {
+    const user = Cache.getUser();
+    if (user) {
       const {error} = await supabase
         .from<Bill>('bills')
         .update({completedDate})

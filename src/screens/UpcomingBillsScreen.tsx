@@ -54,15 +54,18 @@ const UpcomingBillsScreen: React.FC = () => {
     };
     const listener = Cache.getStorage().addOnValueChangedListener(
       changedKey => {
-        const newValue = Cache.getStorage().getString(changedKey);
-        const parsedValue = JSON.parse(newValue!);
-        switch (changedKey) {
-          case STORAGE_KEYS.BILLS:
-            setBills(getUpcomingBills([...parsedValue]));
-            break;
-          case STORAGE_KEYS.LAST_SYNC_DATE:
-            setLastSyncDate(dayjs(parsedValue).format('DD MMM YYYY'));
-            break;
+        if (Cache.getStorage().contains(changedKey)) {
+          const newValue = Cache.getStorage().getString(changedKey);
+          const parsedValue = JSON.parse(newValue!);
+          switch (changedKey) {
+            case STORAGE_KEYS.BILLS:
+              setBills(getUpcomingBills([...parsedValue]));
+              setmissedBills(getMissedBills([...parsedValue]));
+              break;
+            case STORAGE_KEYS.LAST_SYNC_DATE:
+              setLastSyncDate(dayjs(parsedValue).format('DD MMM YYYY'));
+              break;
+          }
         }
       },
     );

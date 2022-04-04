@@ -7,6 +7,7 @@ import {StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CustomInput} from '../components/BillForm/CustomInput';
 import {NavigationProps, RootStackParamList} from '../routes';
+import UserService from '../services/UserService';
 import {LoginMode} from '../types/LoginMode';
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
@@ -17,7 +18,7 @@ interface FormData {
 }
 
 const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
-  const navigator = useNavigation<NavigationProps>();
+  const navigation = useNavigation<NavigationProps>();
   const {loginMode} = route.params;
 
   const {
@@ -33,11 +34,18 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
     },
   });
 
-  const onSubmit = () => {
-    // switch (loginMode) {
-    //   case LoginMode.SIGN_UP:
-    //   case LoginMode.SIGN_IN:
-    // }
+  const onSubmit = async () => {
+    const {email, password} = getValues();
+    switch (loginMode) {
+      case LoginMode.SIGN_UP:
+        await UserService.signUpUser(email, password);
+        break;
+      case LoginMode.SIGN_IN:
+        await UserService.signInUser(email, password);
+        break;
+    }
+
+    navigation.navigate('Home');
   };
 
   const getTitle = () =>
@@ -83,7 +91,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
                   label={name}
                   value={value}
                   onChangeText={onChange}
-                  placeholder="tecktan@gmail.com"
+                  placeholder="at least 6 characters"
                   icon="eye-off"
                 />
               )}
