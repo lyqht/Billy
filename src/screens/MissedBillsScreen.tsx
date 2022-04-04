@@ -35,6 +35,7 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = ({route}) => {
           )}
           ListFooterComponent={
             <Button
+              style={styles.listItemWrapper}
               size={'large'}
               appearance={'filled'}
               accessoryLeft={<Icon name="archive" />}
@@ -42,7 +43,6 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = ({route}) => {
               Archive all bills
             </Button>
           }
-          contentContainerStyle={styles.listWrapper}
         />
       </Layout>
     </SafeAreaView>
@@ -53,11 +53,8 @@ const styles = StyleSheet.create({
   layoutContainer: {
     height: '100%',
   },
-  listWrapper: {
-    paddingBottom: 60,
-  },
   listItemWrapper: {
-    padding: 12,
+    margin: 12,
   },
   quoteContainer: {
     flexDirection: 'row',

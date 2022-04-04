@@ -141,7 +141,6 @@ const HomeScreen: React.FC = () => {
               <></>
             )
           }
-          contentContainerStyle={styles.listWrapper}
         />
       </Layout>
     </SafeAreaView>
@@ -166,9 +165,8 @@ const styles = StyleSheet.create({
     margin: 16,
     padding: 16,
   },
-  listWrapper: {},
   listItemWrapper: {
-    padding: 12,
+    margin: 12,
   },
   alertWrapper: {
     flexDirection: 'row',
