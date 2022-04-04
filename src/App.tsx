@@ -12,11 +12,18 @@ import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
 import MissedBillsScreen from './screens/MissedBillsScreen';
+import NavigationHeader from './components/Navigation/NavigationHeader';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 const NavStack = () => (
-  <RootStack.Navigator initialRouteName="Home">
+  <RootStack.Navigator
+    initialRouteName="Home"
+    screenOptions={{
+      header: navigationProps => (
+        <NavigationHeader navigation={navigationProps} />
+      ),
+    }}>
     <RootStack.Screen
       name={'Home'}
       component={HomeScreen}
@@ -24,20 +31,8 @@ const NavStack = () => (
         headerShown: false,
       }}
     />
-    <RootStack.Screen
-      name={'BillForm'}
-      component={BillFormScreen}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <RootStack.Screen
-      name={'MissedBills'}
-      component={MissedBillsScreen}
-      options={{
-        headerTitle: 'Missed Bills',
-      }}
-    />
+    <RootStack.Screen name={'BillForm'} component={BillFormScreen} />
+    <RootStack.Screen name={'MissedBills'} component={MissedBillsScreen} />
   </RootStack.Navigator>
 );
 
