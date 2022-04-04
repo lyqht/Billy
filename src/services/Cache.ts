@@ -1,3 +1,4 @@
+import {User} from '@supabase/supabase-js';
 import {MMKV} from 'react-native-mmkv';
 import {initializeMMKVFlipper} from 'react-native-mmkv-flipper-plugin';
 import {Bill} from '../models/Bill';
@@ -6,6 +7,7 @@ export enum STORAGE_KEYS {
   LAST_SYNC_DATE = 'lastSyncDate',
   BILLS = 'bills',
   USER_ID = 'userId',
+  USER = 'user',
 }
 class Cache {
   private storage;
@@ -42,6 +44,15 @@ class Cache {
 
   getUserId(): string | undefined {
     return this.storage.getString(STORAGE_KEYS.USER_ID);
+  }
+
+  getUser(): User | null {
+    const user = this.storage.getString(STORAGE_KEYS.USER);
+    if (user) {
+      return JSON.parse(user);
+    }
+
+    return null;
   }
 
   setUserId(userId: string): void {

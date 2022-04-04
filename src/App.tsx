@@ -8,11 +8,12 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import {SupabaseContextProvider} from 'use-supabase';
 import supabase from './api/supabase';
+import NavigationHeader from './components/Navigation/NavigationHeader';
 import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
 import MissedBillsScreen from './screens/MissedBillsScreen';
-import NavigationHeader from './components/Navigation/NavigationHeader';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -33,6 +34,7 @@ const NavStack = () => (
     />
     <RootStack.Screen name={'BillForm'} component={BillFormScreen} />
     <RootStack.Screen name={'MissedBills'} component={MissedBillsScreen} />
+    <RootStack.Screen name={'Login'} component={LoginScreen} />
   </RootStack.Navigator>
 );
 

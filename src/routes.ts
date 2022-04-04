@@ -7,6 +7,13 @@ export type RootStackParamList = {
   BillForm: undefined;
   Login: {loginMode: LoginMode};
   MissedBills: {bills: Bill[]};
+  Settings: undefined;
+};
+
+export type TabParamList = {
+  UpcomingBills: undefined;
+  Settings: undefined;
 };
 
 export type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
+export type TabNavigationProps = NativeStackNavigationProp<TabParamList>;

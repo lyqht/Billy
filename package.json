@@ -12,6 +12,7 @@
   "dependencies": {
     "@eva-design/eva": "^2.1.0",
     "@notifee/react-native": "^5.0.3",
+    "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.2",
     "@supabase/supabase-js": "^1.33.2",
