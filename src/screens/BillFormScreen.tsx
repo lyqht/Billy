@@ -47,7 +47,7 @@ const BillFormScreen: React.FC<Props> = () => {
     console.log('Submitting form');
     const bill: Partial<Bill> = {
       ...getValues(),
-      amount: parseInt(getValues().amount, 10),
+      amount: parseFloat(getValues().amount),
     };
 
     const toastParams = await BillService.addBill(bill);
