@@ -11,7 +11,7 @@ class UserService {
 
     if (error) {
       console.debug({error});
-      throw Error('Not able to sign up user');
+      throw Error(error.message);
     }
 
     Cache.setUser(user!);
@@ -27,7 +27,7 @@ class UserService {
 
     if (error) {
       console.debug({error});
-      throw Error('Not able to sign in user');
+      throw Error(error.message);
     }
 
     Cache.setUser(user!);
@@ -40,7 +40,7 @@ class UserService {
     let {error} = await supabase.auth.signOut();
     if (error) {
       console.debug({error});
-      throw Error('Not able to sign out user');
+      throw Error(error.message);
     }
   };
 
