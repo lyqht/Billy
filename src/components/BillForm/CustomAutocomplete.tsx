@@ -1,4 +1,9 @@
-import {Autocomplete, AutocompleteItem, Icon} from '@ui-kitten/components';
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Icon,
+  IconProps,
+} from '@ui-kitten/components';
 import {RenderProp} from '@ui-kitten/components/devsupport';
 import React from 'react';
 import {
@@ -8,11 +13,8 @@ import {
   Platform,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {testAutocompleteItems} from '../../mocks/bills';
-
-interface Item {
-  title: string;
-}
+import {defaultCategoryIcons} from '../../constants/PayeeOptions';
+import {Category} from '../../types/AutocompleteOption';
 
 const showEvent: KeyboardEventName = Platform.select({
   android: 'keyboardDidShow',
@@ -24,15 +26,27 @@ const hideEvent: KeyboardEventName = Platform.select({
   default: 'keyboardWillHide',
 });
 
-const filter = (item: Item, query: string) =>
-  item.title.toLowerCase().includes(query.toLowerCase());
+const filter = (item: string, query: string) =>
+  item.toLowerCase().includes(query.toLowerCase());
 
-const ItemAccesoryIcon = props => <Icon {...props} name="pricetags-outline" />;
-const renderOption = (item: Item, index: number) => (
+const getIconName = (option: string) => {
+  if (Object.keys(defaultCategoryIcons).includes(option)) {
+    const key = option as Category;
+    return defaultCategoryIcons[key];
+  }
+
+  return 'person-outline';
+};
+
+const ItemAccesoryIcon: RenderProp<IconProps> = props => (
+  <Icon {...props} name={getIconName(props.item)} />
+); //TODO: use filled version if it is custom dropdown option by user
+
+const renderOption = (item: string, index: number) => (
   <AutocompleteItem
-    key={`autocomplete-item-${index}-${item.title}`}
-    title={item.title}
-    accessoryLeft={ItemAccesoryIcon}
+    key={`autocomplete-item-${index}-${item}`}
+    title={item}
+    accessoryLeft={props => ItemAccesoryIcon({...props, item})}
   />
 );
 interface Props {
@@ -40,12 +54,13 @@ interface Props {
   placeholder: string;
   icon: string;
   value: string;
+  options: string[];
   onChange: (x: string) => void;
 }
 
 export const CustomAutoComplete: React.FC<Props> = props => {
-  const {label, icon, value, placeholder, onChange} = props;
-  const [data, setData] = React.useState(testAutocompleteItems);
+  const {label, icon, value, options, placeholder, onChange} = props;
+  const [data, setData] = React.useState(options);
   const [placement, setPlacement] = React.useState('bottom');
 
   React.useEffect(() => {
@@ -65,7 +80,7 @@ export const CustomAutoComplete: React.FC<Props> = props => {
 
   const onChangeText = (query: string) => {
     onChange(query);
-    setData(testAutocompleteItems.filter(item => filter(item, query)));
+    setData(options.filter(item => filter(item, query)));
   };
 
   const accessoryRight: RenderProp<Partial<ImageProps>> = iconProps => {
@@ -82,7 +97,7 @@ export const CustomAutoComplete: React.FC<Props> = props => {
 
   const clearInput = () => {
     onChange('');
-    setData(testAutocompleteItems);
+    setData(options);
   };
 
   const autocompleteProps = {label, icon, value, placeholder, accessoryRight};
@@ -93,7 +108,7 @@ export const CustomAutoComplete: React.FC<Props> = props => {
       value={value}
       onChangeText={onChangeText}
       placement={placement}
-      onSelect={index => onChange(data[index].title)}
+      onSelect={index => onChange(data[index])}
     >
       {data.map(renderOption)}
     </Autocomplete>
