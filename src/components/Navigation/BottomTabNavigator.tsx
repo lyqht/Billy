@@ -1,5 +1,4 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Icon} from '@ui-kitten/components';
 import React from 'react';
 import {TabParamList} from '../../routes';
 import SettingsScreen from '../../screens/SettingsScreen';
@@ -15,7 +14,8 @@ const BottomTabNavigator: React.FC = () => {
       tabBar={props => <BottomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-      }}>
+      }}
+    >
       <Tab.Screen name="UpcomingBills" component={UpcomingBillsScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>

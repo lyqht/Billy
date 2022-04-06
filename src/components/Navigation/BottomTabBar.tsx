@@ -16,7 +16,8 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({navigation, state}) => {
       <BottomNavigation
         style={styles.bottomNavigation}
         selectedIndex={state.index}
-        onSelect={index => navigation.navigate(state.routeNames[index])}>
+        onSelect={index => navigation.navigate(state.routeNames[index])}
+      >
         <BottomNavigationTab title="Upcoming Bills" icon={BellIcon} />
         <BottomNavigationTab title="Settings" icon={SettingsIcon} />
       </BottomNavigation>

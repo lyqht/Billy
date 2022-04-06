@@ -69,7 +69,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
               setSelectedLoginMode(
                 index === 0 ? LoginMode.SIGN_UP : LoginMode.SIGN_IN,
               );
-            }}>
+            }}
+          >
             <Tab title="Register an account" />
             <Tab title="Sign in" />
           </TabBar>

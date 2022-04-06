@@ -24,7 +24,8 @@ const NavStack = () => (
       header: navigationProps => (
         <NavigationHeader navigation={navigationProps} />
       ),
-    }}>
+    }}
+  >
     <RootStack.Screen
       name={'Home'}
       component={HomeScreen}

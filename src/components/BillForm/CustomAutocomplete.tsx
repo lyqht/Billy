@@ -93,7 +93,8 @@ export const CustomAutoComplete: React.FC<Props> = props => {
       value={value}
       onChangeText={onChangeText}
       placement={placement}
-      onSelect={index => onChange(data[index].title)}>
+      onSelect={index => onChange(data[index].title)}
+    >
       {data.map(renderOption)}
     </Autocomplete>
   );

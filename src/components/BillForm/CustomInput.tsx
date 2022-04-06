@@ -21,7 +21,8 @@ export const CustomInput: React.FC<Props> = ({
   const AccessoryIcon: RenderProp<Partial<ImageProps>> = iconProps =>
     inputSecure ? (
       <TouchableWithoutFeedback
-        onPress={() => setSecureTextEntry(!secureTextEntry)}>
+        onPress={() => setSecureTextEntry(!secureTextEntry)}
+      >
         <Icon {...iconProps} name={secureTextEntry ? 'eye-off' : 'eye'} />
       </TouchableWithoutFeedback>
     ) : (

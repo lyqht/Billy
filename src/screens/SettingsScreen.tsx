@@ -43,7 +43,8 @@ const SettingsScreen: React.FC = () => {
           <Button
             status={'danger'}
             style={styles.listItem}
-            accessoryLeft={<Icon name="heart" />}>
+            accessoryLeft={<Icon name="heart" />}
+          >
             Like the app?
           </Button>
           {user ? (
@@ -54,7 +55,8 @@ const SettingsScreen: React.FC = () => {
               onPress={() => {
                 UserService.logOutUser();
                 navigation.navigate('UpcomingBills');
-              }}>
+              }}
+            >
               Log out
             </Button>
           ) : (
@@ -65,7 +67,8 @@ const SettingsScreen: React.FC = () => {
                 navigation.getParent()?.navigate('Login', {
                   loginMode: LoginMode.SIGN_UP,
                 })
-              }>
+              }
+            >
               Sign up / Log in
             </Button>
           )}

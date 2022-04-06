@@ -7,17 +7,15 @@ interface MissedBillCardFooterProps extends BillStatus {
   onMarkAcknowledged: () => void;
 }
 
-const MissedBillCardFooter: React.FC<MissedBillCardFooterProps> = ({
-  id,
-  onMarkAcknowledged,
-}) => {
+const MissedBillCardFooter: React.FC<MissedBillCardFooterProps> = () => {
   return (
     <View>
       <Button
         style={styles.buttonContainer}
         appearance={'ghost'}
         status="danger"
-        accessoryRight={<Icon name="archive" />}>
+        accessoryRight={<Icon name="archive" />}
+      >
         Archive this bill
       </Button>
     </View>

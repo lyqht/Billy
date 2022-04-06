@@ -70,16 +70,16 @@ class BillService {
 
   setBillCompleteStatus = async (
     completedStatus: boolean,
-    id: string,
+    id: number,
   ): Promise<void> => {
     const billIndex = this.bills.findIndex(bill => bill.id === id);
     if (billIndex === -1) {
       throw Error('Cannot find bill');
     }
     const updatedBill = this.bills[billIndex];
-    let completedDate = null;
+    let completedDate = '';
     if (completedStatus) {
-      completedDate = dayjs().toDate();
+      completedDate = dayjs().toDate().toISOString();
     }
 
     updatedBill.completedDate = completedDate;

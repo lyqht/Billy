@@ -43,7 +43,8 @@ export const BillCard: React.FC<BillCardProps> = ({
             onMarkComplete={() => setCardStatus('success')}
             onMarkIncomplete={() => setCardStatus('basic')}
           />
-        }>
+        }
+      >
         <View style={styles.container}>
           <View style={styles.leftColumn}>
             <Text category={'s1'}>{payee}</Text>
@@ -55,7 +56,8 @@ export const BillCard: React.FC<BillCardProps> = ({
               style={[
                 styles.dueDateText,
                 {backgroundColor: theme['color-basic-default']},
-              ]}>
+              ]}
+            >
               <Text category={'p1'}>
                 Due: {dayjs(deadline).format('DD MMM YYYY')}
               </Text>
@@ -76,7 +78,8 @@ export const BillCard: React.FC<BillCardProps> = ({
               console.log(`Bill ${id} has been archived`);
             }}
           />
-        }>
+        }
+      >
         <View style={styles.container}>
           <View style={styles.leftColumn}>
             <Text category={'s1'}>{payee}</Text>
@@ -87,7 +90,8 @@ export const BillCard: React.FC<BillCardProps> = ({
               style={[
                 styles.dueDateText,
                 {backgroundColor: theme['color-basic-default']},
-              ]}>
+              ]}
+            >
               <Text category={'p1'}>
                 Due: {dayjs(deadline).format('DD MMM YYYY')}
               </Text>

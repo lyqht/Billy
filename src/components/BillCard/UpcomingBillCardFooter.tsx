@@ -26,7 +26,8 @@ const UpcomingBillCardFooter: React.FC<BillCardFooterProps> = ({
         onPress={() => {
           BillService.setBillCompleteStatus(false, id);
           onMarkIncomplete();
-        }}>
+        }}
+      >
         <Text>Completed on {dayjs(completedDate).format('DD MMM YYYY')}</Text>
       </Button>
     </View>
@@ -39,7 +40,8 @@ const UpcomingBillCardFooter: React.FC<BillCardFooterProps> = ({
       onPress={() => {
         BillService.setBillCompleteStatus(true, id);
         onMarkComplete();
-      }}>
+      }}
+    >
       Mark as complete
     </Button>
   );

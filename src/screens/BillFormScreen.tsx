@@ -47,6 +47,7 @@ const BillFormScreen: React.FC<Props> = () => {
     console.log('Submitting form');
     const bill: Partial<Bill> = {
       ...getValues(),
+      deadline: getValues().deadline.toISOString(),
       amount: parseFloat(getValues().amount),
     };
 

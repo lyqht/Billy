@@ -7,7 +7,10 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --cache --fix --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint-staged": "lint-staged",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.0",
@@ -43,7 +46,9 @@
     "@types/uuid": "^8.3.4",
     "babel-jest": "^26.6.3",
     "eslint": "^7.14.0",
+    "husky": "^7.0.0",
     "jest": "^26.6.3",
+    "lint-staged": "^12.3.7",
     "metro-react-native-babel-preset": "^0.64.0",
     "react-native-flipper": "^0.140.0",
     "react-native-mmkv-flipper-plugin": "^1.0.0",
@@ -62,6 +67,16 @@
       "jsx",
       "json",
       "node"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
     ]
   }
 }

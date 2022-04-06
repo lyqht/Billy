@@ -39,7 +39,8 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = ({route}) => {
               size={'large'}
               appearance={'filled'}
               accessoryLeft={<Icon name="archive" />}
-              status={'danger'}>
+              status={'danger'}
+            >
               Archive all bills
             </Button>
           }

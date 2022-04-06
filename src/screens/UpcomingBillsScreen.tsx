@@ -100,7 +100,8 @@ const UpcomingBillsScreen: React.FC = () => {
             size="small"
             accessoryRight={<Icon name="plus-outline" />}
             onPress={() => navigator.navigate('BillForm')}
-            style={styles.addBillButton}>
+            style={styles.addBillButton}
+          >
             Add Bill
           </Button>
         </View>
@@ -114,7 +115,8 @@ const UpcomingBillsScreen: React.FC = () => {
             style={styles.alertWrapper}
             onPress={() => {
               navigator.navigate('MissedBills', {bills: missedBills});
-            }}>
+            }}
+          >
             <Text>
               You have {missedBills.length} missed bills, review them here
             </Text>
@@ -137,7 +139,8 @@ const UpcomingBillsScreen: React.FC = () => {
                 status={'basic'}
                 onPress={() => {
                   scrollToTop();
-                }}>
+                }}
+              >
                 Scroll back to top
               </Button>
             ) : (
