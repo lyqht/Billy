@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-  '/': {
+  "/": {
     get: {
       responses: {
         /** OK */
@@ -12,40 +12,40 @@ export interface paths {
       };
     };
   };
-  '/Bill': {
+  "/Bill": {
     get: {
       parameters: {
         query: {
-          deadline?: parameters['rowFilter.Bill.deadline'];
-          payee?: parameters['rowFilter.Bill.payee'];
-          amount?: parameters['rowFilter.Bill.amount'];
-          category?: parameters['rowFilter.Bill.category'];
-          id?: parameters['rowFilter.Bill.id'];
-          userId?: parameters['rowFilter.Bill.userId'];
-          completedDate?: parameters['rowFilter.Bill.completedDate'];
-          archived?: parameters['rowFilter.Bill.archived'];
+          deadline?: parameters["rowFilter.Bill.deadline"];
+          payee?: parameters["rowFilter.Bill.payee"];
+          amount?: parameters["rowFilter.Bill.amount"];
+          category?: parameters["rowFilter.Bill.category"];
+          id?: parameters["rowFilter.Bill.id"];
+          userId?: parameters["rowFilter.Bill.userId"];
+          completedDate?: parameters["rowFilter.Bill.completedDate"];
+          archived?: parameters["rowFilter.Bill.archived"];
           /** Filtering Columns */
-          select?: parameters['select'];
+          select?: parameters["select"];
           /** Ordering */
-          order?: parameters['order'];
+          order?: parameters["order"];
           /** Limiting and Pagination */
-          offset?: parameters['offset'];
+          offset?: parameters["offset"];
           /** Limiting and Pagination */
-          limit?: parameters['limit'];
+          limit?: parameters["limit"];
         };
         header: {
           /** Limiting and Pagination */
-          Range?: parameters['range'];
+          Range?: parameters["range"];
           /** Limiting and Pagination */
-          'Range-Unit'?: parameters['rangeUnit'];
+          "Range-Unit"?: parameters["rangeUnit"];
           /** Preference */
-          Prefer?: parameters['preferCount'];
+          Prefer?: parameters["preferCount"];
         };
       };
       responses: {
         /** OK */
         200: {
-          schema: definitions['Bill'][];
+          schema: definitions["Bill"][];
         };
         /** Partial Content */
         206: unknown;
@@ -55,15 +55,15 @@ export interface paths {
       parameters: {
         body: {
           /** Bill */
-          Bill?: definitions['Bill'];
+          Bill?: definitions["Bill"];
         };
         query: {
           /** Filtering Columns */
-          select?: parameters['select'];
+          select?: parameters["select"];
         };
         header: {
           /** Preference */
-          Prefer?: parameters['preferReturn'];
+          Prefer?: parameters["preferReturn"];
         };
       };
       responses: {
@@ -74,18 +74,18 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          deadline?: parameters['rowFilter.Bill.deadline'];
-          payee?: parameters['rowFilter.Bill.payee'];
-          amount?: parameters['rowFilter.Bill.amount'];
-          category?: parameters['rowFilter.Bill.category'];
-          id?: parameters['rowFilter.Bill.id'];
-          userId?: parameters['rowFilter.Bill.userId'];
-          completedDate?: parameters['rowFilter.Bill.completedDate'];
-          archived?: parameters['rowFilter.Bill.archived'];
+          deadline?: parameters["rowFilter.Bill.deadline"];
+          payee?: parameters["rowFilter.Bill.payee"];
+          amount?: parameters["rowFilter.Bill.amount"];
+          category?: parameters["rowFilter.Bill.category"];
+          id?: parameters["rowFilter.Bill.id"];
+          userId?: parameters["rowFilter.Bill.userId"];
+          completedDate?: parameters["rowFilter.Bill.completedDate"];
+          archived?: parameters["rowFilter.Bill.archived"];
         };
         header: {
           /** Preference */
-          Prefer?: parameters['preferReturn'];
+          Prefer?: parameters["preferReturn"];
         };
       };
       responses: {
@@ -96,22 +96,22 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          deadline?: parameters['rowFilter.Bill.deadline'];
-          payee?: parameters['rowFilter.Bill.payee'];
-          amount?: parameters['rowFilter.Bill.amount'];
-          category?: parameters['rowFilter.Bill.category'];
-          id?: parameters['rowFilter.Bill.id'];
-          userId?: parameters['rowFilter.Bill.userId'];
-          completedDate?: parameters['rowFilter.Bill.completedDate'];
-          archived?: parameters['rowFilter.Bill.archived'];
+          deadline?: parameters["rowFilter.Bill.deadline"];
+          payee?: parameters["rowFilter.Bill.payee"];
+          amount?: parameters["rowFilter.Bill.amount"];
+          category?: parameters["rowFilter.Bill.category"];
+          id?: parameters["rowFilter.Bill.id"];
+          userId?: parameters["rowFilter.Bill.userId"];
+          completedDate?: parameters["rowFilter.Bill.completedDate"];
+          archived?: parameters["rowFilter.Bill.archived"];
         };
         body: {
           /** Bill */
-          Bill?: definitions['Bill'];
+          Bill?: definitions["Bill"];
         };
         header: {
           /** Preference */
-          Prefer?: parameters['preferReturn'];
+          Prefer?: parameters["preferReturn"];
         };
       };
       responses: {
@@ -124,7 +124,7 @@ export interface paths {
 
 export interface definitions {
   Bill: {
-    /** Format: text */
+    /** Format: date */
     deadline?: string;
     /** Format: text */
     payee?: string;
@@ -152,17 +152,17 @@ export interface parameters {
    * @description Preference
    * @enum {string}
    */
-  preferParams: 'params=single-object';
+  preferParams: "params=single-object";
   /**
    * @description Preference
    * @enum {string}
    */
-  preferReturn: 'return=representation' | 'return=minimal' | 'return=none';
+  preferReturn: "return=representation" | "return=minimal" | "return=none";
   /**
    * @description Preference
    * @enum {string}
    */
-  preferCount: 'count=none';
+  preferCount: "count=none";
   /** @description Filtering Columns */
   select: string;
   /** @description On Conflict */
@@ -181,23 +181,23 @@ export interface parameters {
   /** @description Limiting and Pagination */
   limit: string;
   /** @description Bill */
-  'body.Bill': definitions['Bill'];
-  /** Format: text */
-  'rowFilter.Bill.deadline': string;
-  /** Format: text */
-  'rowFilter.Bill.payee': string;
-  /** Format: double precision */
-  'rowFilter.Bill.amount': string;
-  /** Format: text */
-  'rowFilter.Bill.category': string;
-  /** Format: bigint */
-  'rowFilter.Bill.id': string;
-  /** Format: uuid */
-  'rowFilter.Bill.userId': string;
+  "body.Bill": definitions["Bill"];
   /** Format: date */
-  'rowFilter.Bill.completedDate': string;
+  "rowFilter.Bill.deadline": string;
+  /** Format: text */
+  "rowFilter.Bill.payee": string;
+  /** Format: double precision */
+  "rowFilter.Bill.amount": string;
+  /** Format: text */
+  "rowFilter.Bill.category": string;
+  /** Format: bigint */
+  "rowFilter.Bill.id": string;
+  /** Format: uuid */
+  "rowFilter.Bill.userId": string;
+  /** Format: date */
+  "rowFilter.Bill.completedDate": string;
   /** Format: boolean */
-  'rowFilter.Bill.archived': string;
+  "rowFilter.Bill.archived": string;
 }
 
 export interface operations {}

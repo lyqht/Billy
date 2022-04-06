@@ -10,7 +10,8 @@
     "lint": "eslint . --cache --fix --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint-staged": "lint-staged",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "update-types": "npx openapi-typescript \"${SUPABASE_URL}/rest/v1/?apikey=${SUPABASE_ANON_KEY}\" --version=2 --output src/types/supabase.ts"
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.0",

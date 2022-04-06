@@ -1,5 +1,7 @@
 # Billy
 
+[![Update database types](https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg)](https://github.com/lyqht/Billy/actions/workflows/update-types.yml)
+
 <div style="display: grid; place-items:center;">
     <img width="300" src="./screenshots/4%20Apr.gif"></img>
     <p style="padding: 16px;">Don't miss your bills with Billy 🦜 </p>
