@@ -4,10 +4,12 @@ import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
+import {RegisterPromptButton} from '../components/RegisterPromptButton';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
+import UserService from '../services/UserService';
 
 const getUpcomingBills = (bills: Bill[]) => {
   const billsSortedByDeadline = bills
@@ -38,6 +40,7 @@ const UpcomingBillsScreen: React.FC = () => {
 
   useEffect(() => {
     const init = async () => {
+      const user = await UserService.getUser();
       const retrievedBills = await BillService.getBills();
       const upcomingBills = getUpcomingBills(retrievedBills);
       const retrievedMissedBills = getMissedBills(retrievedBills);
@@ -87,14 +90,18 @@ const UpcomingBillsScreen: React.FC = () => {
         <View style={styles.header}>
           <View>
             <Text category="h2">Upcoming Bills</Text>
-            {lastSyncDate ? (
-              <Text category="p1">Last Sync Date: {lastSyncDate}</Text>
-            ) : (
-              <Text category="p1">
-                Not synced yet
-                <Icon name="alert-circle-outline" />
-              </Text>
-            )}
+            <View style={styles.lastSyncDateView}>
+              {lastSyncDate ? (
+                <Text category="p1">Last Sync Date: {lastSyncDate}</Text>
+              ) : (
+                <Text category="p1">Not synced yet</Text>
+              )}
+              <RegisterPromptButton
+                description={
+                  'Billy can only sync to the cloud if you have an account.'
+                }
+              />
+            </View>
           </View>
           <Button
             size="small"
@@ -166,6 +173,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
+  },
+  lastSyncDateView: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   addBillButton: {
     margin: 16,
