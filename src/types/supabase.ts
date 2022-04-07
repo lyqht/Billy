@@ -3,7 +3,7 @@
  * Do not make direct changes to the file.
  */
 
- export interface paths {
+export interface paths {
   "/": {
     get: {
       responses: {
@@ -120,6 +120,204 @@
       };
     };
   };
+  "/FixedReminder": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.FixedReminder.id"];
+          created_at?: parameters["rowFilter.FixedReminder.created_at"];
+          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
+          billID?: parameters["rowFilter.FixedReminder.billID"];
+          relativeTime?: parameters["rowFilter.FixedReminder.relativeTime"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["FixedReminder"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** FixedReminder */
+          FixedReminder?: definitions["FixedReminder"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.FixedReminder.id"];
+          created_at?: parameters["rowFilter.FixedReminder.created_at"];
+          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
+          billID?: parameters["rowFilter.FixedReminder.billID"];
+          relativeTime?: parameters["rowFilter.FixedReminder.relativeTime"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.FixedReminder.id"];
+          created_at?: parameters["rowFilter.FixedReminder.created_at"];
+          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
+          billID?: parameters["rowFilter.FixedReminder.billID"];
+          relativeTime?: parameters["rowFilter.FixedReminder.relativeTime"];
+        };
+        body: {
+          /** FixedReminder */
+          FixedReminder?: definitions["FixedReminder"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/RecurringReminder": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.RecurringReminder.id"];
+          created_at?: parameters["rowFilter.RecurringReminder.created_at"];
+          intervalUnit?: parameters["rowFilter.RecurringReminder.intervalUnit"];
+          specificUnit?: parameters["rowFilter.RecurringReminder.specificUnit"];
+          billID?: parameters["rowFilter.RecurringReminder.billID"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["RecurringReminder"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** RecurringReminder */
+          RecurringReminder?: definitions["RecurringReminder"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.RecurringReminder.id"];
+          created_at?: parameters["rowFilter.RecurringReminder.created_at"];
+          intervalUnit?: parameters["rowFilter.RecurringReminder.intervalUnit"];
+          specificUnit?: parameters["rowFilter.RecurringReminder.specificUnit"];
+          billID?: parameters["rowFilter.RecurringReminder.billID"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.RecurringReminder.id"];
+          created_at?: parameters["rowFilter.RecurringReminder.created_at"];
+          intervalUnit?: parameters["rowFilter.RecurringReminder.intervalUnit"];
+          specificUnit?: parameters["rowFilter.RecurringReminder.specificUnit"];
+          billID?: parameters["rowFilter.RecurringReminder.billID"];
+        };
+        body: {
+          /** RecurringReminder */
+          RecurringReminder?: definitions["RecurringReminder"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
 }
 
 export interface definitions {
@@ -144,6 +342,52 @@ export interface definitions {
     completedDate?: string;
     /** Format: boolean */
     archived?: boolean;
+  };
+  FixedReminder: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /** Format: timestamp without time zone */
+    computedDate: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `Bill.id`.<fk table='Bill' column='id'/>
+     */
+    billID: number;
+    /** Format: json */
+    relativeTime?: string;
+  };
+  RecurringReminder: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /** Format: text */
+    intervalUnit: string;
+    /** Format: ARRAY */
+    specificUnit?: unknown[];
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `Bill.id`.<fk table='Bill' column='id'/>
+     */
+    billID?: number;
   };
 }
 
@@ -198,6 +442,30 @@ export interface parameters {
   "rowFilter.Bill.completedDate": string;
   /** Format: boolean */
   "rowFilter.Bill.archived": string;
+  /** @description FixedReminder */
+  "body.FixedReminder": definitions["FixedReminder"];
+  /** Format: bigint */
+  "rowFilter.FixedReminder.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.FixedReminder.created_at": string;
+  /** Format: timestamp without time zone */
+  "rowFilter.FixedReminder.computedDate": string;
+  /** Format: bigint */
+  "rowFilter.FixedReminder.billID": string;
+  /** Format: json */
+  "rowFilter.FixedReminder.relativeTime": string;
+  /** @description RecurringReminder */
+  "body.RecurringReminder": definitions["RecurringReminder"];
+  /** Format: bigint */
+  "rowFilter.RecurringReminder.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.RecurringReminder.created_at": string;
+  /** Format: text */
+  "rowFilter.RecurringReminder.intervalUnit": string;
+  /** Format: ARRAY */
+  "rowFilter.RecurringReminder.specificUnit": string;
+  /** Format: bigint */
+  "rowFilter.RecurringReminder.billID": string;
 }
 
 export interface operations {}
