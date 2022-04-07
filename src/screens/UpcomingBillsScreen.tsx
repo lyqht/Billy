@@ -36,11 +36,16 @@ const UpcomingBillsScreen: React.FC = () => {
   const [bills, setBills] = useState<Bill[]>([]);
   const [missedBills, setmissedBills] = useState<Bill[]>([]);
   const [lastSyncDate, setLastSyncDate] = useState<string>('');
+  const [showRegisterPromptButton, setShowRegisterPromptButton] =
+    useState(true);
   const listRef = React.useRef<List>(null);
 
   useEffect(() => {
     const init = async () => {
       const user = await UserService.getUser();
+      if (user) {
+        setShowRegisterPromptButton(false);
+      }
       const retrievedBills = await BillService.getBills();
       const upcomingBills = getUpcomingBills(retrievedBills);
       const retrievedMissedBills = getMissedBills(retrievedBills);
@@ -96,11 +101,13 @@ const UpcomingBillsScreen: React.FC = () => {
               ) : (
                 <Text category="p1">Not synced yet</Text>
               )}
-              <RegisterPromptButton
-                description={
-                  'Billy can only sync to the cloud if you have an account.'
-                }
-              />
+              {showRegisterPromptButton && (
+                <RegisterPromptButton
+                  description={
+                    'Billy can only sync to the cloud if you have an account.'
+                  }
+                />
+              )}
             </View>
           </View>
           <Button
