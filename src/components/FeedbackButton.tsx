@@ -1,32 +1,25 @@
-import {useNavigation, useTheme} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {Button, Card, Icon, Modal, Text} from '@ui-kitten/components';
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Linking, StyleSheet, View} from 'react-native';
 import {NavigationProps} from '../routes';
-import {LoginMode} from '../types/LoginMode';
-interface RegisterPromptButtonProps {
-  description: string;
-}
 
-export const RegisterPromptButton: React.FC<RegisterPromptButtonProps> = ({
-  description,
-}) => {
+export const FeedbackButton: React.FC = ({}) => {
   let navigation = useNavigation<NavigationProps>();
   if (!navigation.getState().routeNames.includes('Login')) {
     navigation = navigation.getParent();
   }
   const [visible, setVisible] = React.useState(false);
-  const theme = useTheme();
 
   return (
     <View>
-      <TouchableOpacity onPress={() => setVisible(true)}>
-        <Icon
-          style={styles.icon}
-          fill={theme.colors.primary}
-          name="info-outline"
-        />
-      </TouchableOpacity>
+      <Button
+        status={'danger'}
+        accessoryLeft={<Icon name="heart" />}
+        onPress={() => setVisible(true)}
+      >
+        Like the app?
+      </Button>
       <Modal
         style={styles.container}
         visible={visible}
@@ -34,16 +27,28 @@ export const RegisterPromptButton: React.FC<RegisterPromptButtonProps> = ({
         onBackdropPress={() => setVisible(false)}
       >
         <Card disabled={true}>
-          <Text category={'h3'}>Register an account</Text>
-          <Text style={styles.descriptionText}>{description}</Text>
+          <Text category={'h3'}>Thank you! ✨</Text>
+          <Text category={'s1'} style={styles.descriptionText}>
+            If you want to support my work, visit my GitHub project to leave a
+            ⭐️ or buy me a cup of tea 🍵
+          </Text>
+          <Text category={'p1'} style={styles.descriptionText}>
+            Please note that this is an open-source project that is still a
+            work-in-progress, and features may not be stable until the MVP
+            checklist is completed.
+          </Text>
+
+          <Text category={'c1'} style={styles.descriptionText}>
+            © Estee Tey, 2022
+          </Text>
           <Button
             style={styles.modalButton}
             onPress={() => {
               setVisible(false);
-              navigation.navigate('Login', {loginMode: LoginMode.SIGN_UP});
+              Linking.openURL('https://github.com/lyqht/Billy');
             }}
           >
-            Sign up
+            Visit the project on GitHub ➡️
           </Button>
           <Button
             status={'danger'}
@@ -64,7 +69,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   descriptionText: {
-    textAlign: 'center',
+    textAlign: 'left',
     margin: 16,
   },
   icon: {

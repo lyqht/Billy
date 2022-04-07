@@ -108,7 +108,7 @@ const UpcomingBillsScreen: React.FC = () => {
               {showRegisterPromptButton && (
                 <RegisterPromptButton
                   description={
-                    'Billy can only sync to the cloud when you are logged in.'
+                    'Billy can only sync to the cloud when you have a registered account.'
                   }
                 />
               )}

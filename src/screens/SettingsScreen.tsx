@@ -3,6 +3,7 @@ import {User} from '@supabase/supabase-js';
 import {Button, Icon, Layout, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {FeedbackButton} from '../components/FeedbackButton';
 import {TabNavigationProps} from '../routes';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
@@ -44,13 +45,7 @@ const SettingsScreen: React.FC = () => {
           <Text category={'s1'}>{renderGreetingText()}</Text>
         </View>
         <View style={styles.buttonsContainer}>
-          <Button
-            status={'danger'}
-            style={styles.listItem}
-            accessoryLeft={<Icon name="heart" />}
-          >
-            Like the app?
-          </Button>
+          <FeedbackButton />
           {user ? (
             <Button
               style={styles.listItem}
@@ -89,13 +84,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   listItem: {
-    margin: 12,
+    marginVertical: 12,
     flexDirection: 'row',
   },
   buttonsContainer: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
+    padding: 16,
   },
 });
 
