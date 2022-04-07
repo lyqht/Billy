@@ -14,8 +14,6 @@ class UserService {
       throw Error(error.message);
     }
 
-    Cache.setUser(user!);
-
     return user;
   };
 
@@ -30,8 +28,6 @@ class UserService {
       throw Error(error.message);
     }
 
-    Cache.setUser(user!);
-
     return user;
   };
 
@@ -44,7 +40,7 @@ class UserService {
     }
   };
 
-  getUser = async (): Promise<User | null> => {
+  getUser = (): User | null => {
     const retrievedUser = Cache.getUser();
     if (retrievedUser) {
       return retrievedUser;

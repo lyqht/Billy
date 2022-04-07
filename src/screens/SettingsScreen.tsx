@@ -4,22 +4,26 @@ import {Button, Icon, Layout, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {TabNavigationProps} from '../routes';
+import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
 import {LoginMode} from '../types/LoginMode';
 
 const SettingsScreen: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const retrievedUser = UserService.getUser();
+  const [user, setUser] = useState<User | null>(retrievedUser);
   const navigation = useNavigation<TabNavigationProps>();
 
   useEffect(() => {
-    const init = async () => {
-      const retrievedUser = await UserService.getUser();
-      if (retrievedUser) {
-        setUser(retrievedUser);
-      }
-    };
+    const listener = Cache.getStorage().addOnValueChangedListener(
+      changedKey => {
+        if (changedKey === STORAGE_KEYS.AUTH_TOKEN) {
+          const updatedUser = UserService.getUser();
+          setUser(updatedUser);
+        }
+      },
+    );
 
-    init();
+    return () => listener.remove();
   }, []);
 
   const renderGreetingText = () => {
@@ -52,8 +56,8 @@ const SettingsScreen: React.FC = () => {
               style={styles.listItem}
               status={'warning'}
               accessoryLeft={<Icon name="corner-down-right" />}
-              onPress={() => {
-                UserService.logOutUser();
+              onPress={async () => {
+                await UserService.logOutUser();
                 navigation.navigate('UpcomingBills');
               }}
             >

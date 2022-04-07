@@ -20,11 +20,12 @@ class BillService {
     }
 
     const user = Cache.getUser();
+    console.log(`Getting bills, does user exists? ${user}`);
 
     if (user) {
       console.debug('Retrieving bills from DB');
       let {data: bills, error} = await supabase
-        .from<Bill>('bills')
+        .from<Bill>('Bill')
         .select('*')
         .eq('userId', user.id);
 
@@ -43,7 +44,7 @@ class BillService {
     const updatedBill = {...bill, userId: user?.id};
     if (user) {
       const {data, error} = await supabase
-        .from<Bill>('bills')
+        .from<Bill>('Bill')
         .insert(updatedBill);
 
       if (error) {
@@ -89,7 +90,7 @@ class BillService {
     const user = Cache.getUser();
     if (user) {
       const {error} = await supabase
-        .from<Bill>('bills')
+        .from<Bill>('Bill')
         .update({completedDate})
         .eq('id', id);
 
@@ -103,7 +104,7 @@ class BillService {
     file: any,
     filename: string,
   ): Promise<{Key: string} | null> => {
-    const user = await UserService.getUser();
+    const user = UserService.getUser();
     const {data, error} = await supabase.storage
       .from('documents')
       .upload(`${user?.id}/${filename}`, file);

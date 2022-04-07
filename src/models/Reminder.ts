@@ -1,5 +1,9 @@
+import {definitions} from '../types/supabase';
+
 export type Reminder = {
   id?: string;
-  billId: string;
-  date: Date;
+  billID: string;
 };
+
+export type RecurringReminder = definitions['RecurringReminder'];
+export type FixedReminder = definitions['FixedReminder'];

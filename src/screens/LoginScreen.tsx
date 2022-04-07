@@ -41,7 +41,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
   const onSubmit = async () => {
     const {email, password} = getValues();
     try {
-      switch (loginMode) {
+      switch (selectedLoginMode) {
         case LoginMode.SIGN_UP:
           await UserService.signUpUser(email, password);
           break;

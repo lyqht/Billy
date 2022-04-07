@@ -27,7 +27,8 @@ const getUpcomingBills = (bills: Bill[]) => {
 const getMissedBills = (bills: Bill[]) => {
   return bills.filter(
     bill =>
-      bill.completedDate === null && dayjs(bill.deadline).isBefore(dayjs()),
+      bill.completedDate === null &&
+      dayjs(bill.deadline).isBefore(dayjs(), 'day'),
   );
 };
 
@@ -42,7 +43,7 @@ const UpcomingBillsScreen: React.FC = () => {
 
   useEffect(() => {
     const init = async () => {
-      const user = await UserService.getUser();
+      const user = UserService.getUser();
       if (user) {
         setShowRegisterPromptButton(false);
       }
@@ -55,24 +56,29 @@ const UpcomingBillsScreen: React.FC = () => {
 
       const lastSyncDateFromCache = Cache.getLastSyncDate();
       if (lastSyncDateFromCache) {
-        setLastSyncDate(
-          dayjs(JSON.parse(lastSyncDateFromCache)).format('DD MMM YYYY'),
-        );
+        setLastSyncDate(dayjs(lastSyncDateFromCache).format('DD MMM YYYY'));
       }
     };
     const listener = Cache.getStorage().addOnValueChangedListener(
       changedKey => {
-        if (Cache.getStorage().contains(changedKey)) {
-          const newValue = Cache.getStorage().getString(changedKey);
-          const parsedValue = JSON.parse(newValue!);
-          switch (changedKey) {
-            case STORAGE_KEYS.BILLS:
-              setBills(getUpcomingBills([...parsedValue]));
-              setmissedBills(getMissedBills([...parsedValue]));
-              break;
-            case STORAGE_KEYS.LAST_SYNC_DATE:
-              setLastSyncDate(dayjs(parsedValue).format('DD MMM YYYY'));
-              break;
+        if (changedKey === STORAGE_KEYS.AUTH_TOKEN) {
+          const user = UserService.getUser();
+          if (user) {
+            setShowRegisterPromptButton(false);
+          } else {
+            setShowRegisterPromptButton(true);
+          }
+        } else if (changedKey === STORAGE_KEYS.BILLS) {
+          const updatedBills = Cache.getBills();
+          if (updatedBills) {
+            const parsedBills = JSON.parse(Cache.getBills()!);
+            setBills(getUpcomingBills([...parsedBills]));
+            setmissedBills(getMissedBills([...parsedBills]));
+          }
+        } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
+          const lastSyncDateFromCache = Cache.getLastSyncDate();
+          if (lastSyncDateFromCache) {
+            setLastSyncDate(dayjs(lastSyncDateFromCache).format('DD MMM YYYY'));
           }
         }
       },
@@ -80,9 +86,7 @@ const UpcomingBillsScreen: React.FC = () => {
 
     init();
 
-    return () => {
-      listener.remove();
-    };
+    return () => listener.remove();
   }, []);
 
   const scrollToTop = () => {
@@ -104,7 +108,7 @@ const UpcomingBillsScreen: React.FC = () => {
               {showRegisterPromptButton && (
                 <RegisterPromptButton
                   description={
-                    'Billy can only sync to the cloud if you have an account.'
+                    'Billy can only sync to the cloud when you are logged in.'
                   }
                 />
               )}

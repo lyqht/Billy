@@ -1,4 +1,4 @@
-import {User} from '@supabase/supabase-js';
+import {AuthSession, User} from '@supabase/supabase-js';
 import {MMKV} from 'react-native-mmkv';
 import {initializeMMKVFlipper} from 'react-native-mmkv-flipper-plugin';
 import {Bill} from '../models/Bill';
@@ -8,23 +8,47 @@ export enum STORAGE_KEYS {
   BILLS = 'bills',
   USER_ID = 'userId',
   USER = 'user',
+  AUTH_TOKEN = 'supabase.auth.token',
 }
 class Cache {
   private storage;
   constructor() {
-    ('');
     this.storage = new MMKV();
     if (__DEV__) {
       initializeMMKVFlipper({default: this.storage});
     }
   }
 
+  // -------------------------------------
+  // these methods are added so that the Supabase client can access MMKV as cache
+
+  getItem(key: string) {
+    return this.storage.getString(key);
+  }
+
+  setItem(key: string, value: string) {
+    return this.storage.set(key, value);
+  }
+
+  removeItem(key: string) {
+    if (this.storage.contains(key)) {
+      this.storage.delete(key);
+    }
+
+    console.warn(`Cache does not contain ${key}`);
+  }
+
+  // -------------------------------------
+
   getStorage() {
     return this.storage;
   }
 
   getLastSyncDate(): string | undefined {
-    return this.storage.getString(STORAGE_KEYS.LAST_SYNC_DATE);
+    if (this.storage.contains(STORAGE_KEYS.LAST_SYNC_DATE)) {
+      return this.storage.getString(STORAGE_KEYS.LAST_SYNC_DATE);
+    }
+    return undefined;
   }
 
   setLastSyncDate(date: string): void {
@@ -32,7 +56,7 @@ class Cache {
   }
 
   setLastSyncDateAsNow(): void {
-    this.setLastSyncDate(JSON.stringify(new Date()));
+    this.setLastSyncDate(new Date().toISOString());
   }
 
   getBills(): string | undefined {
@@ -44,16 +68,15 @@ class Cache {
   }
 
   getUser(): User | null {
-    const user = this.storage.getString(STORAGE_KEYS.USER);
-    if (user) {
-      return JSON.parse(user);
+    if (this.storage.contains(STORAGE_KEYS.AUTH_TOKEN)) {
+      const authInfo = JSON.parse(
+        this.storage.getString(STORAGE_KEYS.AUTH_TOKEN)!,
+      );
+      const session: AuthSession = authInfo.currentSession;
+      return session.user;
     }
 
     return null;
-  }
-
-  setUser(user: User): void {
-    this.storage.set(STORAGE_KEYS.USER, JSON.stringify(user));
   }
 
   deleteUser(): void {
