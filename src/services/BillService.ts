@@ -20,7 +20,6 @@ class BillService {
     }
 
     const user = Cache.getUser();
-    console.log(`Getting bills, does user exists? ${user}`);
 
     if (user) {
       console.debug('Retrieving bills from DB');
@@ -60,6 +59,7 @@ class BillService {
       Cache.setBills([...this.bills, ...data]);
       Cache.setLastSyncDateAsNow();
     } else {
+      console.log('Updating bills locally');
       const updatedBills = [...this.bills, updatedBill];
       Cache.setBills(updatedBills);
     }

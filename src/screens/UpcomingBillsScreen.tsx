@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
@@ -10,15 +11,16 @@ import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
+dayjs.extend(isSameOrAfter);
 
 const getUpcomingBills = (bills: Bill[]) => {
   const billsSortedByDeadline = bills
-    .filter(a => dayjs(a.deadline).isAfter(dayjs()))
+    .filter(a => dayjs(a.deadline).isSameOrAfter(dayjs(), 'day'))
     .sort((a, b) => (dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1));
 
   const completedBills = billsSortedByDeadline.filter(a => a.completedDate);
   const uncompletedBills = billsSortedByDeadline.filter(
-    a => a.completedDate === null,
+    a => a.completedDate === undefined || a.completedDate === null,
   );
 
   return [...uncompletedBills, ...completedBills];
@@ -27,7 +29,7 @@ const getUpcomingBills = (bills: Bill[]) => {
 const getMissedBills = (bills: Bill[]) => {
   return bills.filter(
     bill =>
-      bill.completedDate === null &&
+      (bill.completedDate === null || bill.completedDate === undefined) &&
       dayjs(bill.deadline).isBefore(dayjs(), 'day'),
   );
 };
@@ -35,7 +37,7 @@ const getMissedBills = (bills: Bill[]) => {
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
   const [bills, setBills] = useState<Bill[]>([]);
-  const [missedBills, setmissedBills] = useState<Bill[]>([]);
+  const [missedBills, setMissedBills] = useState<Bill[]>([]);
   const [lastSyncDate, setLastSyncDate] = useState<string>('');
   const [showRegisterPromptButton, setShowRegisterPromptButton] =
     useState(true);
@@ -50,9 +52,10 @@ const UpcomingBillsScreen: React.FC = () => {
       const retrievedBills = await BillService.getBills();
       const upcomingBills = getUpcomingBills(retrievedBills);
       const retrievedMissedBills = getMissedBills(retrievedBills);
+      console.log({upcomingBills, retrievedMissedBills});
 
       setBills(upcomingBills);
-      setmissedBills(retrievedMissedBills);
+      setMissedBills(retrievedMissedBills);
 
       const lastSyncDateFromCache = Cache.getLastSyncDate();
       if (lastSyncDateFromCache) {
@@ -73,7 +76,7 @@ const UpcomingBillsScreen: React.FC = () => {
           if (updatedBills) {
             const parsedBills = JSON.parse(Cache.getBills()!);
             setBills(getUpcomingBills([...parsedBills]));
-            setmissedBills(getMissedBills([...parsedBills]));
+            setMissedBills(getMissedBills([...parsedBills]));
           }
         } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
           const lastSyncDateFromCache = Cache.getLastSyncDate();
