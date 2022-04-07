@@ -3,6 +3,7 @@ import {ToastShowParams} from 'react-native-toast-message';
 import supabase from '../api/supabase';
 import {Bill} from '../models/Bill';
 import Cache from './Cache';
+import UserService from './UserService';
 class BillService {
   private bills: Bill[];
 
@@ -96,6 +97,22 @@ class BillService {
         throw Error('Error syncing to cloud');
       }
     }
+  };
+
+  uploadFile = async (
+    file: any,
+    filename: string,
+  ): Promise<{Key: string} | null> => {
+    const user = await UserService.getUser();
+    const {data, error} = await supabase.storage
+      .from('documents')
+      .upload(`${user?.id}/${filename}`, file);
+
+    if (error) {
+      throw Error(error.message);
+    }
+
+    return data;
   };
 }
 
