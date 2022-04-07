@@ -9,6 +9,9 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -20,9 +23,6 @@ jobs:
       - run: |
           npm run update-types
           echo "$(cat src/types/supabase.ts)"
-        env:
-          SUPABASE_URL: ${{secrets.SUPABASE_URL}}
-          SUPABASE_ANON_KEY: ${{secrets.SUPABASE_URL}}
       - name: check for file changes
         id: git_status
         run: |
