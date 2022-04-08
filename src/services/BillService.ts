@@ -5,25 +5,12 @@ import {Bill} from '../models/Bill';
 import Cache from './Cache';
 import UserService from './UserService';
 class BillService {
-  private bills: Bill[];
-
-  constructor() {
-    this.bills = [];
-  }
-
-  getBills = async (): Promise<Bill[]> => {
-    const billsFromCache = Cache.getBills();
-    if (billsFromCache) {
-      console.debug('Returning bills from cache!');
-      this.bills = JSON.parse(billsFromCache);
-      return this.bills;
-    }
-
+  getBillsFromDB = async (): Promise<Bill[]> => {
     const user = Cache.getUser();
 
     if (user) {
       console.debug('Retrieving bills from DB');
-      let {data: bills, error} = await supabase
+      let {data, error} = await supabase
         .from<Bill>('Bill')
         .select('*')
         .eq('userId', user.id);
@@ -31,16 +18,39 @@ class BillService {
       if (error) {
         throw new Error('Error retrieving bills');
       }
-      Cache.setBills(bills!);
-      this.bills = bills!;
+
+      const bills = data || [];
+      Cache.setBills(bills);
       Cache.setLastSyncDateAsNow();
+      return bills;
     }
-    return this.bills;
+
+    throw Error('Not able to get bills, no user in cache');
+  };
+
+  getBills = async (): Promise<Bill[]> => {
+    const billsFromCache = Cache.getBills();
+    if (billsFromCache) {
+      console.debug('Returning bills from cache!');
+      return JSON.parse(billsFromCache);
+    }
+
+    let result: Bill[] = [];
+
+    try {
+      result = await this.getBillsFromDB();
+    } catch (err) {
+      console.error(err);
+    }
+
+    return result;
   };
 
   addBill = async (bill: Partial<Bill>): Promise<ToastShowParams> => {
     const user = Cache.getUser();
     const updatedBill = {...bill, userId: user?.id};
+    const bills = await this.getBills();
+
     if (user) {
       const {data, error} = await supabase
         .from<Bill>('Bill')
@@ -56,11 +66,11 @@ class BillService {
         };
       }
 
-      Cache.setBills([...this.bills, ...data]);
+      Cache.setBills([...bills, ...data]);
       Cache.setLastSyncDateAsNow();
     } else {
       console.log('Updating bills locally');
-      const updatedBills = [...this.bills, updatedBill];
+      const updatedBills = [...bills, updatedBill];
       Cache.setBills(updatedBills);
     }
 
@@ -74,18 +84,19 @@ class BillService {
     completedStatus: boolean,
     id: number,
   ): Promise<void> => {
-    const billIndex = this.bills.findIndex(bill => bill.id === id);
+    const bills = await this.getBills();
+    const billIndex = bills.findIndex(bill => bill.id === id);
     if (billIndex === -1) {
       throw Error('Cannot find bill');
     }
-    const updatedBill = this.bills[billIndex];
-    let completedDate = '';
+    const updatedBill = bills[billIndex];
+    let completedDate;
     if (completedStatus) {
       completedDate = dayjs().toDate().toISOString();
     }
 
     updatedBill.completedDate = completedDate;
-    Cache.setBills(this.bills);
+    Cache.setBills(bills);
 
     const user = Cache.getUser();
     if (user) {
@@ -95,7 +106,7 @@ class BillService {
         .eq('id', id);
 
       if (error) {
-        throw Error('Error syncing to cloud');
+        throw Error(error.message);
       }
     }
   };

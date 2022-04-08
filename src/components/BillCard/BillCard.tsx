@@ -4,6 +4,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Bill} from '../../models/Bill';
 import {Reminder} from '../../models/Reminder';
+import BillService from '../../services/BillService';
 import BillCardReminderText from './BillCardReminderText';
 import MissedBillCardFooter from './MissedBillCardFooter';
 import UpcomingBillCardFooter from './UpcomingBillCardFooter';
@@ -40,8 +41,14 @@ export const BillCard: React.FC<BillCardProps> = ({
           <UpcomingBillCardFooter
             id={id}
             completedDate={completedDate}
-            onMarkComplete={() => setCardStatus('success')}
-            onMarkIncomplete={() => setCardStatus('basic')}
+            onMarkComplete={async () => {
+              await BillService.setBillCompleteStatus(true, id);
+              setCardStatus('success');
+            }}
+            onMarkIncomplete={async () => {
+              await BillService.setBillCompleteStatus(false, id);
+              setCardStatus('basic');
+            }}
           />
         }
       >
@@ -51,7 +58,7 @@ export const BillCard: React.FC<BillCardProps> = ({
             {!completedDate && <BillCardReminderText reminder={reminder!} />}
           </View>
           <View style={styles.rightColumn}>
-            <Text category={'h6'}>${amount}</Text>
+            <Text category={'h6'}>${`${amount}`}</Text>
             <View
               style={[
                 styles.dueDateText,
@@ -85,7 +92,7 @@ export const BillCard: React.FC<BillCardProps> = ({
             <Text category={'s1'}>{payee}</Text>
           </View>
           <View style={styles.rightColumn}>
-            <Text category={'h6'}>${amount}</Text>
+            <Text category={'h6'}>${`${amount}`}</Text>
             <View
               style={[
                 styles.dueDateText,

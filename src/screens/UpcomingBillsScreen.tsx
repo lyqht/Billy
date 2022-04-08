@@ -52,7 +52,6 @@ const UpcomingBillsScreen: React.FC = () => {
       const retrievedBills = await BillService.getBills();
       const upcomingBills = getUpcomingBills(retrievedBills);
       const retrievedMissedBills = getMissedBills(retrievedBills);
-      console.log({upcomingBills, retrievedMissedBills});
 
       setBills(upcomingBills);
       setMissedBills(retrievedMissedBills);

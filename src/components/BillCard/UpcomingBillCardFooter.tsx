@@ -24,7 +24,6 @@ const UpcomingBillCardFooter: React.FC<BillCardFooterProps> = ({
         status={'basic'}
         accessoryRight={<Icon name="checkmark-circle-2-outline" />}
         onPress={() => {
-          BillService.setBillCompleteStatus(false, id);
           onMarkIncomplete();
         }}
       >
@@ -38,7 +37,6 @@ const UpcomingBillCardFooter: React.FC<BillCardFooterProps> = ({
       status="primary"
       accessoryRight={<Icon name="checkmark-circle-2" />}
       onPress={() => {
-        BillService.setBillCompleteStatus(true, id);
         onMarkComplete();
       }}
     >
