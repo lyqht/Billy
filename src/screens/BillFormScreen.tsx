@@ -27,7 +27,7 @@ interface FormData {
 }
 
 const showToast = (toastParams: ToastShowParams) => {
-  Toast.show({...toastParams, position: 'bottom'});
+  Toast.show({...toastParams, position: 'bottom', bottomOffset: 120});
 };
 
 const BillFormScreen: React.FC<Props> = () => {
