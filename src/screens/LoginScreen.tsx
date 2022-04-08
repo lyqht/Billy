@@ -1,9 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Button, Layout, Tab, TabBar, Text} from '@ui-kitten/components';
+import {
+  Button,
+  Divider,
+  Layout,
+  Tab,
+  TabBar,
+  Text,
+} from '@ui-kitten/components';
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity, Linking} from 'react-native';
 import {CustomInput} from '../components/BillForm/CustomInput';
 import {NavigationProps, RootStackParamList} from '../routes';
 import UserService from '../services/UserService';
@@ -57,6 +64,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
 
   const getButtonText = () =>
     selectedLoginMode === LoginMode.SIGN_IN ? 'Log in' : 'Sign up';
+  const getGreetingText = () =>
+    selectedLoginMode === LoginMode.SIGN_IN ? 'Welcome back!' : 'You new here?';
+  const getDescriptionText = () =>
+    selectedLoginMode === LoginMode.SIGN_IN
+      ? 'Need a reminder on what Billy does for you? Here are some features that Billy offers ➜'
+      : 'Billy is happy to help you track your expenses! Here are some features that Billy offers ➜';
 
   return (
     <View>
@@ -74,6 +87,23 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
             <Tab title="Register an account" />
             <Tab title="Sign in" />
           </TabBar>
+        </View>
+        <View style={styles.bottomContainer}>
+          <Image
+            style={styles.image}
+            source={require('../../assets/BillyHero.png')}
+          />
+          <Text category={'h3'}>{getGreetingText()}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL('https://github.com/lyqht/Billy');
+            }}
+          >
+            <Text style={styles.formFieldContainer} category={'p1'}>
+              {getDescriptionText()}
+            </Text>
+          </TouchableOpacity>
+          <Divider style={styles.formFieldContainer} />
           <View style={styles.formFieldContainer}>
             <Controller
               name="email"
@@ -113,8 +143,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
               )}
             />
           </View>
-        </View>
-        <View style={styles.buttonContainer}>
           <Text style={styles.errorText} status={'danger'}>
             {errorText}
           </Text>
@@ -136,11 +164,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  formFieldContainer: {
-    margin: 16,
+  image: {
+    marginVertical: 24,
+    width: 200,
+    height: 200,
   },
-  buttonContainer: {
+  formFieldContainer: {
     marginVertical: 16,
+  },
+  bottomContainer: {
+    margin: 16,
+    paddingBottom: 16,
   },
   errorText: {
     marginVertical: 16,

@@ -3,6 +3,7 @@ import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
+import {Quote} from '../components/Quote';
 import {RootStackParamList} from '../routes';
 
 type MissedBillsScreenProps = NativeStackScreenProps<
@@ -18,13 +19,13 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = ({route}) => {
         <Text category={'h6'} style={styles.listItemWrapper}>
           You didn't pay {bills.length} bills on time 😰
         </Text>
-        <View style={styles.quoteContainer}>
-          <View style={styles.quoteLine} />
+        <Quote>
           <Text category={'p1'} style={styles.listItemWrapper}>
             Check below what you missed. If you don't want Billy to alert you of
             these bills anymore, you can archive them.
           </Text>
-        </View>
+        </Quote>
+
         <Divider />
         <List
           data={bills}
