@@ -75,7 +75,7 @@ const SettingsScreen: React.FC = () => {
                     and you can still continue to add bills.
                   </Text>
                   <Quote>
-                    <Text category={'p1'} style={styles.descriptionText}>
+                    <Text category={'p1'}>
                       However, your data{' '}
                       <Text category={'s1'}>
                         will not be synced to the cloud
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   descriptionText: {
-    margin: 16,
+    marginVertical: 16,
   },
   modalContainer: {
     position: 'absolute',

@@ -27,7 +27,9 @@ export const FeedbackButton: React.FC = ({}) => {
         onBackdropPress={() => setVisible(false)}
       >
         <Card disabled={true}>
-          <Text category={'h3'}>Thank you! ✨</Text>
+          <Text category={'h3'} style={styles.descriptionText}>
+            Thank you! ✨
+          </Text>
           <Text category={'s1'} style={styles.descriptionText}>
             If you want to support my work, visit my GitHub project to leave a
             ⭐️ or buy me a cup of tea 🍵

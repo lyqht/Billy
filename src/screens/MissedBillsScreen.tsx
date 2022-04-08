@@ -16,15 +16,17 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = ({route}) => {
   return (
     <SafeAreaView>
       <Layout style={styles.layoutContainer}>
-        <Text category={'h6'} style={styles.listItemWrapper}>
-          You didn't pay {bills.length} bills on time 😰
-        </Text>
-        <Quote>
-          <Text category={'p1'} style={styles.listItemWrapper}>
-            Check below what you missed. If you don't want Billy to alert you of
-            these bills anymore, you can archive them.
+        <View style={[styles.listItemWrapper]}>
+          <Text category={'h6'} style={styles.item}>
+            You didn't pay {bills.length} bills on time 😰
           </Text>
-        </Quote>
+          <Quote>
+            <Text category={'p1'}>
+              Check below what you missed. If you don't want Billy to alert you
+              of these bills anymore, you can archive them.
+            </Text>
+          </Quote>
+        </View>
 
         <Divider />
         <List
@@ -58,16 +60,8 @@ const styles = StyleSheet.create({
   listItemWrapper: {
     margin: 12,
   },
-  quoteContainer: {
-    flexDirection: 'row',
-    paddingLeft: 12,
-    paddingBottom: 12,
-  },
-  quoteLine: {
-    borderColor: '#abcbca',
-    borderWidth: 2,
-    width: 0,
-    height: '100%',
+  item: {
+    marginVertical: 12,
   },
 });
 
