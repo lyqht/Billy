@@ -23,7 +23,7 @@ export interface paths {
           id?: parameters["rowFilter.Bill.id"];
           userId?: parameters["rowFilter.Bill.userId"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
-          archived?: parameters["rowFilter.Bill.archived"];
+          archivedDate?: parameters["rowFilter.Bill.archivedDate"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -81,7 +81,7 @@ export interface paths {
           id?: parameters["rowFilter.Bill.id"];
           userId?: parameters["rowFilter.Bill.userId"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
-          archived?: parameters["rowFilter.Bill.archived"];
+          archivedDate?: parameters["rowFilter.Bill.archivedDate"];
         };
         header: {
           /** Preference */
@@ -103,7 +103,7 @@ export interface paths {
           id?: parameters["rowFilter.Bill.id"];
           userId?: parameters["rowFilter.Bill.userId"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
-          archived?: parameters["rowFilter.Bill.archived"];
+          archivedDate?: parameters["rowFilter.Bill.archivedDate"];
         };
         body: {
           /** Bill */
@@ -340,8 +340,8 @@ export interface definitions {
     userId?: string;
     /** Format: date */
     completedDate?: string;
-    /** Format: boolean */
-    archived?: boolean;
+    /** Format: date */
+    archivedDate?: string;
   };
   FixedReminder: {
     /**
@@ -440,8 +440,8 @@ export interface parameters {
   "rowFilter.Bill.userId": string;
   /** Format: date */
   "rowFilter.Bill.completedDate": string;
-  /** Format: boolean */
-  "rowFilter.Bill.archived": string;
+  /** Format: date */
+  "rowFilter.Bill.archivedDate": string;
   /** @description FixedReminder */
   "body.FixedReminder": definitions["FixedReminder"];
   /** Format: bigint */
