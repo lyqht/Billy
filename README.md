@@ -25,14 +25,6 @@ My mom & I both like cute stuff, so that's how _Billy_ has its name.
 
 A live progress can be found in [this #BuildInPublic tweet thread](https://twitter.com/estee_tey/status/1511017683440996359). Otherwise, for more in-depth details, you could refer to [ROADMAP.md](./ROADMAP.md).
 
-Below are some videos.
-
-https://user-images.githubusercontent.com/35736525/162599847-2573fe46-906d-4405-9ad2-03a69eba8001.mp4
-
-https://user-images.githubusercontent.com/35736525/162599856-867a0344-9bff-4602-8f52-9a7171924c76.mp4
-
-https://user-images.githubusercontent.com/35736525/162599866-929f880f-1f63-4249-a34d-fe28a8366773.mp4
-
 
 ## Memes
 
