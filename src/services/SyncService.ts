@@ -21,6 +21,7 @@ class SyncService {
       try {
         const result = await Promise.all(unsyncBills);
         console.log(`Number of bills sync to cloud: ${result.length}`);
+        await BillService.getBillsFromDB();
       } catch (err) {
         console.error(err);
       }
