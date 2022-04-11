@@ -225,8 +225,8 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.RecurringReminder.id"];
           created_at?: parameters["rowFilter.RecurringReminder.created_at"];
-          intervalUnit?: parameters["rowFilter.RecurringReminder.intervalUnit"];
-          specificUnit?: parameters["rowFilter.RecurringReminder.specificUnit"];
+          interval?: parameters["rowFilter.RecurringReminder.interval"];
+          timeUnit?: parameters["rowFilter.RecurringReminder.timeUnit"];
           billID?: parameters["rowFilter.RecurringReminder.billID"];
           /** Filtering Columns */
           select?: parameters["select"];
@@ -280,8 +280,8 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.RecurringReminder.id"];
           created_at?: parameters["rowFilter.RecurringReminder.created_at"];
-          intervalUnit?: parameters["rowFilter.RecurringReminder.intervalUnit"];
-          specificUnit?: parameters["rowFilter.RecurringReminder.specificUnit"];
+          interval?: parameters["rowFilter.RecurringReminder.interval"];
+          timeUnit?: parameters["rowFilter.RecurringReminder.timeUnit"];
           billID?: parameters["rowFilter.RecurringReminder.billID"];
         };
         header: {
@@ -299,8 +299,8 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.RecurringReminder.id"];
           created_at?: parameters["rowFilter.RecurringReminder.created_at"];
-          intervalUnit?: parameters["rowFilter.RecurringReminder.intervalUnit"];
-          specificUnit?: parameters["rowFilter.RecurringReminder.specificUnit"];
+          interval?: parameters["rowFilter.RecurringReminder.interval"];
+          timeUnit?: parameters["rowFilter.RecurringReminder.timeUnit"];
           billID?: parameters["rowFilter.RecurringReminder.billID"];
         };
         body: {
@@ -343,6 +343,7 @@ export interface definitions {
     /** Format: date */
     archivedDate?: string;
   };
+  /** @description Timestamp triggers */
   FixedReminder: {
     /**
      * Format: bigint
@@ -366,6 +367,7 @@ export interface definitions {
     /** Format: json */
     relativeTime?: string;
   };
+  /** @description Interval Triggers */
   RecurringReminder: {
     /**
      * Format: bigint
@@ -378,10 +380,10 @@ export interface definitions {
      * @default now()
      */
     created_at?: string;
-    /** Format: text */
-    intervalUnit: string;
+    /** Format: numeric */
+    interval: number;
     /** Format: ARRAY */
-    specificUnit?: unknown[];
+    timeUnit?: unknown[];
     /**
      * Format: bigint
      * @description Note:
@@ -460,10 +462,10 @@ export interface parameters {
   "rowFilter.RecurringReminder.id": string;
   /** Format: timestamp with time zone */
   "rowFilter.RecurringReminder.created_at": string;
-  /** Format: text */
-  "rowFilter.RecurringReminder.intervalUnit": string;
+  /** Format: numeric */
+  "rowFilter.RecurringReminder.interval": string;
   /** Format: ARRAY */
-  "rowFilter.RecurringReminder.specificUnit": string;
+  "rowFilter.RecurringReminder.timeUnit": string;
   /** Format: bigint */
   "rowFilter.RecurringReminder.billID": string;
 }
