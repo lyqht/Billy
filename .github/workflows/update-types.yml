@@ -2,7 +2,6 @@ name: Update database types
 
 on:
   schedule:
-    # sets the action to run daily. You can modify this to run the action more or less frequently
     - cron: '*/5 * * * *'
   workflow_dispatch:
 
@@ -13,30 +12,9 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: actions/setup-node@v2.1.5
-        with:
-          node-version: 14
-      - run: |
-          npm run update-types
-          echo "$(cat src/types/supabase.ts)"
-      - name: check for file changes
-        id: git_status
-        run: |
-          echo "::set-output name=status::$(git status -s)"
-      - name: Commit files
-        if: ${{contains(steps.git_status.outputs.status, ' ')}}
-        run: |
-          git add src/types/supabase.ts
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "billy-github-actions[bot]"
-          git commit -m "Update database types" -a
-      - name: Push changes
-        if: ${{contains(steps.git_status.outputs.status, ' ')}}
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+    - name: Generate Supabase Database types
+      uses: lyqht/generate-supabase-db-types-github-action@v0.0.1
+      with:
+          SUPABASE_URL: ${{secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          OUTPUT_PATH: src/types/supabase.ts
