@@ -44,7 +44,7 @@ Some funny tweet threads about Billy:
 - [UI Kittens](https://github.com/akveo/react-native-ui-kitten) for UI components
 - [Supabase](https://github.com/supabase/supabase) for Database & Auth. Data is served by REST.
 - [React Native MMKV](https://github.com/mrousavy/react-native-mmkv) for caching
-- [Notifee](https://github.com/invertase/notifee) for creating & editing notifications
+- [Notifee](https://github.com/invertase/notifee) for creating & editing notifications (not implemented yet!)
 - [Custom GitHub action for generating Supabase database types](https://blog.esteetey.dev/how-to-create-and-test-a-github-action-that-generates-types-from-supabase-database)
 ### Misc Tech Notes
 
