@@ -1,13 +1,13 @@
 # Billy
 
+[![Update database types](https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg)](https://github.com/lyqht/Billy/actions/workflows/update-types.yml)
+
+
 <div style="display: grid; place-items:center;">
     <img width="400" src="./demo/overview.gif"></img>
 </div>
 
 <br />
-
-[![Update database types](https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg)](https://github.com/lyqht/Billy/actions/workflows/update-types.yml)
-
 
 ## About the project
 
@@ -26,10 +26,10 @@ My mom & I both like cute stuff, so that's how _Billy_ has its name.
 A live progress can be found in [this #BuildInPublic tweet thread](https://twitter.com/estee_tey/status/1511017683440996359). Otherwise, for more in-depth details, you could refer to [ROADMAP.md](./ROADMAP.md).
 
 
-## Memes
+### Memes
 
 <div style="display: grid; place-items:center;">
-    <img width="400" src="./demo/Concerned%20Billy.png"></img>
+    <img width="300" src="./demo/Concerned%20Billy.png"></img>
 </div>
 
 <br />

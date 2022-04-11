@@ -7,6 +7,8 @@ This project is bootstrapped by
 npx react-native init Billy --template @ui-kitten/template-ts
 ```
 
+Many things have been heavily modified since then!
+
 ### Random stuff learnt along the way
 
 - UI Kittens does not come with FABs, so had to change design
