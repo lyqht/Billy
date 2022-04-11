@@ -13,7 +13,7 @@ jobs:
       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
     steps:
     - name: Generate Supabase Database types
-      uses: lyqht/generate-supabase-db-types-github-action@v0.0.1
+      uses: lyqht/generate-supabase-db-types-github-action@v0.0.2
       with:
           SUPABASE_URL: ${{secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
