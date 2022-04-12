@@ -15,6 +15,7 @@ class UserService {
       throw Error(error.message);
     }
 
+    await SyncService.syncAllData();
     return user;
   };
 

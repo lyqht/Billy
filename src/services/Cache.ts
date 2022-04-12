@@ -1,7 +1,7 @@
 import {AuthSession, User} from '@supabase/supabase-js';
 import {MMKV} from 'react-native-mmkv';
 import {initializeMMKVFlipper} from 'react-native-mmkv-flipper-plugin';
-import {Bill} from '../models/Bill';
+import {Bill, UnsyncBill} from '../models/Bill';
 
 export enum STORAGE_KEYS {
   LAST_SYNC_DATE = 'lastSyncDate',
@@ -63,7 +63,7 @@ class Cache {
     return this.storage.getString(STORAGE_KEYS.BILLS);
   }
 
-  setBills(bills: Partial<Bill>[]): void {
+  setBills(bills: Partial<Bill | UnsyncBill>[]): void {
     this.storage.set(STORAGE_KEYS.BILLS, JSON.stringify(bills));
   }
 

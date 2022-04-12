@@ -1,10 +1,47 @@
 import dayjs from 'dayjs';
 import {ToastShowParams} from 'react-native-toast-message';
+import {v4} from 'uuid';
 import supabase from '../api/supabase';
-import {Bill} from '../models/Bill';
+import {Bill, UnsyncBill} from '../models/Bill';
 import Cache from './Cache';
 import UserService from './UserService';
 class BillService {
+  getUnsyncBills = (bills: Bill[]): Bill[] => {
+    return bills.filter(
+      bill =>
+        (bill.tempID !== undefined || bill.tempID !== null) &&
+        (bill.id === undefined || bill.id === null),
+    );
+  };
+
+  getUpcomingBills = (bills: Bill[], sortByCompleted = true): Bill[] => {
+    const billsSortedByDeadline = bills
+      .filter(a => dayjs(a.deadline).isSameOrAfter(dayjs(), 'day'))
+      .sort((a, b) => (dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1));
+
+    if (sortByCompleted) {
+      const completedBills = billsSortedByDeadline.filter(a => a.completedDate);
+      const uncompletedBills = billsSortedByDeadline.filter(
+        a => a.completedDate === undefined || a.completedDate === null,
+      );
+
+      return [...uncompletedBills, ...completedBills];
+    }
+
+    return billsSortedByDeadline;
+  };
+
+  getMissedBills = (bills: Bill[]) => {
+    return bills
+      .filter(
+        bill =>
+          (bill.completedDate === null || bill.completedDate === undefined) &&
+          (bill.archivedDate === null || bill.archivedDate === undefined) &&
+          dayjs(bill.deadline).isBefore(dayjs(), 'day'),
+      )
+      .sort((a, b) => (dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1));
+  };
+
   getBillsFromDB = async (): Promise<Bill[]> => {
     const user = Cache.getUser();
 
@@ -38,7 +75,9 @@ class BillService {
     let result: Bill[] = [];
 
     try {
-      result = await this.getBillsFromDB();
+      if (UserService.getUser()) {
+        result = await this.getBillsFromDB();
+      }
     } catch (err) {
       console.error(err);
     }
@@ -48,10 +87,10 @@ class BillService {
 
   addBill = async (bill: Partial<Bill>): Promise<ToastShowParams> => {
     const user = Cache.getUser();
-    const updatedBill = {...bill, userId: user?.id};
     const bills = await this.getBills();
 
     if (user) {
+      const updatedBill = {...bill, userId: user.id};
       const {data, error} = await supabase
         .from<Bill>('Bill')
         .insert(updatedBill);
@@ -70,6 +109,7 @@ class BillService {
       Cache.setLastSyncDateAsNow();
     } else {
       console.log('Updating bills locally');
+      const updatedBill: UnsyncBill = {...bill, tempID: v4()};
       const updatedBills = [...bills, updatedBill];
       Cache.setBills(updatedBills);
     }
@@ -80,9 +120,9 @@ class BillService {
     };
   };
 
-  setBillCompleteStatus = async (
-    completedStatus: boolean,
-    id: number,
+  setBillAsComplete = async (
+    completed: boolean,
+    id?: number,
   ): Promise<void> => {
     const bills = await this.getBills();
     const billIndex = bills.findIndex(bill => bill.id === id);
@@ -91,7 +131,7 @@ class BillService {
     }
     const updatedBill = bills[billIndex];
     let completedDate;
-    if (completedStatus) {
+    if (completed) {
       completedDate = dayjs().toDate().toISOString();
     }
 
@@ -104,6 +144,35 @@ class BillService {
         .from<Bill>('Bill')
         .update({completedDate})
         .eq('id', id);
+
+      if (error) {
+        throw Error(error.message);
+      }
+    }
+  };
+
+  setBillAsArchived = async (bill: Bill): Promise<void> => {
+    const bills = await this.getBills();
+    let updatedBill: Bill;
+    const billIndex = bills.findIndex(
+      b => b.id === bill.id || b.tempID === bill.tempID,
+    );
+    if (billIndex === -1) {
+      throw Error('Cannot find bill');
+    }
+    updatedBill = bills[billIndex];
+
+    const archivedDate = dayjs().toDate().toISOString();
+
+    updatedBill.archivedDate = archivedDate;
+    Cache.setBills(bills);
+
+    const user = Cache.getUser();
+    if (user && bill.id) {
+      const {error} = await supabase
+        .from<Bill>('Bill')
+        .update({archivedDate})
+        .eq('id', bill.id);
 
       if (error) {
         throw Error(error.message);

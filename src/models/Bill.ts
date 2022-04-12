@@ -1,3 +1,12 @@
 import {definitions} from '../types/supabase';
 
-export type Bill = definitions['Bill'];
+interface UnsyncBillAttributes {
+  tempID?: string;
+  lastSyncedDate?: Date;
+}
+
+export interface UnsyncBill extends UnsyncBillAttributes, Omit<Bill, 'id'> {
+  id?: number | undefined;
+}
+
+export type Bill = definitions['Bill'] & UnsyncBillAttributes;

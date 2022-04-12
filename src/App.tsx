@@ -1,4 +1,5 @@
 import * as eva from '@eva-design/eva';
+import 'react-native-get-random-values';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';

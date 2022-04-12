@@ -13,27 +13,6 @@ import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
 dayjs.extend(isSameOrAfter);
 
-const getUpcomingBills = (bills: Bill[]) => {
-  const billsSortedByDeadline = bills
-    .filter(a => dayjs(a.deadline).isSameOrAfter(dayjs(), 'day'))
-    .sort((a, b) => (dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1));
-
-  const completedBills = billsSortedByDeadline.filter(a => a.completedDate);
-  const uncompletedBills = billsSortedByDeadline.filter(
-    a => a.completedDate === undefined || a.completedDate === null,
-  );
-
-  return [...uncompletedBills, ...completedBills];
-};
-
-const getMissedBills = (bills: Bill[]) => {
-  return bills.filter(
-    bill =>
-      (bill.completedDate === null || bill.completedDate === undefined) &&
-      dayjs(bill.deadline).isBefore(dayjs(), 'day'),
-  );
-};
-
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
   const [bills, setBills] = useState<Bill[]>([]);
@@ -50,8 +29,8 @@ const UpcomingBillsScreen: React.FC = () => {
         setShowRegisterPromptButton(false);
       }
       const retrievedBills = await BillService.getBills();
-      const upcomingBills = getUpcomingBills(retrievedBills);
-      const retrievedMissedBills = getMissedBills(retrievedBills);
+      const upcomingBills = BillService.getUpcomingBills(retrievedBills);
+      const retrievedMissedBills = BillService.getMissedBills(retrievedBills);
 
       setBills(upcomingBills);
       setMissedBills(retrievedMissedBills);
@@ -73,9 +52,9 @@ const UpcomingBillsScreen: React.FC = () => {
         } else if (changedKey === STORAGE_KEYS.BILLS) {
           const updatedBills = Cache.getBills();
           if (updatedBills) {
-            const parsedBills = JSON.parse(Cache.getBills()!);
-            setBills(getUpcomingBills([...parsedBills]));
-            setMissedBills(getMissedBills([...parsedBills]));
+            const parsedBills: Bill[] = JSON.parse(updatedBills);
+            setBills(BillService.getUpcomingBills([...parsedBills]));
+            setMissedBills(BillService.getMissedBills([...parsedBills]));
           }
         } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
           const lastSyncDateFromCache = Cache.getLastSyncDate();
@@ -134,7 +113,7 @@ const UpcomingBillsScreen: React.FC = () => {
             }
             style={styles.alertWrapper}
             onPress={() => {
-              navigator.navigate('MissedBills', {bills: missedBills});
+              navigator.navigate('MissedBills');
             }}
           >
             <Text>
@@ -147,7 +126,7 @@ const UpcomingBillsScreen: React.FC = () => {
           data={bills}
           renderItem={({item}) => (
             <View key={item.id} style={styles.listItemWrapper}>
-              <BillCard billCardType={BillCardType.UPCOMING_BILL} {...item} />
+              <BillCard billCardType={BillCardType.UPCOMING_BILL} bill={item} />
             </View>
           )}
           ListFooterComponent={
