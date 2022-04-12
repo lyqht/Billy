@@ -152,20 +152,7 @@ class BillService {
   };
 
   setBillAsArchived = async (bill: Bill): Promise<void> => {
-    const bills = await this.getBills();
-    let updatedBill: Bill;
-    const billIndex = bills.findIndex(
-      b => b.id === bill.id || b.tempID === bill.tempID,
-    );
-    if (billIndex === -1) {
-      throw Error('Cannot find bill');
-    }
-    updatedBill = bills[billIndex];
-
     const archivedDate = dayjs().toDate().toISOString();
-
-    updatedBill.archivedDate = archivedDate;
-    Cache.setBills(bills);
 
     const user = Cache.getUser();
     if (user && bill.id) {
@@ -177,6 +164,21 @@ class BillService {
       if (error) {
         throw Error(error.message);
       }
+      await this.getBillsFromDB();
+    } else {
+      const bills = await this.getBills();
+      let updatedBill: Bill;
+      const billIndex = bills.findIndex(
+        b => b.id === bill.id || b.tempID === bill.tempID,
+      );
+      if (billIndex === -1) {
+        throw Error('Cannot find bill');
+      }
+      updatedBill = bills[billIndex];
+
+      updatedBill.archivedDate = archivedDate;
+      console.log({bill, updatedBill});
+      Cache.setBills(bills);
     }
   };
 

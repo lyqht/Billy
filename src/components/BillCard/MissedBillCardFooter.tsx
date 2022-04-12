@@ -1,13 +1,14 @@
 import {Button, Icon} from '@ui-kitten/components';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {BillStatus} from '../../types/BillStatus';
 
-interface MissedBillCardFooterProps extends BillStatus {
+interface MissedBillCardFooterProps {
   onMarkAcknowledged: () => void;
 }
 
-const MissedBillCardFooter: React.FC<MissedBillCardFooterProps> = () => {
+const MissedBillCardFooter: React.FC<MissedBillCardFooterProps> = ({
+  onMarkAcknowledged,
+}) => {
   return (
     <View>
       <Button
@@ -15,6 +16,9 @@ const MissedBillCardFooter: React.FC<MissedBillCardFooterProps> = () => {
         appearance={'ghost'}
         status="danger"
         accessoryRight={<Icon name="archive" />}
+        onPress={() => {
+          onMarkAcknowledged();
+        }}
       >
         Archive this bill
       </Button>

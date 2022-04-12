@@ -1,7 +1,7 @@
 import {Card, Text, useTheme} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {LayoutAnimation, StyleSheet, View} from 'react-native';
 import {Bill} from '../../models/Bill';
 import {Reminder} from '../../models/Reminder';
 import BillService from '../../services/BillService';
@@ -13,21 +13,19 @@ export enum BillCardType {
   UPCOMING_BILL = 'UpcomingBill',
   MISSED_BILL = 'MissedBill',
 }
-interface BillCardProps extends Bill {
+interface BillCardProps {
+  bill: Bill;
   reminder?: Reminder;
   billCardType: BillCardType;
 }
 
 export const BillCard: React.FC<BillCardProps> = ({
-  id,
-  payee,
-  amount,
-  deadline,
+  bill,
   reminder,
-  completedDate,
   billCardType,
 }) => {
   const theme = useTheme();
+  const {id, payee, amount, deadline, completedDate} = bill;
   const [cardStatus, setCardStatus] = React.useState(
     completedDate ? 'success' : 'basic',
   );
@@ -39,14 +37,19 @@ export const BillCard: React.FC<BillCardProps> = ({
         disabled={true}
         footer={
           <UpcomingBillCardFooter
-            id={id}
             completedDate={completedDate}
             onMarkComplete={async () => {
-              await BillService.setBillCompleteStatus(true, id);
+              await BillService.setBillAsComplete(true, id);
+              LayoutAnimation.configureNext(
+                LayoutAnimation.Presets.easeInEaseOut,
+              );
               setCardStatus('success');
             }}
             onMarkIncomplete={async () => {
-              await BillService.setBillCompleteStatus(false, id);
+              await BillService.setBillAsComplete(false, id);
+              LayoutAnimation.configureNext(
+                LayoutAnimation.Presets.easeInEaseOut,
+              );
               setCardStatus('basic');
             }}
           />
@@ -80,9 +83,9 @@ export const BillCard: React.FC<BillCardProps> = ({
         disabled={true}
         footer={
           <MissedBillCardFooter
-            id={id}
-            onMarkAcknowledged={() => {
-              console.log(`Bill ${id} has been archived`);
+            onMarkAcknowledged={async () => {
+              await BillService.setBillAsArchived(bill);
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             }}
           />
         }

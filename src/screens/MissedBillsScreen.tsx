@@ -1,25 +1,78 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Quote} from '../components/Quote';
+import {Bill} from '../models/Bill';
 import {RootStackParamList} from '../routes';
+import BillService from '../services/BillService';
+import Cache, {STORAGE_KEYS} from '../services/Cache';
 
 type MissedBillsScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'MissedBills'
 >;
 
-const MissedBillsScreen: React.FC<MissedBillsScreenProps> = ({route}) => {
-  const {bills} = route.params;
+const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
+  const [bills, setMissedBills] = useState<Bill[]>([]);
+
+  useEffect(() => {
+    const init = async () => {
+      const retrievedBills = await BillService.getBills();
+      const retrievedMissedBills = BillService.getMissedBills(retrievedBills);
+
+      setMissedBills(retrievedMissedBills);
+    };
+
+    const listener = Cache.getStorage().addOnValueChangedListener(
+      changedKey => {
+        if (changedKey === STORAGE_KEYS.BILLS) {
+          const updatedBills = Cache.getBills();
+          console.log({updatedBills});
+          if (updatedBills) {
+            const parsedBills: Bill[] = JSON.parse(updatedBills);
+            setMissedBills(BillService.getMissedBills([...parsedBills]));
+          }
+        }
+      },
+    );
+
+    init();
+
+    return () => listener.remove();
+  }, []);
+
+  const headerText =
+    bills.length > 0
+      ? "You didn't pay {bills.length} bill(s) on time 😰"
+      : 'You have no missed bills 🥳';
+
+  if (bills.length === 0) {
+    return (
+      <SafeAreaView>
+        <Layout style={styles.layoutContainer}>
+          <View style={[styles.listItemWrapper]}>
+            <Text category={'h6'} style={styles.item}>
+              {headerText}
+            </Text>
+            <Text category={'p1'}>
+              Good job! Let's continue to stay on track!
+            </Text>
+          </View>
+        </Layout>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView>
       <Layout style={styles.layoutContainer}>
         <View style={[styles.listItemWrapper]}>
           <Text category={'h6'} style={styles.item}>
-            You didn't pay {bills.length} bills on time 😰
+            {headerText}
           </Text>
+
           <Quote>
             <Text category={'p1'}>
               Check below what you missed. If you don't want Billy to alert you
@@ -33,7 +86,7 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = ({route}) => {
           data={bills}
           renderItem={({item}) => (
             <View key={item.id} style={styles.listItemWrapper}>
-              <BillCard billCardType={BillCardType.MISSED_BILL} {...item} />
+              <BillCard billCardType={BillCardType.MISSED_BILL} bill={item} />
             </View>
           )}
           ListFooterComponent={

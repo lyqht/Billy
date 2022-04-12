@@ -53,7 +53,7 @@ const UpcomingBillsScreen: React.FC = () => {
           const updatedBills = Cache.getBills();
           if (updatedBills) {
             const parsedBills: Bill[] = JSON.parse(updatedBills);
-            setBills(BillService.getUpcomingBills([...parsedBills]));
+            setBills(BillService.getUpcomingBills([...parsedBills], false));
             setMissedBills(BillService.getMissedBills([...parsedBills]));
           }
         } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
