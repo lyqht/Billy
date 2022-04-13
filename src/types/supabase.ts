@@ -120,6 +120,135 @@ export interface paths {
       };
     };
   };
+<<<<<<< HEAD
+  "/FCMTokens": {
+    get: {
+      parameters: {
+        query: {
+          deviceId?: parameters["rowFilter.FCMTokens.deviceId"];
+          created_at?: parameters["rowFilter.FCMTokens.created_at"];
+          userId?: parameters["rowFilter.FCMTokens.userId"];
+          token?: parameters["rowFilter.FCMTokens.token"];
+=======
+  "/FcmTokens": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.FcmTokens.id"];
+          created_at?: parameters["rowFilter.FcmTokens.created_at"];
+          userId?: parameters["rowFilter.FcmTokens.userId"];
+          token?: parameters["rowFilter.FcmTokens.token"];
+>>>>>>> fdc7d3a (update roadmap)
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+<<<<<<< HEAD
+          schema: definitions["FCMTokens"][];
+=======
+          schema: definitions["FcmTokens"][];
+>>>>>>> fdc7d3a (update roadmap)
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** FCMTokens */
+          FCMTokens?: definitions["FCMTokens"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+<<<<<<< HEAD
+          deviceId?: parameters["rowFilter.FCMTokens.deviceId"];
+          created_at?: parameters["rowFilter.FCMTokens.created_at"];
+          userId?: parameters["rowFilter.FCMTokens.userId"];
+          token?: parameters["rowFilter.FCMTokens.token"];
+=======
+          id?: parameters["rowFilter.FcmTokens.id"];
+          created_at?: parameters["rowFilter.FcmTokens.created_at"];
+          userId?: parameters["rowFilter.FcmTokens.userId"];
+          token?: parameters["rowFilter.FcmTokens.token"];
+>>>>>>> fdc7d3a (update roadmap)
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+<<<<<<< HEAD
+          deviceId?: parameters["rowFilter.FCMTokens.deviceId"];
+          created_at?: parameters["rowFilter.FCMTokens.created_at"];
+          userId?: parameters["rowFilter.FCMTokens.userId"];
+          token?: parameters["rowFilter.FCMTokens.token"];
+        };
+        body: {
+          /** FCMTokens */
+          FCMTokens?: definitions["FCMTokens"];
+=======
+          id?: parameters["rowFilter.FcmTokens.id"];
+          created_at?: parameters["rowFilter.FcmTokens.created_at"];
+          userId?: parameters["rowFilter.FcmTokens.userId"];
+          token?: parameters["rowFilter.FcmTokens.token"];
+        };
+        body: {
+          /** FcmTokens */
+          FcmTokens?: definitions["FcmTokens"];
+>>>>>>> fdc7d3a (update roadmap)
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/FixedReminder": {
     get: {
       parameters: {
@@ -343,6 +472,34 @@ export interface definitions {
     /** Format: date */
     archivedDate?: string;
   };
+<<<<<<< HEAD
+  FCMTokens: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    deviceId: string;
+=======
+  /** @description Tokens for firebase cloud messaging */
+  FcmTokens: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+>>>>>>> fdc7d3a (update roadmap)
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /** Format: uuid */
+    userId?: string;
+    /** Format: uuid */
+    token?: string;
+  };
   /** @description Timestamp triggers */
   FixedReminder: {
     /**
@@ -444,6 +601,29 @@ export interface parameters {
   "rowFilter.Bill.completedDate": string;
   /** Format: date */
   "rowFilter.Bill.archivedDate": string;
+<<<<<<< HEAD
+  /** @description FCMTokens */
+  "body.FCMTokens": definitions["FCMTokens"];
+  /** Format: uuid */
+  "rowFilter.FCMTokens.deviceId": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.FCMTokens.created_at": string;
+  /** Format: uuid */
+  "rowFilter.FCMTokens.userId": string;
+  /** Format: uuid */
+  "rowFilter.FCMTokens.token": string;
+=======
+  /** @description FcmTokens */
+  "body.FcmTokens": definitions["FcmTokens"];
+  /** Format: bigint */
+  "rowFilter.FcmTokens.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.FcmTokens.created_at": string;
+  /** Format: uuid */
+  "rowFilter.FcmTokens.userId": string;
+  /** Format: uuid */
+  "rowFilter.FcmTokens.token": string;
+>>>>>>> fdc7d3a (update roadmap)
   /** @description FixedReminder */
   "body.FixedReminder": definitions["FixedReminder"];
   /** Format: bigint */
