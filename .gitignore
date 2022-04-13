@@ -61,3 +61,5 @@ buck-out/
 .env
 .eslintcache
 .envrc
+google-services.json
+GoogleService-Info.plist

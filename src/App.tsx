@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import {SupabaseContextProvider} from 'use-supabase';
@@ -14,6 +14,13 @@ import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import MissedBillsScreen from './screens/MissedBillsScreen';
+import {registerDeviceForRemoteMessages} from './services/NotificationService';
+import SyncService from './services/SyncService';
+
+const init = async () => {
+  await SyncService.syncAllData();
+  await registerDeviceForRemoteMessages();
+};
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -40,6 +47,9 @@ const NavStack = () => (
 );
 
 const App: React.FC = () => {
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />

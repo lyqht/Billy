@@ -39,6 +39,11 @@
 - [ ]  Access Billy from the Web
 
 
+## Going Production Checklist
+
+- [ ] [Supabase Checklist](https://supabase.com/docs/going-into-prod)
+- [ ] Add analytics
+
 ## Videos
 
 https://user-images.githubusercontent.com/35736525/162599847-2573fe46-906d-4405-9ad2-03a69eba8001.mp4

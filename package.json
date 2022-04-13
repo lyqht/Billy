@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.0",
-    "@notifee/react-native": "^5.0.3",
+    "@notifee/react-native": "^5.1.0",
+    "@react-native-firebase/app": "^14.7.0",
+    "@react-native-firebase/messaging": "^14.7.0",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.2",
@@ -26,6 +28,7 @@
     "react": "17.0.1",
     "react-hook-form": "^7.29.0",
     "react-native": "0.64.1",
+    "react-native-device-info": "^8.7.0",
     "react-native-dotenv": "^3.3.1",
     "react-native-get-random-values": "^1.7.2",
     "react-native-mmkv": "^2.3.0",

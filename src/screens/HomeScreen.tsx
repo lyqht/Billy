@@ -1,14 +1,9 @@
 import {Layout} from '@ui-kitten/components';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import BottomTabNavigator from '../components/Navigation/BottomTabNavigator';
-import SyncService from '../services/SyncService';
 
 const HomeScreen: React.FC = () => {
-  useEffect(() => {
-    const init = async () => await SyncService.syncAllData();
-    init();
-  }, []);
   return (
     <SafeAreaView style={styles.main}>
       <Layout style={styles.layoutContainer}>
