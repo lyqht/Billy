@@ -24,13 +24,12 @@
         - [x]  Sync existing device cache (bills, reminders that do not have ids) to cloud
         - [x]  Retrieve and cache cloud data that do not exist on device
 - [x]  Missed Bills
-    - [ ]  Mark as acknowledged
+    - [x]  Mark as acknowledged (Archive bill)
 - [ ]  Edit bills
-    - [ ]  Allow users to mark as complete manually
+    - [x]  Allow users to mark as complete manually
     - [ ]  Edit notifications
 - [ ]  Delete bills
     - [ ]  Delete notifications
-- [ ]  Recurring bills
 - [ ]  Network handling
     - [ ]  only fetch bills for account users
     - [ ]  only post bills for account users
