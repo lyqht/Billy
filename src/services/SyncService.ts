@@ -1,3 +1,4 @@
+import {getUnsyncBills} from '../helpers/bill-filter';
 import {addTempIDToUnsyncedBills} from '../helpers/migrate-cache';
 import {Bill} from '../models/Bill';
 import BillService from './BillService';
@@ -17,7 +18,7 @@ class SyncService {
     const billsFromCache = Cache.getBills();
     if (billsFromCache) {
       const bills: Bill[] = JSON.parse(billsFromCache);
-      const unsyncBills = BillService.getUnsyncBills(bills);
+      const unsyncBills = getUnsyncBills(bills);
       console.log({unsyncBills});
       console.log(`Number of unsync bills: ${unsyncBills.length}`);
       const promises = [];

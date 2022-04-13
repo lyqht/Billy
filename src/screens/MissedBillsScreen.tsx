@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Quote} from '../components/Quote';
+import {getMissedBills} from '../helpers/bill-filter';
 import {Bill} from '../models/Bill';
 import {RootStackParamList} from '../routes';
 import BillService from '../services/BillService';
@@ -20,7 +21,7 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
   useEffect(() => {
     const init = async () => {
       const retrievedBills = await BillService.getBills();
-      const retrievedMissedBills = BillService.getMissedBills(retrievedBills);
+      const retrievedMissedBills = getMissedBills(retrievedBills);
 
       setMissedBills(retrievedMissedBills);
     };
@@ -32,7 +33,7 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
           console.log({updatedBills});
           if (updatedBills) {
             const parsedBills: Bill[] = JSON.parse(updatedBills);
-            setMissedBills(BillService.getMissedBills([...parsedBills]));
+            setMissedBills(getMissedBills([...parsedBills]));
           }
         }
       },

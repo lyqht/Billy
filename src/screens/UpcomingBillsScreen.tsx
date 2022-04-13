@@ -1,17 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import dayjs from 'dayjs';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/RegisterPromptButton';
+import {getMissedBills, getUpcomingBills} from '../helpers/bill-filter';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
-dayjs.extend(isSameOrAfter);
 
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
@@ -29,8 +28,8 @@ const UpcomingBillsScreen: React.FC = () => {
         setShowRegisterPromptButton(false);
       }
       const retrievedBills = await BillService.getBills();
-      const upcomingBills = BillService.getUpcomingBills(retrievedBills);
-      const retrievedMissedBills = BillService.getMissedBills(retrievedBills);
+      const upcomingBills = getUpcomingBills(retrievedBills);
+      const retrievedMissedBills = getMissedBills(retrievedBills);
 
       setBills(upcomingBills);
       setMissedBills(retrievedMissedBills);
@@ -53,8 +52,8 @@ const UpcomingBillsScreen: React.FC = () => {
           const updatedBills = Cache.getBills();
           if (updatedBills) {
             const parsedBills: Bill[] = JSON.parse(updatedBills);
-            setBills(BillService.getUpcomingBills([...parsedBills], false));
-            setMissedBills(BillService.getMissedBills([...parsedBills]));
+            setBills(getUpcomingBills([...parsedBills], false));
+            setMissedBills(getMissedBills([...parsedBills]));
           }
         } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
           const lastSyncDateFromCache = Cache.getLastSyncDate();
