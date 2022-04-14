@@ -119,32 +119,41 @@ const UpcomingBillsScreen: React.FC = () => {
             </Text>
           </Button>
         )}
-        <List
-          ref={listRef}
-          data={bills}
-          renderItem={({item}) => (
-            <View key={item.id} style={styles.listItemWrapper}>
-              <BillCard billCardType={BillCardType.UPCOMING_BILL} bill={item} />
-            </View>
-          )}
-          ListFooterComponent={
-            bills.length > 5 ? (
-              <Button
-                size={'large'}
-                appearance={'ghost'}
-                accessoryLeft={<Icon name="corner-left-up-outline" />}
-                status={'basic'}
-                onPress={() => {
-                  scrollToTop();
-                }}
-              >
-                Scroll back to top
-              </Button>
-            ) : (
-              <></>
-            )
-          }
-        />
+        {bills.length > 0 ? (
+          <List
+            ref={listRef}
+            data={bills}
+            renderItem={({item}) => (
+              <View key={item.id} style={styles.listItemWrapper}>
+                <BillCard
+                  billCardType={BillCardType.UPCOMING_BILL}
+                  bill={item}
+                />
+              </View>
+            )}
+            ListFooterComponent={
+              bills.length > 5 ? (
+                <Button
+                  size={'large'}
+                  appearance={'ghost'}
+                  accessoryLeft={<Icon name="corner-left-up-outline" />}
+                  status={'basic'}
+                  onPress={() => {
+                    scrollToTop();
+                  }}
+                >
+                  Scroll back to top
+                </Button>
+              ) : (
+                <></>
+              )
+            }
+          />
+        ) : (
+          <View style={styles.noBillsContainer}>
+            <Text category={'p1'}>No bills found 👀</Text>
+          </View>
+        )}
       </Layout>
     </SafeAreaView>
   );
@@ -183,6 +192,11 @@ const styles = StyleSheet.create({
   alertIcon: {
     width: 24,
     height: 24,
+  },
+  noBillsContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
   },
 });
 
