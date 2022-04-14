@@ -44,7 +44,9 @@ class BillService {
     return result;
   };
 
-  addBill = async (bill: Partial<Bill>): Promise<ToastShowParams> => {
+  addBill = async (
+    bill: Partial<Bill>,
+  ): Promise<ToastShowParams & {id: string}> => {
     const user = Cache.getUser();
     const bills = await this.getBills();
 
@@ -61,22 +63,30 @@ class BillService {
           text1: 'Ops!',
           text2:
             'This bill has been saved locally, but failed to sync to cloud. We will try this again in the background!',
+          id: v4(),
         };
       }
 
       Cache.setBills([...bills, ...data]);
       Cache.setLastSyncDateAsNow();
+
+      return {
+        type: 'success',
+        text1: 'Bill saved!',
+        id: `${data[0].id}`,
+      };
     } else {
       console.log('Updating bills locally');
-      const updatedBill: UnsyncBill = {...bill, tempID: v4()};
+      const tempID = v4();
+      const updatedBill: UnsyncBill = {...bill, tempID};
       const updatedBills = [...bills, updatedBill];
       Cache.setBills(updatedBills);
+      return {
+        type: 'success',
+        text1: 'Bill saved!',
+        id: tempID,
+      };
     }
-
-    return {
-      type: 'success',
-      text1: 'Bill saved!',
-    };
   };
 
   setBillAsComplete = async (

@@ -9,6 +9,7 @@ import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
+import {getReminderNotificationIdsForBill} from '../services/NotificationService';
 import UserService from '../services/UserService';
 
 const UpcomingBillsScreen: React.FC = () => {
@@ -16,6 +17,7 @@ const UpcomingBillsScreen: React.FC = () => {
   const [bills, setBills] = useState<Bill[]>([]);
   const [missedBills, setMissedBills] = useState<Bill[]>([]);
   const [lastSyncDate, setLastSyncDate] = useState<string>('');
+  const [reminders, setReminders] = useState<Record<string, number>>({});
   const [showRegisterPromptButton, setShowRegisterPromptButton] =
     useState(true);
   const listRef = React.useRef<List>(null);
@@ -36,6 +38,17 @@ const UpcomingBillsScreen: React.FC = () => {
     if (lastSyncDateFromCache) {
       setLastSyncDate(lastSyncDateFromCache);
     }
+
+    const retrievedReminders: Record<string, number> = {};
+    for (let bill of retrievedBills) {
+      const identifier = `${bill.tempID || bill.id}`;
+      const remindersForBill = await getReminderNotificationIdsForBill(
+        `${identifier}`,
+      );
+      retrievedReminders[identifier] = remindersForBill.length;
+    }
+
+    setReminders(retrievedReminders);
   };
 
   useEffect(() => {
@@ -53,6 +66,16 @@ const UpcomingBillsScreen: React.FC = () => {
           if (retrievedBills) {
             setBills(getUpcomingBills([...retrievedBills], false));
             setMissedBills(getMissedBills([...retrievedBills]));
+            const retrievedReminders: Record<string, number> = {};
+            for (let bill of retrievedBills) {
+              const identifier = `${bill.tempID || bill.id}`;
+              getReminderNotificationIdsForBill(`${identifier}`).then(
+                remindersForBill => {
+                  retrievedReminders[identifier] = remindersForBill.length;
+                  setReminders(retrievedReminders);
+                },
+              );
+            }
           }
         } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
           const lastSyncDateFromCache = Cache.getLastSyncDate();
@@ -124,10 +147,11 @@ const UpcomingBillsScreen: React.FC = () => {
             ref={listRef}
             data={bills}
             renderItem={({item}) => (
-              <View key={item.id} style={styles.listItemWrapper}>
+              <View key={item.id || item.tempID} style={styles.listItemWrapper}>
                 <BillCard
                   billCardType={BillCardType.UPCOMING_BILL}
                   bill={item}
+                  numReminders={reminders[item.tempID || item.id]}
                 />
               </View>
             )}

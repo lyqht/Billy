@@ -1,8 +1,18 @@
 import {definitions} from '../types/supabase';
+export interface ReminderFormData {
+  timeUnit: TimeUnit;
+  value: string;
+}
 
-export type Reminder = {
-  id?: string;
-  billID: string;
+export enum TimeUnit {
+  HOURS = 'hours',
+  DAYS = 'days',
+  WEEKS = 'weeks',
+  MONTHS = 'months',
+}
+
+export type ReminderNotification = {
+  id: string;
 };
 
 export type RecurringReminder = definitions['RecurringReminder'];

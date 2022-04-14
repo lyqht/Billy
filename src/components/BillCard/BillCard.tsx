@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import React from 'react';
 import {LayoutAnimation, StyleSheet, View} from 'react-native';
 import {Bill} from '../../models/Bill';
-import {Reminder} from '../../models/Reminder';
 import BillService from '../../services/BillService';
 import BillCardReminderText from './BillCardReminderText';
 import MissedBillCardFooter from './MissedBillCardFooter';
@@ -15,14 +14,14 @@ export enum BillCardType {
 }
 interface BillCardProps {
   bill: Bill;
-  reminder?: Reminder;
   billCardType: BillCardType;
+  numReminders: number;
 }
 
 export const BillCard: React.FC<BillCardProps> = ({
   bill,
-  reminder,
   billCardType,
+  numReminders,
 }) => {
   const theme = useTheme();
   const {id, payee, amount, deadline, completedDate} = bill;
@@ -58,7 +57,9 @@ export const BillCard: React.FC<BillCardProps> = ({
         <View style={styles.container}>
           <View style={styles.leftColumn}>
             <Text category={'s1'}>{payee}</Text>
-            {!completedDate && <BillCardReminderText reminder={reminder!} />}
+            {!completedDate && (
+              <BillCardReminderText numReminders={numReminders} />
+            )}
           </View>
           <View style={styles.rightColumn}>
             <Text category={'h6'}>${`${amount}`}</Text>

@@ -1,21 +1,29 @@
 import {useNavigation} from '@react-navigation/native';
-import {Button, Layout, Text} from '@ui-kitten/components';
+import {Button, Icon, Layout, Text, useTheme} from '@ui-kitten/components';
 import dayjs from 'dayjs';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Toast, {ToastShowParams} from 'react-native-toast-message';
 import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
 import {CustomDatepicker} from '../components/BillForm/CustomDatePicker';
 import {CustomInput} from '../components/BillForm/CustomInput';
+import CustomTimePicker from '../components/BillForm/CustomTimePicker';
+import ReminderForm from '../components/BillForm/ReminderForm';
 import {
   defaultCategoryIcons,
   defaultPayees,
   getCategoryForPayee,
 } from '../constants/PayeeOptions';
+import {getReminderDate} from '../helpers/DateFns';
 import {Bill} from '../models/Bill';
+import {ReminderFormData} from '../models/Reminder';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
+import {
+  createTimestampNotification,
+  createBaseNotification,
+} from '../services/NotificationService';
 interface Props {
   bill?: Bill;
 }
@@ -24,6 +32,7 @@ interface FormData {
   amount: string;
   category: string;
   deadline: Date;
+  reminderDates: Date[];
 }
 
 const showToast = (toastParams: ToastShowParams) => {
@@ -31,7 +40,12 @@ const showToast = (toastParams: ToastShowParams) => {
 };
 
 const BillFormScreen: React.FC<Props> = () => {
+  const theme = useTheme();
   const navigator = useNavigation<NavigationProps>();
+  const [showReminderForm, setShowReminderForm] = useState(false);
+  const [relativeReminderDates, setRelativeReminderDates] = useState<
+    ReminderFormData[]
+  >([]);
   const {
     control,
     handleSubmit,
@@ -45,39 +59,84 @@ const BillFormScreen: React.FC<Props> = () => {
       payee: '',
       category: '',
       amount: '',
-      deadline: dayjs().toDate(),
+      deadline: dayjs().hour(21).minute(0).toDate(),
     },
   });
 
-  const payee = watch('payee');
+  const currentPayee = watch('payee');
+  const currentDeadline = watch('deadline');
 
   useEffect(() => {
     // according to react-hook-form's video here: https://www.youtube.com/watch?v=3qLd69WMqKk
     // watch is not intended to be used like this, but it does work so i'm leaving it LOL
-    if (defaultPayees.includes(payee)) {
-      setValue('category', getCategoryForPayee(payee));
+    if (defaultPayees.includes(currentPayee)) {
+      setValue('category', getCategoryForPayee(currentPayee));
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [payee]);
+  }, [currentPayee]);
+
+  const getDateWithTime = (date: Date, dateTime: Date): Date =>
+    dayjs(date)
+      .hour(dayjs(dateTime).hour())
+      .minute(dayjs(dateTime).minute())
+      .toDate();
 
   const onSubmit = async () => {
-    console.log('Submitting form');
+    const {amount, deadline} = getValues();
     const bill: Partial<Bill> = {
       ...getValues(),
-      deadline: getValues().deadline.toDateString(),
-      amount: parseFloat(getValues().amount),
+      deadline: deadline.toDateString(),
+      amount: parseFloat(amount),
     };
 
-    const toastParams = await BillService.addBill(bill);
+    const {id, ...toastParams} = await BillService.addBill(bill);
     showToast(toastParams);
-    navigator.goBack();
+
+    if (toastParams.type !== 'error') {
+      const reminderDates = relativeReminderDates.map(({value, timeUnit}) =>
+        getReminderDate(deadline, value, timeUnit),
+      );
+
+      console.debug('In bill form screen');
+      console.debug({id});
+      const notifPromises = reminderDates.map(date =>
+        createTimestampNotification(
+          date,
+          createBaseNotification(
+            id,
+            'Your bill is due!',
+            `You have a pending bill to ${currentPayee} due on ${dayjs(
+              deadline,
+            ).format('DD/MM/YYYY')}`,
+          ),
+        ),
+      );
+
+      try {
+        await Promise.all(notifPromises);
+        navigator.goBack();
+      } catch (err) {
+        console.log(err);
+        showToast({
+          type: 'error',
+          text1: 'Unable to create notifications',
+          text2:
+            'Billy is unable to create notifications here for some reason >_< Either check your permission settings, or make sure that your reminder is not set in the past.',
+        });
+      }
+    }
+  };
+
+  const onReminderFormSubmit = ({value, timeUnit}: ReminderFormData) => {
+    setRelativeReminderDates([...relativeReminderDates, {value, timeUnit}]);
+    setShowReminderForm(false);
   };
 
   return (
     <SafeAreaView>
       <Layout style={styles.container}>
-        <View>
+        <ScrollView>
           <Text category="h2">New Bill</Text>
           <View style={styles.formField}>
             <Controller
@@ -133,6 +192,7 @@ const BillFormScreen: React.FC<Props> = () => {
                   icon="pricetags-outline"
                   onChangeText={onChange}
                   value={value}
+                  keyboardType="number-pad"
                 />
               )}
             />
@@ -154,12 +214,67 @@ const BillFormScreen: React.FC<Props> = () => {
                   label="Deadline"
                   placeholder="Choose a date"
                   date={value}
-                  onSelect={onChange}
+                  onSelect={selected =>
+                    onChange(getDateWithTime(selected, currentDeadline))
+                  }
                 />
               )}
             />
           </View>
-        </View>
+          <View style={styles.formField}>
+            <Controller
+              name="deadline"
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, value}}) => (
+                <CustomTimePicker
+                  onSelect={onChange}
+                  date={value}
+                  accessoryRight={<Icon name="clock" />}
+                />
+              )}
+            />
+          </View>
+          <View>
+            <View style={styles.reminderSection}>
+              <Text
+                category={'label'}
+                style={[
+                  styles.reminderHeader,
+                  {color: theme['color-basic-600']},
+                ]}
+              >
+                Reminders ({relativeReminderDates.length})
+              </Text>
+              {relativeReminderDates.map(({value, timeUnit}, index) => (
+                <View key={`reminder-date-section-${index}`}>
+                  <Text category={'p1'}>
+                    {dayjs(
+                      getReminderDate(currentDeadline, value, timeUnit),
+                    ).format('DD MMM YYYY, ddd, h:mm a')}
+                  </Text>
+                </View>
+              ))}
+            </View>
+            {showReminderForm ? (
+              <ReminderForm onSubmit={onReminderFormSubmit} />
+            ) : (
+              <Button
+                style={styles.reminderButton}
+                size={'small'}
+                appearance={'outline'}
+                onPress={() => setShowReminderForm(true)}
+                accessoryRight={props => (
+                  <Icon {...props} name="bell-outline" />
+                )}
+              >
+                Add a reminder
+              </Button>
+            )}
+          </View>
+        </ScrollView>
         <Button size="medium" onPress={handleSubmit(onSubmit)}>
           Submit
         </Button>
@@ -176,6 +291,15 @@ const styles = StyleSheet.create({
   },
   formField: {
     paddingVertical: 16,
+  },
+  reminderSection: {
+    paddingVertical: 16,
+  },
+  reminderButton: {
+    width: 200,
+  },
+  reminderHeader: {
+    marginBottom: 8,
   },
 });
 

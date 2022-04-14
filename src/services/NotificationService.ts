@@ -10,6 +10,7 @@ import {Platform} from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
 import supabase from '../api/supabase';
 import UserService from './UserService';
+import {v4} from 'uuid';
 
 // --------- FCM ---------- //
 
@@ -20,7 +21,7 @@ export const requestUserPermissionOnIOS = async (): Promise<boolean> => {
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
   if (enabled) {
-    console.log('Authorization status:', authStatus);
+    console.log('User permission for notifications:', authStatus);
   }
 
   return enabled;
@@ -61,21 +62,23 @@ export const registerDeviceForRemoteMessages = async () => {
 const ANDROID_CHANNEL_ID = 'billy-notifs';
 
 export const createAndroidNotifChannel = async () => {
-  await notifee.createChannel({
-    id: ANDROID_CHANNEL_ID,
-    name: 'Billy',
-    lights: false,
-    vibration: true,
-    importance: AndroidImportance.DEFAULT,
-  });
+  if (!notifee.isChannelCreated(ANDROID_CHANNEL_ID)) {
+    await notifee.createChannel({
+      id: ANDROID_CHANNEL_ID,
+      name: 'Billy',
+      lights: false,
+      vibration: true,
+      importance: AndroidImportance.DEFAULT,
+    });
+  }
 };
 
 export const createBaseNotification = (
-  id: string,
+  billId: string,
   title: string,
   body: string,
 ): Notification => ({
-  id, // this id should follow either bill.tempID or bill.id
+  id: billId + v4(), // this id should follow either bill.tempID or bill.id
   title,
   body,
   android: {
@@ -101,12 +104,23 @@ export const createTimestampNotification = async (
   date: Date,
   notification: Notification,
 ): Promise<void> => {
-  checkAndroidAlarmPermissionSettings(async () => {
+  await createAndroidNotifChannel();
+  await checkAndroidAlarmPermissionSettings(async () => {
     const trigger: TimestampTrigger = {
       type: TriggerType.TIMESTAMP,
       timestamp: date.getTime(),
     };
 
-    await notifee.createTriggerNotification(notification, trigger);
+    const createdNotification = await notifee.createTriggerNotification(
+      notification,
+      trigger,
+    );
+
+    console.debug({createdNotification});
   });
+};
+
+export const getReminderNotificationIdsForBill = async (billID: string) => {
+  const ids = await notifee.getTriggerNotificationIds();
+  return ids.filter(id => id.startsWith(billID)) || [];
 };

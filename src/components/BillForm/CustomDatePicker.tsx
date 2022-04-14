@@ -2,6 +2,7 @@ import {Datepicker, Icon} from '@ui-kitten/components';
 import {RenderProp} from '@ui-kitten/components/devsupport';
 import React from 'react';
 import {ImageProps} from 'react-native';
+import dayjs from 'dayjs';
 
 interface Props {
   label: string;
@@ -15,5 +16,11 @@ export const CustomDatepicker: React.FC<Props> = props => {
     <Icon {...iconProps} name={'calendar'} />
   );
 
-  return <Datepicker {...props} accessoryRight={AccessoryIcon} />;
+  return (
+    <Datepicker
+      {...props}
+      min={dayjs().toDate()}
+      accessoryRight={AccessoryIcon}
+    />
+  );
 };
