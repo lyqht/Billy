@@ -1,7 +1,6 @@
 import {User} from '@supabase/supabase-js';
 import supabase from '../api/supabase';
 import Cache from './Cache';
-import SyncService from './SyncService';
 
 class UserService {
   signUpUser = async (email: string, password: string) => {
@@ -15,7 +14,6 @@ class UserService {
       throw Error(error.message);
     }
 
-    await SyncService.syncAllData();
     return user;
   };
 
@@ -30,7 +28,6 @@ class UserService {
       throw Error(error.message);
     }
 
-    await SyncService.syncAllData();
     return user;
   };
 

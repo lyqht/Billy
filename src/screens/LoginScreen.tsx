@@ -13,6 +13,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet, View, Image, TouchableOpacity, Linking} from 'react-native';
 import {CustomInput} from '../components/BillForm/CustomInput';
 import {NavigationProps, RootStackParamList} from '../routes';
+import SyncService from '../services/SyncService';
 import UserService from '../services/UserService';
 import {LoginMode} from '../types/LoginMode';
 
@@ -56,6 +57,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
           await UserService.signInUser(email, password);
           break;
       }
+      await SyncService.syncAllData();
       navigation.navigate('Home');
     } catch (err) {
       setErrorText(`${err}, please try again later.`);

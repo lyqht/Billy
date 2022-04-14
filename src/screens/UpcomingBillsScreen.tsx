@@ -1,11 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/RegisterPromptButton';
-import {getMissedBills, getUpcomingBills} from '../helpers/bill-filter';
+import {getMissedBills, getUpcomingBills} from '../helpers/BillFilter';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
@@ -21,24 +20,25 @@ const UpcomingBillsScreen: React.FC = () => {
     useState(true);
   const listRef = React.useRef<List>(null);
 
+  const init = async () => {
+    const user = UserService.getUser();
+    if (user) {
+      setShowRegisterPromptButton(false);
+    }
+    const retrievedBills = await BillService.getBills();
+    const upcomingBills = getUpcomingBills(retrievedBills);
+    const retrievedMissedBills = getMissedBills(retrievedBills);
+
+    setBills(upcomingBills);
+    setMissedBills(retrievedMissedBills);
+
+    const lastSyncDateFromCache = Cache.getLastSyncDate();
+    if (lastSyncDateFromCache) {
+      setLastSyncDate(lastSyncDateFromCache);
+    }
+  };
+
   useEffect(() => {
-    const init = async () => {
-      const user = UserService.getUser();
-      if (user) {
-        setShowRegisterPromptButton(false);
-      }
-      const retrievedBills = await BillService.getBills();
-      const upcomingBills = getUpcomingBills(retrievedBills);
-      const retrievedMissedBills = getMissedBills(retrievedBills);
-
-      setBills(upcomingBills);
-      setMissedBills(retrievedMissedBills);
-
-      const lastSyncDateFromCache = Cache.getLastSyncDate();
-      if (lastSyncDateFromCache) {
-        setLastSyncDate(dayjs(lastSyncDateFromCache).format('DD MMM YYYY'));
-      }
-    };
     const listener = Cache.getStorage().addOnValueChangedListener(
       changedKey => {
         if (changedKey === STORAGE_KEYS.AUTH_TOKEN) {
@@ -49,16 +49,15 @@ const UpcomingBillsScreen: React.FC = () => {
             setShowRegisterPromptButton(true);
           }
         } else if (changedKey === STORAGE_KEYS.BILLS) {
-          const updatedBills = Cache.getBills();
-          if (updatedBills) {
-            const parsedBills: Bill[] = JSON.parse(updatedBills);
-            setBills(getUpcomingBills([...parsedBills], false));
-            setMissedBills(getMissedBills([...parsedBills]));
+          const retrievedBills = Cache.getBills();
+          if (retrievedBills) {
+            setBills(getUpcomingBills([...retrievedBills], false));
+            setMissedBills(getMissedBills([...retrievedBills]));
           }
         } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
           const lastSyncDateFromCache = Cache.getLastSyncDate();
           if (lastSyncDateFromCache) {
-            setLastSyncDate(dayjs(lastSyncDateFromCache).format('DD MMM YYYY'));
+            setLastSyncDate(lastSyncDateFromCache);
           }
         }
       },

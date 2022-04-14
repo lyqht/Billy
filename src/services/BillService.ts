@@ -31,12 +31,7 @@ class BillService {
 
   getBills = async (): Promise<Bill[]> => {
     const billsFromCache = Cache.getBills();
-    if (billsFromCache) {
-      console.debug('Returning bills from cache!');
-      return JSON.parse(billsFromCache);
-    }
-
-    let result: Bill[] = [];
+    let result: Bill[] = billsFromCache || [];
 
     try {
       if (UserService.getUser()) {

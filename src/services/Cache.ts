@@ -1,4 +1,5 @@
 import {AuthSession, User} from '@supabase/supabase-js';
+import dayjs from 'dayjs';
 import {MMKV} from 'react-native-mmkv';
 import {initializeMMKVFlipper} from 'react-native-mmkv-flipper-plugin';
 import {Bill, UnsyncBill} from '../models/Bill';
@@ -46,9 +47,10 @@ class Cache {
 
   getLastSyncDate(): string | undefined {
     if (this.storage.contains(STORAGE_KEYS.LAST_SYNC_DATE)) {
-      return this.storage.getString(STORAGE_KEYS.LAST_SYNC_DATE);
+      return dayjs(this.storage.getString(STORAGE_KEYS.LAST_SYNC_DATE)).format(
+        'DD MMM YYYY',
+      );
     }
-    return undefined;
   }
 
   setLastSyncDate(date: string): void {
@@ -59,8 +61,11 @@ class Cache {
     this.setLastSyncDate(new Date().toISOString());
   }
 
-  getBills(): string | undefined {
-    return this.storage.getString(STORAGE_KEYS.BILLS);
+  getBills(): Bill[] | undefined {
+    const retrievedBills = this.storage.getString(STORAGE_KEYS.BILLS);
+    if (retrievedBills) {
+      return JSON.parse(retrievedBills);
+    }
   }
 
   setBills(bills: Partial<Bill | UnsyncBill>[]): void {

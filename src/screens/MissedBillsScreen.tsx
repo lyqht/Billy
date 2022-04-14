@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Quote} from '../components/Quote';
-import {getMissedBills} from '../helpers/bill-filter';
+import {getMissedBills} from '../helpers/BillFilter';
 import {Bill} from '../models/Bill';
 import {RootStackParamList} from '../routes';
 import BillService from '../services/BillService';
@@ -30,10 +30,8 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
       changedKey => {
         if (changedKey === STORAGE_KEYS.BILLS) {
           const updatedBills = Cache.getBills();
-          console.log({updatedBills});
           if (updatedBills) {
-            const parsedBills: Bill[] = JSON.parse(updatedBills);
-            setMissedBills(getMissedBills([...parsedBills]));
+            setMissedBills(getMissedBills([...updatedBills]));
           }
         }
       },

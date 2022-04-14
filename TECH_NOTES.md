@@ -2,6 +2,7 @@
 
 - [How this project is created](#how-this-project-is-created)
 - [Initial Mock up](#initial-mock-up)
+- [Tech Architecture](#tech-architecture)
 - [Random stuff learnt along the way](#random-stuff-learnt-along-the-way)
 
 ## How this project is created
@@ -19,6 +20,9 @@ Many things have been heavily modified since then!
 
 Yes it looks a lot different from then! The original figma mockup is made using Native Base's Figma kit — and now I'm not even using Native Base component library. This mockup gave me sufficient ideas on what I want to display that I didn't feel a need to create a new one.
 
+## Tech Architecture
+
+![](diagrams/service_architecture.png)
 ## Random stuff learnt along the way
 
 - UI Kittens does not come with FABs, so had to change design
