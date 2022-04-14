@@ -1,5 +1,7 @@
 ## Product Roadmap Checklist
 
+### V1
+
 - [x]  View bills
     - [x]  Retrieve cached bills if available
     - [x]  Fetch bills from Supabase if user is cached
@@ -28,15 +30,9 @@
     - [x]  Mark as acknowledged (Archive bill)
 - [ ]  Create notifications
   - [ ]  Native notifications
-    - [ ]  Timestamp trigger notifications
-    - [ ]  Interval trigger notifications
-    - [ ]  Clicking notifications allow user to navigate to the UpcomingBillsScreen directly
-  - [ ]  Integration with Firebase Cloud Messaging (FCM)
-    - [x]  Set up FCM on mobile app
-    - [ ]  Edge function to send remote notifications via pub sub topics (e.g. app upgrade is available)
-    - [ ]  Edge function to send remote notifications to specific users via FCM (e.g. paid plan is running out)
-  - [ ]  Integration with Google Calendar
-    - [ ]  Edge function to create Google Calendar Reminders
+    - [x]  Timestamp trigger notifications
+    - [ ]  Interval trigger notifications (dependent on recurring bills)
+    - [x]  Clicking notifications allow user to navigate to the UpcomingBillsScreen directly
 - [ ]  Edit bills
     - [x]  Allow users to mark as complete manually
     - [ ]  Edit notifications
@@ -47,13 +43,26 @@
     - [ ]  only post bills for account users
     - [ ]  Refresh only works if there is internet
 - [ ]  Summary View
-  - [ ]  Show users nett bill expenses they have incurred by month, and bills that they have missed
-- [ ]  Access Billy from the Web
+  - [ ]  Edge function to create bill summary
+  - [ ]  UI to show users by month
+    - [ ]  nett bill expenses they have incurred 
+    - [ ]  bills that they have missed
+  - [ ]  Show archived bills
 - [ ]  Personalization
   - [ ]  Let users set their own name
   - [ ]  Light/dark mode toggle
+  - [ ]  Notification sound, Billy mascot
 
+### V1.1
 
+- [ ] Create notifications
+  - [ ]  Integration with Firebase Cloud Messaging (FCM)
+    - [x]  Set up FCM on mobile app
+    - [ ]  Edge function to send remote notifications via pub sub topics (e.g. app upgrade is available)
+    - [ ]  Edge function to send remote notifications to specific users via FCM (e.g. paid plan is running out)
+  - [ ]  Integration with Google Calendar
+    - [ ]  Edge function to create Google Calendar Reminders
+- [ ]  Access Billy from the Web
 ## Going Production Checklist
 
 - [ ] [Supabase Checklist](https://supabase.com/docs/going-into-prod)

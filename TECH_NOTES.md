@@ -2,6 +2,7 @@
 
 - [How this project is created](#how-this-project-is-created)
 - [Initial Mock up](#initial-mock-up)
+- [Content Models](#content-models)
 - [Tech Architecture](#tech-architecture)
 - [Random stuff learnt along the way](#random-stuff-learnt-along-the-way)
 
@@ -16,9 +17,15 @@ Many things have been heavily modified since then!
 
 ## Initial Mock up
 
-![](demo/initial_mockup.png)
+![](diagrams/initial_mockup.png)
 
 Yes it looks a lot different from then! The original figma mockup is made using Native Base's Figma kit — and now I'm not even using Native Base component library. This mockup gave me sufficient ideas on what I want to display that I didn't feel a need to create a new one.
+
+## Content Models
+
+These are some brief ideations of the content models and entities that could be in Billy. Billy still has a long way to go \m/ although probably not everything would be in v1.0.0 of production release.
+
+![](diagrams/content-models-v1.png)
 
 ## Tech Architecture
 

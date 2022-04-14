@@ -4,7 +4,7 @@
 
 
 <div style="display: grid; place-items:center;">
-    <img width="400" src="./demo/overview_v0.0.1.gif"></img>
+    <img width="300" src="./demo/overview_v0.0.1.gif"></img>
 </div>
 
 <br />
