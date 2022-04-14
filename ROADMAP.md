@@ -2,7 +2,8 @@
 
 - [x]  View bills
     - [x]  Retrieve cached bills if available
-    - [x]  Fetch bills from Supabase if user is cached.
+    - [x]  Fetch bills from Supabase if user is cached
+    - [ ]  Pull down to refresh
     - [ ]  Improved styling for Due Date & Reminder Set
         - [ ]  Different UI for Bills that are closer due (e.g. 3 days, 1 week, 1 month.)
         - [ ]  Clock icon to pulse if user unchecks a completed bill
@@ -11,10 +12,10 @@
     - [x]  Bills should be added to local cache first before trying to POST to Supabase
     - [x]  Post to Supabase if user is cached
     - [ ]  Payee autocomplete: Scrape for SG local billing organisations
-    - [ ]  Create notifications
     - [ ]  Caching of user inputs on BillFormScreen
     - [ ]  Upload Bill PDF from their billing organisation
     - [ ]  Config for 1-time bill or recurring bill e.g. monthly/annual subscription
+    - [ ]  Duplicate bill
 - [x]  User Management
     - [x]  Register Prompt to be shown on press for info icon on account-locked features
     - [x]  Log out
@@ -25,6 +26,17 @@
         - [x]  Retrieve and cache cloud data that do not exist on device
 - [x]  Missed Bills
     - [x]  Mark as acknowledged (Archive bill)
+- [ ]  Create notifications
+  - [ ]  Native notifications
+    - [ ]  Timestamp trigger notifications
+    - [ ]  Interval trigger notifications
+    - [ ]  Clicking notifications allow user to navigate to the UpcomingBillsScreen directly
+  - [ ]  Integration with Firebase Cloud Messaging (FCM)
+    - [x]  Set up FCM on mobile app
+    - [ ]  Edge function to send remote notifications via pub sub topics (e.g. app upgrade is available)
+    - [ ]  Edge function to send remote notifications to specific users via FCM (e.g. paid plan is running out)
+  - [ ]  Integration with Google Calendar
+    - [ ]  Edge function to create Google Calendar Reminders
 - [ ]  Edit bills
     - [x]  Allow users to mark as complete manually
     - [ ]  Edit notifications
@@ -37,6 +49,9 @@
 - [ ]  Summary View
   - [ ]  Show users nett bill expenses they have incurred by month, and bills that they have missed
 - [ ]  Access Billy from the Web
+- [ ]  Personalization
+  - [ ]  Let users set their own name
+  - [ ]  Light/dark mode toggle
 
 
 ## Going Production Checklist
