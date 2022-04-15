@@ -2,7 +2,12 @@ import {v4} from 'uuid';
 import {getUnsyncBills} from '../helpers/BillFilter';
 import BillService from './BillService';
 import Cache from './Cache';
+import {
+  getReminderNotificationsForBill,
+  updateNotificationsWithNewBillId,
+} from './NotificationService';
 import UserService from './UserService';
+
 class SyncService {
   addTempIDToUnsyncedBills = async () => {
     const bills = await BillService.getBills();
@@ -10,7 +15,11 @@ class SyncService {
     const unsyncBillIndexes = unsyncBills.map(bill =>
       bills.findIndex(b => Object.is(b, bill)),
     );
-    unsyncBillIndexes.forEach(index => (bills[index].tempID = v4()));
+    unsyncBillIndexes.forEach(index => {
+      if (bills[index].tempID === undefined) {
+        bills[index].tempID = v4();
+      }
+    });
     Cache.setBills(bills);
   };
 
@@ -19,24 +28,33 @@ class SyncService {
     this.addTempIDToUnsyncedBills();
 
     if (UserService.getUser() === null) {
-      console.warn('No user found, unable to sync');
+      console.debug('No user found, not syncing to cloud');
       return;
     }
 
     const bills = await BillService.getBills();
     const unsyncBills = getUnsyncBills(bills);
     console.log(`Number of unsync bills: ${unsyncBills.length}`);
-    const promises = [];
-    unsyncBills.forEach(bill =>
-      promises.push(BillService.addBill({...bill, tempID: undefined})),
-    );
-    try {
-      const result = await Promise.all(unsyncBills);
-      console.log(`Number of bills sync to cloud: ${result.length}`);
-      await BillService.getBillsFromDB();
-    } catch (err) {
-      console.error(err);
+    for (let bill of unsyncBills) {
+      const newBill = await BillService.addBill({...bill, tempID: undefined});
+      console.debug(
+        `Bill tempID ${bill.tempID} has been sync to obtain new id ${newBill.id}`,
+      );
+
+      try {
+        const triggerNotifications = await getReminderNotificationsForBill(
+          bill.tempID!,
+        );
+        await updateNotificationsWithNewBillId(
+          triggerNotifications,
+          newBill.id,
+        );
+      } catch (err) {
+        console.error(err);
+      }
     }
+
+    await BillService.getBillsFromDB();
   };
 }
 

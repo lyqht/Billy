@@ -5,11 +5,11 @@ import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/RegisterPromptButton';
 import {getMissedBills, getUpcomingBills} from '../helpers/BillFilter';
+import {getBillIdToNumRemindersMap} from '../helpers/ReminderMapper';
 import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
-import {getReminderNotificationIdsForBill} from '../services/NotificationService';
 import UserService from '../services/UserService';
 
 const UpcomingBillsScreen: React.FC = () => {
@@ -39,14 +39,7 @@ const UpcomingBillsScreen: React.FC = () => {
       setLastSyncDate(lastSyncDateFromCache);
     }
 
-    const retrievedReminders: Record<string, number> = {};
-    for (let bill of retrievedBills) {
-      const identifier = `${bill.tempID || bill.id}`;
-      const remindersForBill = await getReminderNotificationIdsForBill(
-        `${identifier}`,
-      );
-      retrievedReminders[identifier] = remindersForBill.length;
-    }
+    const retrievedReminders = await getBillIdToNumRemindersMap(retrievedBills);
 
     setReminders(retrievedReminders);
   };
@@ -66,16 +59,11 @@ const UpcomingBillsScreen: React.FC = () => {
           if (retrievedBills) {
             setBills(getUpcomingBills([...retrievedBills], false));
             setMissedBills(getMissedBills([...retrievedBills]));
-            const retrievedReminders: Record<string, number> = {};
-            for (let bill of retrievedBills) {
-              const identifier = `${bill.tempID || bill.id}`;
-              getReminderNotificationIdsForBill(`${identifier}`).then(
-                remindersForBill => {
-                  retrievedReminders[identifier] = remindersForBill.length;
-                  setReminders(retrievedReminders);
-                },
-              );
-            }
+            getBillIdToNumRemindersMap(retrievedBills).then(
+              retrievedReminders => {
+                setReminders(retrievedReminders);
+              },
+            );
           }
         } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
           const lastSyncDateFromCache = Cache.getLastSyncDate();

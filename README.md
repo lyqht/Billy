@@ -23,7 +23,7 @@ This project is developed solely by [Estee Tey](https://www.github.com/lyqht). I
 - [UI Kittens](https://github.com/akveo/react-native-ui-kitten) for UI components
 - [Supabase](https://github.com/supabase/supabase) for Database & Auth. Data is served by REST.
 - [React Native MMKV](https://github.com/mrousavy/react-native-mmkv) for caching
-- [Notifee](https://github.com/invertase/notifee) for creating & editing notifications (not implemented yet!)
+- [Notifee](https://github.com/invertase/notifee) for creating notifications
 - [Custom GitHub action for generating Supabase database types](https://blog.esteetey.dev/how-to-create-and-test-a-github-action-that-generates-types-from-supabase-database)
 ### Misc Tech Notes
 

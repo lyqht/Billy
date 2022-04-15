@@ -98,8 +98,6 @@ const BillFormScreen: React.FC<Props> = () => {
         getReminderDate(deadline, value, timeUnit),
       );
 
-      console.debug('In bill form screen');
-      console.debug({id});
       const notifPromises = reminderDates.map(date =>
         createTimestampNotification(
           date,

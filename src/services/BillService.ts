@@ -32,15 +32,6 @@ class BillService {
   getBills = async (): Promise<Bill[]> => {
     const billsFromCache = Cache.getBills();
     let result: Bill[] = billsFromCache || [];
-
-    try {
-      if (UserService.getUser()) {
-        result = await this.getBillsFromDB();
-      }
-    } catch (err) {
-      console.error(err);
-    }
-
     return result;
   };
 

@@ -3,6 +3,8 @@ import notifee, {
   AndroidNotificationSetting,
   Notification,
   TimestampTrigger,
+  Trigger,
+  TriggerNotification,
   TriggerType,
 } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
@@ -48,7 +50,7 @@ export const registerDeviceForRemoteMessages = async () => {
     // Save the token
     const {data, error} = await supabase
       .from('FCMToken')
-      .upsert([{userId: UserService.getUser(), token, deviceId}]);
+      .upsert([{userId: UserService.getUser()?.id, token, deviceId}]);
 
     if (error) {
       throw Error(error.message);
@@ -78,9 +80,12 @@ export const createBaseNotification = (
   title: string,
   body: string,
 ): Notification => ({
-  id: billId + v4(), // this id should follow either bill.tempID or bill.id
+  id: v4(),
   title,
   body,
+  data: {
+    billId,
+  },
   android: {
     channelId: ANDROID_CHANNEL_ID,
     pressAction: {
@@ -120,7 +125,39 @@ export const createTimestampNotification = async (
   });
 };
 
-export const getReminderNotificationIdsForBill = async (billID: string) => {
-  const ids = await notifee.getTriggerNotificationIds();
-  return ids.filter(id => id.startsWith(billID)) || [];
+export const getReminderNotificationsForBill = async (
+  billID: string,
+): Promise<TriggerNotification[]> => {
+  const triggerNotifs = await notifee.getTriggerNotifications();
+  return (
+    triggerNotifs.filter(
+      trigger => trigger.notification.data?.billId === billID,
+    ) || []
+  );
+};
+
+export const getReminderNotificationIdsForBill = async (
+  billID: string,
+): Promise<string[]> => {
+  const triggerNotifs = await getReminderNotificationsForBill(billID);
+  return triggerNotifs.map(triggerNotif => triggerNotif.notification.id!) || [];
+};
+
+export const updateNotificationsWithNewBillId = async (
+  triggerNotifications: TriggerNotification[],
+  billID: string,
+) => {
+  const promises = triggerNotifications.map(triggerNotif =>
+    notifee.createTriggerNotification(
+      {...triggerNotif.notification, data: {billId: billID}},
+      {...triggerNotif.trigger, repeatFrequency: undefined} as Trigger,
+    ),
+  );
+
+  try {
+    const updatedNotifications = await Promise.all(promises);
+    console.debug({updatedNotifications});
+  } catch (err) {
+    console.error(err);
+  }
 };
