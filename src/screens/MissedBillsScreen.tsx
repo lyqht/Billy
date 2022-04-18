@@ -44,7 +44,7 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
 
   const headerText =
     bills.length > 0
-      ? "You didn't pay {bills.length} bill(s) on time 😰"
+      ? `You didn't pay ${bills.length} bill(s) on time 😰`
       : 'You have no missed bills 🥳';
 
   if (bills.length === 0) {

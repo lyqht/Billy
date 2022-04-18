@@ -16,6 +16,7 @@ import {
   getCategoryForPayee,
 } from '../constants/PayeeOptions';
 import {getReminderDate} from '../helpers/DateFns';
+import {showToast} from '../helpers/Toast';
 import {Bill} from '../models/Bill';
 import {ReminderFormData} from '../models/Reminder';
 import {NavigationProps} from '../routes';
@@ -34,10 +35,6 @@ interface FormData {
   deadline: Date;
   reminderDates: Date[];
 }
-
-const showToast = (toastParams: ToastShowParams) => {
-  Toast.show({...toastParams, position: 'bottom', bottomOffset: 120});
-};
 
 const BillFormScreen: React.FC<Props> = () => {
   const theme = useTheme();
@@ -115,7 +112,7 @@ const BillFormScreen: React.FC<Props> = () => {
         await Promise.all(notifPromises);
         navigator.goBack();
       } catch (err) {
-        console.log(err);
+        console.error(err);
         showToast({
           type: 'error',
           text1: 'Unable to create notifications',

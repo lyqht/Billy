@@ -5,7 +5,7 @@
 - [x]  View bills
     - [x]  Retrieve cached bills if available
     - [x]  Fetch bills from Supabase if user is cached
-    - [ ]  Pull down to refresh
+    - [x]  Pull down to refresh
     - [ ]  Improved styling for Due Date & Reminder Set
         - [ ]  Different UI for Bills that are closer due (e.g. 3 days, 1 week, 1 month.)
         - [ ]  Clock icon to pulse if user unchecks a completed bill

@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/RegisterPromptButton';
 import {getMissedBills, getUpcomingBills} from '../helpers/BillFilter';
@@ -11,6 +11,9 @@ import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
+import ScrollToTopButton from '../components/ScrollToTopButton';
+import SyncService from '../services/SyncService';
+import {showToast} from '../helpers/Toast';
 
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
@@ -18,14 +21,31 @@ const UpcomingBillsScreen: React.FC = () => {
   const [missedBills, setMissedBills] = useState<Bill[]>([]);
   const [lastSyncDate, setLastSyncDate] = useState<string>('');
   const [reminders, setReminders] = useState<Record<string, number>>({});
-  const [showRegisterPromptButton, setShowRegisterPromptButton] =
-    useState(true);
+  const [userIsPresent, setUserIsPresent] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await SyncService.syncAllData();
+    } catch (err) {
+      showToast({
+        type: 'error',
+        text1: 'Unable to sync data',
+        text2: `${err}`,
+      });
+      console.error(err);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
   const listRef = React.useRef<List>(null);
 
   const init = async () => {
     const user = UserService.getUser();
     if (user) {
-      setShowRegisterPromptButton(false);
+      setUserIsPresent(false);
     }
     const retrievedBills = await BillService.getBills();
     const upcomingBills = getUpcomingBills(retrievedBills);
@@ -50,9 +70,9 @@ const UpcomingBillsScreen: React.FC = () => {
         if (changedKey === STORAGE_KEYS.AUTH_TOKEN) {
           const user = UserService.getUser();
           if (user) {
-            setShowRegisterPromptButton(false);
+            setUserIsPresent(false);
           } else {
-            setShowRegisterPromptButton(true);
+            setUserIsPresent(true);
           }
         } else if (changedKey === STORAGE_KEYS.BILLS) {
           const retrievedBills = Cache.getBills();
@@ -79,8 +99,12 @@ const UpcomingBillsScreen: React.FC = () => {
     return () => listener.remove();
   }, []);
 
-  const scrollToTop = () => {
-    listRef.current?.scrollToOffset({animated: true, offset: 0});
+  const listProps = {
+    ...(userIsPresent && {
+      refreshControl: (
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      ),
+    }),
   };
 
   return (
@@ -91,11 +115,13 @@ const UpcomingBillsScreen: React.FC = () => {
             <Text category="h2">Upcoming Bills</Text>
             <View style={styles.lastSyncDateView}>
               {lastSyncDate ? (
-                <Text category="p1">Last Sync Date: {lastSyncDate}</Text>
+                <Text category="p1">
+                  Last Sync Date: {refreshing ? 'Syncing...' : lastSyncDate}
+                </Text>
               ) : (
                 <Text category="p1">Not synced yet</Text>
               )}
-              {showRegisterPromptButton && (
+              {userIsPresent && (
                 <RegisterPromptButton
                   description={
                     'Billy can only sync to the cloud when you have a registered account.'
@@ -143,23 +169,8 @@ const UpcomingBillsScreen: React.FC = () => {
                 />
               </View>
             )}
-            ListFooterComponent={
-              bills.length > 5 ? (
-                <Button
-                  size={'large'}
-                  appearance={'ghost'}
-                  accessoryLeft={<Icon name="corner-left-up-outline" />}
-                  status={'basic'}
-                  onPress={() => {
-                    scrollToTop();
-                  }}
-                >
-                  Scroll back to top
-                </Button>
-              ) : (
-                <></>
-              )
-            }
+            ListFooterComponent={<ScrollToTopButton ref={listRef} />}
+            {...listProps}
           />
         ) : (
           <View style={styles.noBillsContainer}>

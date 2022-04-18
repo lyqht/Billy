@@ -12,15 +12,17 @@ class SyncService {
   addTempIDToUnsyncedBills = async () => {
     const bills = await BillService.getBills();
     const unsyncBills = getUnsyncBills(bills);
-    const unsyncBillIndexes = unsyncBills.map(bill =>
-      bills.findIndex(b => Object.is(b, bill)),
-    );
-    unsyncBillIndexes.forEach(index => {
-      if (bills[index].tempID === undefined) {
-        bills[index].tempID = v4();
-      }
-    });
-    Cache.setBills(bills);
+    if (unsyncBills.length > 0) {
+      const unsyncBillIndexes = unsyncBills.map(bill =>
+        bills.findIndex(b => Object.is(b, bill)),
+      );
+      unsyncBillIndexes.forEach(index => {
+        if (bills[index].tempID === undefined) {
+          bills[index].tempID = v4();
+        }
+      });
+      Cache.setBills(bills);
+    }
   };
 
   syncAllData = async (): Promise<void> => {

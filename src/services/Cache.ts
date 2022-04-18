@@ -45,10 +45,10 @@ class Cache {
     return this.storage;
   }
 
-  getLastSyncDate(): string | undefined {
+  getLastSyncDate(format = 'DD MMM h:mm a'): string | undefined {
     if (this.storage.contains(STORAGE_KEYS.LAST_SYNC_DATE)) {
       return dayjs(this.storage.getString(STORAGE_KEYS.LAST_SYNC_DATE)).format(
-        'DD MMM YYYY',
+        format,
       );
     }
   }
