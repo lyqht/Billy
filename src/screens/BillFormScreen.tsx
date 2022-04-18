@@ -4,11 +4,9 @@ import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import Toast, {ToastShowParams} from 'react-native-toast-message';
 import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
-import {CustomDatepicker} from '../components/BillForm/CustomDatePicker';
+import CustomDatetimePicker from '../components/BillForm/CustomDatetimePicker';
 import {CustomInput} from '../components/BillForm/CustomInput';
-import CustomTimePicker from '../components/BillForm/CustomTimePicker';
 import ReminderForm from '../components/BillForm/ReminderForm';
 import {
   defaultCategoryIcons,
@@ -22,8 +20,8 @@ import {ReminderFormData} from '../models/Reminder';
 import {NavigationProps} from '../routes';
 import BillService from '../services/BillService';
 import {
-  createTimestampNotification,
   createBaseNotification,
+  createTimestampNotification,
 } from '../services/NotificationService';
 interface Props {
   bill?: Bill;
@@ -205,35 +203,12 @@ const BillFormScreen: React.FC<Props> = () => {
                 required: true,
               }}
               render={({field: {onChange, value}}) => (
-                <CustomDatepicker
-                  label="Deadline"
-                  placeholder="Choose a date"
-                  date={value}
-                  onSelect={selected =>
-                    onChange(getDateWithTime(selected, currentDeadline))
-                  }
-                />
+                <CustomDatetimePicker value={value} onChange={onChange} />
               )}
             />
           </View>
-          <View style={styles.formField}>
-            <Controller
-              name="deadline"
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({field: {onChange, value}}) => (
-                <CustomTimePicker
-                  onSelect={onChange}
-                  date={value}
-                  accessoryRight={<Icon name="clock" />}
-                />
-              )}
-            />
-          </View>
-          <View>
-            <View style={styles.reminderSection}>
+          <View style={styles.reminderSection}>
+            <View>
               <Text
                 category={'label'}
                 style={[
@@ -269,10 +244,10 @@ const BillFormScreen: React.FC<Props> = () => {
               </Button>
             )}
           </View>
+          <Button size="medium" onPress={handleSubmit(onSubmit)}>
+            Submit
+          </Button>
         </ScrollView>
-        <Button size="medium" onPress={handleSubmit(onSubmit)}>
-          Submit
-        </Button>
       </Layout>
     </SafeAreaView>
   );
@@ -288,7 +263,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   reminderSection: {
-    paddingVertical: 16,
+    marginVertical: 16,
   },
   reminderButton: {
     width: 200,

@@ -51,7 +51,7 @@ const ReminderForm: React.FC<Props> = ({onSubmit}) => {
             render={({field: {onChange, value}}) => (
               <CustomInput
                 label=""
-                placeholder="Enter a value"
+                placeholder="a number"
                 keyboardType="number-pad"
                 onChangeText={onChange}
                 value={value}
@@ -105,11 +105,11 @@ const ReminderForm: React.FC<Props> = ({onSubmit}) => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    marginBottom: 16,
+    marginVertical: 16,
     borderRadius: 8,
   },
   formField: {
-    width: 130,
+    width: 125,
     marginEnd: 8,
   },
   row: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 32,
     height: 32,
-    marginHorizontal: 8,
+    marginEnd: 8,
   },
 });
 

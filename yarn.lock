@@ -6110,6 +6110,13 @@ react-native-mmkv@^2.3.0:
   resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.3.0.tgz#ec46a35fa467fbb762cf6fe8212f5984789b6116"
   integrity sha512-c1gqljiDkDHYAV+9CEZEwp2uQQVi4lGgHJB8dn7Nj/RbvGFaJk6/sJdfVvj7VKE6AdW7Jqf4Hc0XjSFDttkl+Q==
 
+react-native-modal-datetime-picker@^13.1.2:
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-13.1.2.tgz#7c8bd3402acb4dcfbca49c926a7f18dd108c69c4"
+  integrity sha512-PZDkuY7HayRX1KE2X2dm29CvCLzwj/vn6B6QdPbjZea/GEKvHBMOLGdhFCcA9+gD64Y41+VqfytUh2fdvUvQ1g==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-safe-area-context@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.2.4.tgz#4df42819759c4d3c74252c8678c2772cfa2271a6"
