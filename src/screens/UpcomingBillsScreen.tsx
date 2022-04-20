@@ -45,7 +45,7 @@ const UpcomingBillsScreen: React.FC = () => {
   const init = async () => {
     const user = UserService.getUser();
     if (user) {
-      setUserIsPresent(false);
+      setUserIsPresent(true);
     }
     const retrievedBills = await BillService.getBills();
     const upcomingBills = getUpcomingBills(retrievedBills);
@@ -99,6 +99,9 @@ const UpcomingBillsScreen: React.FC = () => {
     return () => listener.remove();
   }, []);
 
+  const getFormattedLastSyncDate = () =>
+    `Last Sync Date: ${refreshing ? 'Syncing...' : lastSyncDate}`;
+
   const listProps = {
     ...(userIsPresent && {
       refreshControl: (
@@ -115,13 +118,11 @@ const UpcomingBillsScreen: React.FC = () => {
             <Text category="h2">Upcoming Bills</Text>
             <View style={styles.lastSyncDateView}>
               {lastSyncDate ? (
-                <Text category="p1">
-                  Last Sync Date: {refreshing ? 'Syncing...' : lastSyncDate}
-                </Text>
+                <Text category="p1">{getFormattedLastSyncDate()}</Text>
               ) : (
                 <Text category="p1">Not synced yet</Text>
               )}
-              {userIsPresent && (
+              {!userIsPresent && (
                 <RegisterPromptButton
                   description={
                     'Billy can only sync to the cloud when you have a registered account.'

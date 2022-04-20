@@ -161,3 +161,8 @@ export const updateNotificationsWithNewBillId = async (
     console.error(err);
   }
 };
+
+export const clearAllNotifications = async () => {
+  console.log('Clearing all notifications');
+  await notifee.cancelAllNotifications();
+};

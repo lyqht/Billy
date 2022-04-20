@@ -3,6 +3,7 @@ import {getUnsyncBills} from '../helpers/BillFilter';
 import BillService from './BillService';
 import Cache from './Cache';
 import {
+  clearAllNotifications,
   getReminderNotificationsForBill,
   updateNotificationsWithNewBillId,
 } from './NotificationService';
@@ -60,8 +61,9 @@ class SyncService {
   };
 
   clearAllData = async (): Promise<void> => {
-    Cache.clearAllData();
     await UserService.logOutUser();
+    await clearAllNotifications();
+    Cache.clearAllData();
   };
 }
 
