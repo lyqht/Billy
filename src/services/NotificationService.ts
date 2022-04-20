@@ -10,9 +10,9 @@ import notifee, {
 import messaging from '@react-native-firebase/messaging';
 import {Platform} from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
+import {v4} from 'uuid';
 import supabase from '../api/supabase';
 import UserService from './UserService';
-import {v4} from 'uuid';
 
 // --------- FCM ---------- //
 
@@ -22,9 +22,11 @@ export const requestUserPermissionOnIOS = async (): Promise<boolean> => {
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-  if (enabled) {
-    console.log('User permission for notifications:', authStatus);
-  }
+  console.debug(
+    `User permission for notifications: ${
+      enabled ? 'Authorized' : 'Not given'
+    }`,
+  );
 
   return enabled;
 };
@@ -163,6 +165,6 @@ export const updateNotificationsWithNewBillId = async (
 };
 
 export const clearAllNotifications = async () => {
-  console.log('Clearing all notifications');
+  console.debug('Clearing all notifications');
   await notifee.cancelAllNotifications();
 };

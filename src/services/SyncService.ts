@@ -27,7 +27,7 @@ class SyncService {
   };
 
   syncAllData = async (): Promise<void> => {
-    console.log('Attempting to sync data...');
+    console.debug('Attempting to sync data...');
     this.addTempIDToUnsyncedBills();
 
     if (UserService.getUser() === null) {
@@ -37,7 +37,7 @@ class SyncService {
 
     const bills = await BillService.getBills();
     const unsyncBills = getUnsyncBills(bills);
-    console.log(`Number of unsync bills: ${unsyncBills.length}`);
+    console.debug(`Number of unsync bills: ${unsyncBills.length}`);
     for (let bill of unsyncBills) {
       const newBill = await BillService.addBill({...bill, tempID: undefined});
       console.debug(

@@ -71,12 +71,6 @@ const BillFormScreen: React.FC<Props> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPayee]);
 
-  const getDateWithTime = (date: Date, dateTime: Date): Date =>
-    dayjs(date)
-      .hour(dayjs(dateTime).hour())
-      .minute(dayjs(dateTime).minute())
-      .toDate();
-
   const onSubmit = async () => {
     const {amount, deadline} = getValues();
     const bill: Partial<Bill> = {
@@ -86,7 +80,6 @@ const BillFormScreen: React.FC<Props> = () => {
     };
 
     const {id, ...toastParams} = await BillService.addBill(bill);
-    showToast(toastParams);
 
     if (toastParams.type !== 'error') {
       const reminderDates = relativeReminderDates.map(({value, timeUnit}) =>
@@ -108,6 +101,7 @@ const BillFormScreen: React.FC<Props> = () => {
 
       try {
         await Promise.all(notifPromises);
+        showToast(toastParams);
         navigator.goBack();
       } catch (err) {
         console.error(err);

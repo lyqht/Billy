@@ -67,10 +67,11 @@ class BillService {
         id: `${data[0].id}`,
       };
     } else {
-      console.log('Updating bills locally');
+      console.debug('Updating bills locally');
       const tempID = v4();
       const updatedBill: UnsyncBill = {...bill, tempID};
       const updatedBills = [...bills, updatedBill];
+
       Cache.setBills(updatedBills);
       return {
         type: 'success',
@@ -137,7 +138,7 @@ class BillService {
       updatedBill = bills[billIndex];
 
       updatedBill.archivedDate = archivedDate;
-      console.log({bill, updatedBill});
+      console.debug({bill, updatedBill});
       Cache.setBills(bills);
     }
   };

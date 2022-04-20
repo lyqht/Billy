@@ -91,7 +91,7 @@ class Cache {
   }
 
   clearAllData(): void {
-    console.log('clearing all cache');
+    console.debug('Clearing all cache');
     this.storage.clearAll();
   }
 }
