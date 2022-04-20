@@ -195,6 +195,7 @@ const BillFormScreen: React.FC<Props> = () => {
               control={control}
               rules={{
                 required: true,
+                validate: value => dayjs(value).isValid(),
               }}
               render={({field: {onChange, value}}) => (
                 <CustomDatetimePicker value={value} onChange={onChange} />

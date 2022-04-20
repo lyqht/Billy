@@ -1,11 +1,11 @@
 import {Icon, Input} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 interface Props {
-  onChange: (date: Date) => void;
+  onChange: (date: any) => void;
   value: Date;
 }
 
@@ -38,6 +38,7 @@ const CustomDatetimePicker: React.FC<Props> = ({value, onChange}) => {
         isVisible={isDatePickerVisible}
         mode="datetime"
         date={value}
+        display={'inline'}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />
