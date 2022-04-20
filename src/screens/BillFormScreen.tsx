@@ -107,9 +107,8 @@ const BillFormScreen: React.FC<Props> = () => {
         console.error(err);
         showToast({
           type: 'error',
-          text1: 'Unable to create notifications',
-          text2:
-            'Billy is unable to create notifications here for some reason >_< Either check your permission settings, or make sure that your reminder is not set in the past.',
+          text1: 'Ops! Billy cannot create notifications 😥',
+          text2: 'Check if the notification dates are valid.',
         });
       }
     }
@@ -214,26 +213,37 @@ const BillFormScreen: React.FC<Props> = () => {
                 Reminders ({relativeReminderDates.length})
               </Text>
               {relativeReminderDates.map(({value, timeUnit}, index) => (
-                <View key={`reminder-date-section-${index}`}>
+                <View
+                  style={styles.reminderDateContainer}
+                  key={`reminder-date-section-${index}`}
+                >
+                  <Icon
+                    name="bell-outline"
+                    fill={theme['color-basic-600']}
+                    style={styles.reminderIcon}
+                  />
                   <Text category={'p1'}>
-                    {dayjs(
-                      getReminderDate(currentDeadline, value, timeUnit),
-                    ).format('DD MMM YYYY, ddd, h:mm a')}
+                    {value}{' '}
+                    {parseInt(value, 10) === 1
+                      ? timeUnit.replace('s', '')
+                      : timeUnit}{' '}
+                    before deadline
                   </Text>
                 </View>
               ))}
             </View>
             {showReminderForm ? (
-              <ReminderForm onSubmit={onReminderFormSubmit} />
+              <ReminderForm
+                currentDeadline={currentDeadline}
+                onSubmit={onReminderFormSubmit}
+              />
             ) : (
               <Button
                 style={styles.reminderButton}
                 size={'small'}
                 appearance={'outline'}
                 onPress={() => setShowReminderForm(true)}
-                accessoryRight={props => (
-                  <Icon {...props} name="bell-outline" />
-                )}
+                accessoryLeft={props => <Icon {...props} name="bell-outline" />}
               >
                 Add a reminder
               </Button>
@@ -265,6 +275,15 @@ const styles = StyleSheet.create({
   },
   reminderHeader: {
     marginBottom: 8,
+  },
+  reminderIcon: {
+    width: 16,
+    height: 16,
+    marginEnd: 4,
+  },
+  reminderDateContainer: {
+    flexDirection: 'row',
+    marginBottom: 16,
   },
 });
 
