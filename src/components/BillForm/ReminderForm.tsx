@@ -1,4 +1,5 @@
 import {
+  Button,
   Icon,
   IndexPath,
   Select,
@@ -109,8 +110,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   formField: {
-    width: 125,
     marginEnd: 8,
+    flexGrow: 1,
   },
   row: {
     flexDirection: 'row',
