@@ -1,4 +1,4 @@
-package com.billy;
+package com.lyqht.billy;
 
 import com.facebook.react.ReactActivity;
 
