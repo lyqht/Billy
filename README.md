@@ -1,4 +1,4 @@
-# Billy
+# Billy <!-- omit in toc -->
 
 [![Update database types](https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg)](https://github.com/lyqht/Billy/actions/workflows/update-types.yml)
 
@@ -8,6 +8,17 @@
 </div>
 
 <br />
+
+Table of contents
+
+- [Brief introduction](#brief-introduction)
+- [Tech Notes](#tech-notes)
+  - [Building blocks of this project](#building-blocks-of-this-project)
+  - [Misc Tech Notes](#misc-tech-notes)
+- [Set up instructions](#set-up-instructions)
+  - [Install dependencies](#install-dependencies)
+  - [Clearing cache](#clearing-cache)
+- [Motivations for building the app](#motivations-for-building-the-app)
 
 ## Brief introduction
 
@@ -31,11 +42,13 @@ If you are interested on some other tech notes how this app is built (e.g. how t
 
 ## Set up instructions
 
+### Install dependencies
+
 Install the node modules & pods 
 
 ```
 npm i
-npx pod-install
+npx pod-install # if you want to build for ios
 ```
 
 Then run 1 of the commands 
@@ -44,7 +57,22 @@ npm run ios
 npm run android
 ```
 
-You would need the Supabase project related environment variables as mentioned in `.env.sample`. You can create your own project and replace those values. 
+You would need the Supabase project related environment variables as mentioned in `.env.sample`. You can create your own Supabase project and replace those values.
+
+### Clearing cache
+
+There is a utility function on `SyncService` for logging the user out, clearing all cache and notifications. Intended mostly for testing purposes. 
+
+```ts
+const init = async () => {
+  // add this line for clearing cache temporarily
+  await SyncService.clearAllData();
+
+  await SyncService.syncAllData();
+  await registerDeviceForRemoteMessages();
+};
+
+```
 
 ---
 
@@ -56,7 +84,7 @@ I had built Billy intended for these few specific target audiences:
 
 My mom & I both like cute stuff, so that's how _Billy_ has its name.
 
-## Memes
+
 
 <div style="display: grid; place-items:center;">
     <img width="350" src="./demo/concerned_billy.png"></img>
@@ -64,6 +92,3 @@ My mom & I both like cute stuff, so that's how _Billy_ has its name.
 
 <br />
 
-Some funny tweet threads about Billy:
-- [Concerned Billy](https://twitter.com/RubyNovaDev/status/1511390234440839175)
-- [When a user is reckless in their waifu purchases](https://twitter.com/estee_tey/status/1512439733409878018)

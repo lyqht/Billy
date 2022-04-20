@@ -58,6 +58,11 @@ class SyncService {
 
     await BillService.getBillsFromDB();
   };
+
+  clearAllData = async (): Promise<void> => {
+    Cache.clearAllData();
+    await UserService.logOutUser();
+  };
 }
 
 export default new SyncService();

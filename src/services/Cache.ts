@@ -89,6 +89,11 @@ class Cache {
       this.storage.delete(STORAGE_KEYS.USER);
     }
   }
+
+  clearAllData(): void {
+    console.log('clearing all cache');
+    this.storage.clearAll();
+  }
 }
 
 export default new Cache();
