@@ -1,10 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import {
   Button,
+  Divider,
   Icon,
   Layout,
+  StyleService,
   Text,
   Tooltip,
+  useStyleSheet,
   useTheme,
 } from '@ui-kitten/components';
 import dayjs from 'dayjs';
@@ -53,6 +56,7 @@ interface ReminderWarningTooltipProps {
 
 const BillFormScreen: React.FC<Props> = () => {
   const theme = useTheme();
+  const styles = useStyleSheet(themedStyles);
   const navigator = useNavigation<NavigationProps>();
   const [showReminderForm, setShowReminderForm] = useState(false);
   const [relativeReminderDates, setRelativeReminderDates] = useState<
@@ -270,27 +274,36 @@ const BillFormScreen: React.FC<Props> = () => {
               </Text>
               {relativeReminderDates.map(({value, timeUnit}, index) => (
                 <View
-                  style={styles.reminderDateContainer}
                   key={`reminder-date-section-${index}`}
+                  style={styles.reminderDateContainer}
                 >
-                  {!dayjs(
-                    getReminderDate(currentDeadline, value, timeUnit),
-                  ).isAfter(dayjs()) ? (
-                    <ReminderWarningTooltip index={index} />
-                  ) : (
+                  <View style={styles.row}>
+                    {!dayjs(
+                      getReminderDate(currentDeadline, value, timeUnit),
+                    ).isAfter(dayjs()) && (
+                      <ReminderWarningTooltip index={index} />
+                    )}
+                    <Text category={'p1'}>
+                      {value}{' '}
+                      {parseInt(value, 10) === 1
+                        ? timeUnit.replace('s', '')
+                        : timeUnit}{' '}
+                      before deadline
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      const newReminders = [...relativeReminderDates];
+                      newReminders.splice(index, 1);
+                      setRelativeReminderDates(newReminders);
+                    }}
+                  >
                     <Icon
-                      name="bell-outline"
+                      name="close-outline"
                       fill={theme['color-basic-600']}
-                      style={styles.icon}
+                      style={styles.cancelIcon}
                     />
-                  )}
-                  <Text category={'p1'}>
-                    {value}{' '}
-                    {parseInt(value, 10) === 1
-                      ? timeUnit.replace('s', '')
-                      : timeUnit}{' '}
-                    before deadline
-                  </Text>
+                  </TouchableOpacity>
                 </View>
               ))}
             </View>
@@ -301,7 +314,6 @@ const BillFormScreen: React.FC<Props> = () => {
               />
             ) : (
               <Button
-                style={styles.reminderButton}
                 size={'small'}
                 appearance={'outline'}
                 onPress={() => setShowReminderForm(true)}
@@ -311,7 +323,12 @@ const BillFormScreen: React.FC<Props> = () => {
               </Button>
             )}
           </View>
-          <Button size="medium" onPress={handleSubmit(onSubmit)}>
+
+          <Button
+            style={styles.reminderSection}
+            size="medium"
+            onPress={handleSubmit(onSubmit)}
+          >
             Submit
           </Button>
         </ScrollView>
@@ -320,7 +337,7 @@ const BillFormScreen: React.FC<Props> = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const themedStyles = StyleService.create({
   container: {
     padding: 16,
     height: '100%',
@@ -332,9 +349,6 @@ const styles = StyleSheet.create({
   reminderSection: {
     marginVertical: 16,
   },
-  reminderButton: {
-    width: 200,
-  },
   reminderHeader: {
     marginBottom: 8,
   },
@@ -343,9 +357,23 @@ const styles = StyleSheet.create({
     height: 16,
     marginEnd: 4,
   },
+  cancelIcon: {
+    width: 28,
+    height: 28,
+  },
+  row: {
+    flexDirection: 'row',
+  },
   reminderDateContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 8,
+    paddingHorizontal: 16,
+    borderColor: 'color-basic-400',
   },
 });
 
