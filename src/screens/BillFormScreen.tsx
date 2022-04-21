@@ -1,9 +1,22 @@
 import {useNavigation} from '@react-navigation/native';
-import {Button, Icon, Layout, Text, useTheme} from '@ui-kitten/components';
+import {
+  Button,
+  Icon,
+  Layout,
+  Text,
+  Tooltip,
+  useTheme,
+} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
 import CustomDatetimePicker from '../components/BillForm/CustomDatetimePicker';
 import {CustomInput} from '../components/BillForm/CustomInput';
@@ -34,6 +47,10 @@ interface FormData {
   reminderDates: Date[];
 }
 
+interface ReminderWarningTooltipProps {
+  index: number;
+}
+
 const BillFormScreen: React.FC<Props> = () => {
   const theme = useTheme();
   const navigator = useNavigation<NavigationProps>();
@@ -41,6 +58,7 @@ const BillFormScreen: React.FC<Props> = () => {
   const [relativeReminderDates, setRelativeReminderDates] = useState<
     ReminderFormData[]
   >([]);
+  const [showWarningTooltips, setShowWarningTooltips] = useState<boolean[]>([]);
   const {
     control,
     handleSubmit,
@@ -71,6 +89,11 @@ const BillFormScreen: React.FC<Props> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPayee]);
 
+  useEffect(() => {
+    const hasWarnings = Array(relativeReminderDates.length).fill(false);
+    setShowWarningTooltips(hasWarnings);
+  }, [currentDeadline, relativeReminderDates]);
+
   const onSubmit = async () => {
     const {amount, deadline} = getValues();
     const bill: Partial<Bill> = {
@@ -82,9 +105,9 @@ const BillFormScreen: React.FC<Props> = () => {
     const {id, ...toastParams} = await BillService.addBill(bill);
 
     if (toastParams.type !== 'error') {
-      const reminderDates = relativeReminderDates.map(({value, timeUnit}) =>
-        getReminderDate(deadline, value, timeUnit),
-      );
+      const reminderDates = relativeReminderDates
+        .map(({value, timeUnit}) => getReminderDate(deadline, value, timeUnit))
+        .filter(date => dayjs(date).isAfter(dayjs()));
 
       const notifPromises = reminderDates.map(date =>
         createTimestampNotification(
@@ -115,9 +138,42 @@ const BillFormScreen: React.FC<Props> = () => {
   };
 
   const onReminderFormSubmit = ({value, timeUnit}: ReminderFormData) => {
-    setRelativeReminderDates([...relativeReminderDates, {value, timeUnit}]);
+    const updatedDates = [...relativeReminderDates, {value, timeUnit}];
+    setRelativeReminderDates(updatedDates);
+
     setShowReminderForm(false);
   };
+
+  const ReminderWarningTooltip: React.FC<ReminderWarningTooltipProps> = ({
+    index,
+  }) => (
+    <Tooltip
+      placement={'top'}
+      visible={showWarningTooltips[index]}
+      onBackdropPress={() => {
+        const newWarnings = [...showWarningTooltips];
+        newWarnings.splice(index, 0, false);
+        setShowWarningTooltips(newWarnings);
+      }}
+      anchor={() => (
+        <TouchableOpacity
+          onPress={() => {
+            const newWarnings = [...showWarningTooltips];
+            newWarnings.splice(index, 0, true);
+            setShowWarningTooltips(newWarnings);
+          }}
+        >
+          <Icon
+            name="alert-triangle"
+            fill={theme['color-danger-600']}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      )}
+    >
+      This reminder date will not be created as it is in the past.
+    </Tooltip>
+  );
 
   return (
     <SafeAreaView>
@@ -217,11 +273,17 @@ const BillFormScreen: React.FC<Props> = () => {
                   style={styles.reminderDateContainer}
                   key={`reminder-date-section-${index}`}
                 >
-                  <Icon
-                    name="bell-outline"
-                    fill={theme['color-basic-600']}
-                    style={styles.reminderIcon}
-                  />
+                  {!dayjs(
+                    getReminderDate(currentDeadline, value, timeUnit),
+                  ).isAfter(dayjs()) ? (
+                    <ReminderWarningTooltip index={index} />
+                  ) : (
+                    <Icon
+                      name="bell-outline"
+                      fill={theme['color-basic-600']}
+                      style={styles.icon}
+                    />
+                  )}
                   <Text category={'p1'}>
                     {value}{' '}
                     {parseInt(value, 10) === 1
@@ -276,7 +338,7 @@ const styles = StyleSheet.create({
   reminderHeader: {
     marginBottom: 8,
   },
-  reminderIcon: {
+  icon: {
     width: 16,
     height: 16,
     marginEnd: 4,
