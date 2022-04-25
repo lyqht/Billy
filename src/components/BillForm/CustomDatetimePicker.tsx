@@ -2,7 +2,10 @@ import {Icon, Input} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, {useState} from 'react';
 import {View} from 'react-native';
+import {getSystemName} from 'react-native-device-info';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+type IOSDisplay = 'default' | 'compact' | 'inline' | 'spinner';
 
 interface Props {
   onChange: (date: any) => void;
@@ -24,6 +27,12 @@ const CustomDatetimePicker: React.FC<Props> = ({value, onChange}) => {
     hideDatePicker();
   };
 
+  const displayProps: {display?: IOSDisplay} = {
+    ...((getSystemName() === 'iOS' || getSystemName() === 'iPadOS') && {
+      display: 'spinner',
+    }),
+  };
+
   return (
     <View>
       <Input
@@ -38,9 +47,9 @@ const CustomDatetimePicker: React.FC<Props> = ({value, onChange}) => {
         isVisible={isDatePickerVisible}
         mode="datetime"
         date={value}
-        display={'inline'}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        {...displayProps}
       />
     </View>
   );
