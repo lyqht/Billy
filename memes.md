@@ -1,7 +1,0 @@
-## Memes
-
-Some funny tweet threads about Billy:
-- [Concerned Billy](https://twitter.com/RubyNovaDev/status/1511390234440839175)
-- [When a user is reckless in their waifu purchases](https://twitter.com/estee_tey/status/1512439733409878018)
-
-Feel free to contribute memes too.
