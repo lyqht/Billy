@@ -1,18 +1,21 @@
 # Billy <!-- omit in toc -->
+<div style="display: grid; place-items:center;">
+  <img width="200" src="./assets/BillyHero.png"></img>
+  
+  [![Update database types](https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg)](https://github.com/lyqht/Billy/actions/workflows/update-types.yml)
 
-<img width="200" src="./assets/BillyHero.png"></img>
+  <span>
+    <a href="#introduction-">Introduction 🌱</a>
+    •
+    <a href="#tech-notes-">Tech Notes 🗒</a>
+    •
+    <a href="#setup-instructions-">Setup instructions ⚙️</a>
+    •
+    <a href="./CONTRIBUTING.md">Contributing </a>
+  </span>
+</div>
 
-[![Update database types](https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg)](https://github.com/lyqht/Billy/actions/workflows/update-types.yml)
 
-**Table of contents**
-
-- [Introduction 🌱](#introduction-)
-- [Tech Notes 🗒](#tech-notes-)
-  - [Building blocks of this project 🧱](#building-blocks-of-this-project-)
-  - [Misc Tech Notes](#misc-tech-notes)
-- [Set up instructions ⚙️](#set-up-instructions-️)
-  - [Install dependencies](#install-dependencies)
-  - [Detox](#detox)
 ## Introduction 🌱
 
 Billy is your mobile companion app to help you manage your upcoming bills and remind you when they're due. Say goodbye to late payment fees!
@@ -23,8 +26,9 @@ Billy is your mobile companion app to help you manage your upcoming bills and re
 
 <br />
 
-For now, this project is developed solely by [Estee Tey](https://www.github.com/lyqht). If you are keen on how the app idea came about, you can refer to the [motivations section](./docs/motivations.md).
+For now, this project is developed solely by [Estee Tey](https://www.github.com/lyqht). 
 
+- If you are keen on how the app idea came about, you can refer to the [motivations section](./docs/motivations.md).
 - Live progress on this project can be found in [this #BuildInPublic tweet thread](https://twitter.com/estee_tey/status/1511017683440996359).  
 - For more in-depth details on planned & implemented features, you could refer to [ROADMAP.md](./docs/roadmap.md).
 
