@@ -11,7 +11,11 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "update-types": "npx openapi-typescript \"${SUPABASE_URL}/rest/v1/?apikey=${SUPABASE_ANON_KEY}\" --version=2 --output src/types/supabase.ts"
+    "update-types": "npx openapi-typescript \"${SUPABASE_URL}/rest/v1/?apikey=${SUPABASE_ANON_KEY}\" --version=2 --output src/types/supabase.ts",
+    "e2e:build:android": "detox build --configuration android.release",
+    "e2e:test:android": "detox test --configuration android.release",
+    "e2e:build:ios": "detox build --configuration ios.release",
+    "e2e:test:ios": "detox test --configuration ios.release"
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.0",
@@ -39,27 +43,29 @@
     "react-native-svg": "^12.1.1",
     "react-native-toast-message": "^2.1.5",
     "react-native-url-polyfill": "^1.3.0",
-    "use-supabase": "^2.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-decorators": "^7.17.9",
     "@babel/runtime": "^7.12.5",
+    "@jest/types": "^28.0.1",
     "@react-native-community/eslint-config": "^2.0.0",
     "@types/jest": "^26.0.23",
-    "@types/react-native": "^0.64.5",
+    "@types/react-native": "^0.64.1",
     "@types/react-test-renderer": "^16.9.2",
     "@types/uuid": "^8.3.4",
     "babel-jest": "^26.6.3",
+    "detox": "^19.6.5",
     "eslint": "^7.14.0",
     "husky": "^7.0.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.0",
     "lint-staged": "^12.3.7",
     "metro-react-native-babel-preset": "^0.64.0",
     "react-native-flipper": "^0.140.0",
     "react-native-mmkv-flipper-plugin": "^1.0.0",
     "react-test-renderer": "17.0.1",
+    "ts-jest": "^27.1.4",
     "typescript": "^3.8.3"
   },
   "resolutions": {

@@ -1,0 +1,2 @@
+Crashing bug for timepicker on android fixed 
+Stylings fixed for add bill button on devices that set bigger native font

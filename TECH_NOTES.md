@@ -37,4 +37,5 @@ These are some brief ideations of the content models and entities that could be 
 - If creating DB on Supabase that is imported from spreadsheet, the autoincrement index needs to be manually reset. ([Reference](https://github.com/supabase/supabase/issues/1804))
 - For using custom storage provider with Supabase on React Native, we have to declare an interface that resembles Async Storage ([Reference](https://github.com/supabase/supabase/issues/6348))
 - Integrating UI Kittens Select component with React Hook Form ([Reference](https://github.com/react-hook-form/react-hook-form/discussions/8187))
-- Google App Signing is quite confusing, but here's a [more detailed guide](https://blog.codemagic.io/the-simple-guide-to-android-code-signing/) that I found on this topic. Key password somehow is the same as store password.
+- Detox
+  - Should create builds in release for E2E rather than in debug mode for detox ([Reference](https://github.com/wix/Detox/issues/1382))

@@ -17,6 +17,7 @@ Table of contents
   - [Misc Tech Notes](#misc-tech-notes)
 - [Set up instructions](#set-up-instructions)
   - [Install dependencies](#install-dependencies)
+  - [Detox](#detox)
   - [Clearing cache](#clearing-cache)
 - [Motivations for building the app](#motivations-for-building-the-app)
 
@@ -58,6 +59,9 @@ npm run android
 ```
 
 You would need the Supabase project related environment variables as mentioned in `.env.sample`. You can create your own Supabase project and replace those values.
+
+### Detox
+You need node 16.13.0 for detox that depends on jest-circus runner.
 
 ### Clearing cache
 

@@ -10,7 +10,7 @@ export type RootStackParamList = {
 };
 
 export type TabParamList = {
-  UpcomingBills: undefined;
+  Bills: undefined;
   Settings: undefined;
 };
 

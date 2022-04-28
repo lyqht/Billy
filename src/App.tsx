@@ -6,8 +6,6 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import React, {useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
-import {SupabaseContextProvider} from 'use-supabase';
-import supabase from './api/supabase';
 import NavigationHeader from './components/Navigation/NavigationHeader';
 import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
@@ -54,13 +52,11 @@ const App: React.FC = () => {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <SupabaseContextProvider client={supabase}>
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <NavStack />
-            </NavigationContainer>
-          </SafeAreaProvider>
-        </SupabaseContextProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <NavStack />
+          </NavigationContainer>
+        </SafeAreaProvider>
       </ApplicationProvider>
       <Toast />
     </>

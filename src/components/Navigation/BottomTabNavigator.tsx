@@ -10,13 +10,13 @@ const Tab = createBottomTabNavigator<TabParamList>();
 const BottomTabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
-      initialRouteName="UpcomingBills"
+      initialRouteName="Bills"
       tabBar={props => <BottomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Tab.Screen name="UpcomingBills" component={UpcomingBillsScreen} />
+      <Tab.Screen name="Bills" component={UpcomingBillsScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );

@@ -110,7 +110,9 @@ const UpcomingBillsScreen: React.FC = () => {
       <Layout style={styles.layoutContainer}>
         <View style={styles.header}>
           <View>
-            <Text category="h2">Upcoming Bills</Text>
+            <Text style={styles.headerText} category="h4">
+              Upcoming Bills
+            </Text>
             <View style={styles.lastSyncDateView}>
               {lastSyncDate ? (
                 <Text category="p1">{getFormattedLastSyncDate()}</Text>
@@ -132,7 +134,7 @@ const UpcomingBillsScreen: React.FC = () => {
             onPress={() => navigator.navigate('BillForm')}
             style={styles.addBillButton}
           >
-            Add Bill
+            <Text category={'label'}>Add Bill</Text>
           </Button>
         </View>
         <Divider />
@@ -189,16 +191,19 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 8,
+  },
+  headerText: {
+    marginEnd: 16,
+  },
+  addBillButton: {
+    marginEnd: 16,
   },
   lastSyncDateView: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  addBillButton: {
-    margin: 16,
-    padding: 16,
   },
   listItemWrapper: {
     margin: 12,

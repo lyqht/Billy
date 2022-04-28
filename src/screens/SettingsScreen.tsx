@@ -89,7 +89,7 @@ const SettingsScreen: React.FC = () => {
                     onPress={async () => {
                       await UserService.logOutUser();
                       setLogoutModalVisible(false);
-                      navigation.navigate('UpcomingBills');
+                      navigation.navigate('Bills');
                     }}
                   >
                     Log out
