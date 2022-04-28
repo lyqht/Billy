@@ -1,15 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
@@ -21,22 +9,42 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Create a new app bundle to Play Store: Internal Track"
-  lane :internal do
+  desc "Increment version code and add git tag"
+  lane :vc_and_tag do |options|
+    increment_version_code(
+      gradle_file_path: "./app/build.gradle",
+      version_code: options[:current_build_number]
+    )
+
+    add_git_tag(
+      grouping: "builds",
+      includes_lane: false,
+      prefix: "android",
+      build_number: options[:current_build_number],
+      force: true,
+    )
+  end
+
+  desc "Create a new app bundle for release"
+  lane :bundle do
     gradle(task: 'clean')
     gradle(
       task: 'bundle',
       build_type: 'Release'
     )
-    end
+  end
 
-  desc "Submit a new build to Play Store: Internal Track"
+  desc "Submit a new bundle to Play Store: Internal Track"
   lane :internal do
-    gradle(task: 'clean')
-    gradle(
-      task: 'assemble',
-      build_type: 'Release'
-    )
-    upload_to_play_store(track: 'internal')
-    end
+    previous_build_number = google_play_track_version_codes(
+      track: "internal",
+    ).first
+
+    current_build_number = previous_build_number + 1
+    vc_and_tag(current_build_number: current_build_number)
+    bundle()
+    upload_to_play_store(track: 'internal', version_name: "#{current_build_number}", version_code: current_build_number, aab: "../app/build/outputs/bundle/release/app-release.aab")
+  end
+
+
 end
