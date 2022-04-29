@@ -4,7 +4,9 @@ import React, {useState} from 'react';
 import {
   ImageProps,
   KeyboardTypeOptions,
+  StyleProp,
   TouchableWithoutFeedback,
+  ViewStyle,
 } from 'react-native';
 
 interface Props {
@@ -15,6 +17,7 @@ interface Props {
   icon?: string;
   keyboardType?: KeyboardTypeOptions;
   inputSecure?: boolean;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const CustomInput: React.FC<Props> = ({

@@ -4,6 +4,7 @@ import Cache from '../services/Cache';
 
 const supabaseUrl = SUPABASE_URL || '';
 const supabaseKey = SUPABASE_KEY || '';
+
 const supabase = createClient(supabaseUrl, supabaseKey, {
   localStorage: Cache,
 });

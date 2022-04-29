@@ -95,7 +95,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
             style={styles.image}
             source={require('../../assets/BillyHero.png')}
           />
-          <Text category={'h3'}>{getGreetingText()}</Text>
+          <Text category={'h4'}>{getGreetingText()}</Text>
           <TouchableOpacity
             onPress={() => {
               Linking.openURL('https://github.com/lyqht/Billy');

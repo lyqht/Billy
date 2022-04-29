@@ -194,12 +194,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 8,
+    flexWrap: 'wrap',
   },
   headerText: {
-    marginEnd: 16,
+    marginEnd: 32,
   },
   addBillButton: {
-    marginEnd: 16,
+    marginVertical: 8,
+    flexGrow: 1,
   },
   lastSyncDateView: {
     flexDirection: 'row',

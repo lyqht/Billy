@@ -34,7 +34,7 @@ export const RegisterPromptButton: React.FC<RegisterPromptButtonProps> = ({
         onBackdropPress={() => setVisible(false)}
       >
         <Card disabled={true}>
-          <Text category={'h3'}>Register an account</Text>
+          <Text category={'h4'}>Register an account</Text>
           <Text style={styles.descriptionText}>{description}</Text>
           <Button
             style={styles.modalButton}
@@ -64,8 +64,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   descriptionText: {
-    textAlign: 'center',
-    margin: 16,
+    marginVertical: 16,
   },
   icon: {
     width: 18,
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   modalButton: {
-    margin: 16,
+    marginVertical: 16,
   },
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

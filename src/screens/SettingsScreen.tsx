@@ -43,7 +43,7 @@ const SettingsScreen: React.FC = () => {
     <SafeAreaView>
       <Layout style={styles.container}>
         <View>
-          <Text category={'h2'}>Settings</Text>
+          <Text category={'h4'}>Settings</Text>
           <Text category={'s1'}>{renderGreetingText()}</Text>
         </View>
         <View style={styles.buttonsContainer}>
@@ -66,7 +66,7 @@ const SettingsScreen: React.FC = () => {
                 visible={logoutModalVisible}
               >
                 <Card disabled={true}>
-                  <Text category={'h3'}>
+                  <Text category={'h4'}>
                     Are you sure that you want to log out?
                   </Text>
                   <Text category={'p1'} style={styles.descriptionText}>

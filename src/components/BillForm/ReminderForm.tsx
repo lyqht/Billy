@@ -77,7 +77,7 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
         Add a reminder (relative to the deadline)
       </Text>
       <View style={[styles.row, styles.sectionContainer]}>
-        <View style={[styles.formField, styles.fieldWithPaddingEnd]}>
+        <View style={[styles.numberInput, styles.fieldWithPaddingEnd]}>
           <Controller
             name="value"
             control={control}
@@ -91,7 +91,7 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
             render={({field: {onChange, value}}) => (
               <CustomInput
                 label=""
-                placeholder="a number"
+                placeholder="1"
                 keyboardType="number-pad"
                 onChangeText={onChange}
                 value={value}
@@ -99,7 +99,7 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
             )}
           />
         </View>
-        <View style={styles.formField}>
+        <View style={styles.dropdownInput}>
           <Controller
             name="timeUnit"
             control={control}
@@ -127,6 +127,13 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
           />
         </View>
       </View>
+      {Object.keys(errors).length > 0 && (
+        <View style={styles.sectionContainer}>
+          <Text category={'label'} appearance={'alternative'}>
+            {`* ${getErrorMessage()}`}
+          </Text>
+        </View>
+      )}
       <View
         style={[
           styles.row,
@@ -137,12 +144,7 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
           },
         ]}
       >
-        <View style={styles.row}>
-          <Icon
-            style={styles.icon}
-            name="bell-outline"
-            fill={theme['color-basic-300']}
-          />
+        <View style={[styles.row, styles.reminderButtonContainer]}>
           <View>
             <Text category={'s2'} appearance={'alternative'}>
               Calculated reminder date
@@ -165,13 +167,6 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
           />
         </TouchableOpacity>
       </View>
-      {Object.keys(errors).length > 0 && (
-        <View>
-          <Text category={'p1'} appearance={'alternative'}>
-            {getErrorMessage()}
-          </Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -182,8 +177,11 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 8,
   },
-  formField: {
-    flexGrow: 1,
+  dropdownInput: {
+    width: '60%',
+  },
+  numberInput: {
+    width: '40%',
   },
   fieldWithPaddingEnd: {
     paddingEnd: 8,
@@ -203,6 +201,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: 'white',
+    width: '100%',
+  },
+  reminderButtonContainer: {
+    flex: 1,
   },
   icon: {
     width: 32,
