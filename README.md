@@ -1,10 +1,14 @@
 # Billy <!-- omit in toc -->
-<div style="display: grid; place-items:center;">
+<div align="center">
   <img width="200" src="./assets/BillyHero.png"></img>
-  
-  [![Update database types](https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg)](https://github.com/lyqht/Billy/actions/workflows/update-types.yml)
+</div>
 
-  <span>
+<div align="center">
+  <a href="https://github.com/lyqht/Billy/actions/workflows/update-types.yml"><img width="200" src="https://github.com/lyqht/Billy/actions/workflows/update-types.yml/badge.svg"></img></a>
+</div>
+
+<div align="center">
+  <p>
     <a href="#introduction-">Introduction 🌱</a>
     •
     <a href="#tech-notes-">Tech Notes 🗒</a>
@@ -12,16 +16,15 @@
     <a href="#setup-instructions-">Setup instructions ⚙️</a>
     •
     <a href="./CONTRIBUTING.md">Contributing </a>
-  </span>
+  </p>
 </div>
-
 
 ## Introduction 🌱
 
 Billy is your mobile companion app to help you manage your upcoming bills and remind you when they're due. Say goodbye to late payment fees!
 
-<div style="display: grid; place-items:center;">
-    <img width="300" src="./demo/overview_v0.0.1.gif"></img>
+<div align="center">
+  <img width="300" src="./docs/static/demo/overview_v0.0.1.gif"></img>
 </div>
 
 <br />
