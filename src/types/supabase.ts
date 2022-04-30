@@ -124,8 +124,9 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          deviceId?: parameters["rowFilter.FCMToken.deviceId"];
+          id?: parameters["rowFilter.FCMToken.id"];
           created_at?: parameters["rowFilter.FCMToken.created_at"];
+          deviceId?: parameters["rowFilter.FCMToken.deviceId"];
           userId?: parameters["rowFilter.FCMToken.userId"];
           token?: parameters["rowFilter.FCMToken.token"];
           /** Filtering Columns */
@@ -178,8 +179,9 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          deviceId?: parameters["rowFilter.FCMToken.deviceId"];
+          id?: parameters["rowFilter.FCMToken.id"];
           created_at?: parameters["rowFilter.FCMToken.created_at"];
+          deviceId?: parameters["rowFilter.FCMToken.deviceId"];
           userId?: parameters["rowFilter.FCMToken.userId"];
           token?: parameters["rowFilter.FCMToken.token"];
         };
@@ -196,8 +198,9 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          deviceId?: parameters["rowFilter.FCMToken.deviceId"];
+          id?: parameters["rowFilter.FCMToken.id"];
           created_at?: parameters["rowFilter.FCMToken.created_at"];
+          deviceId?: parameters["rowFilter.FCMToken.deviceId"];
           userId?: parameters["rowFilter.FCMToken.userId"];
           token?: parameters["rowFilter.FCMToken.token"];
         };
@@ -441,16 +444,18 @@ export interface definitions {
   };
   FCMToken: {
     /**
-     * Format: uuid
+     * Format: bigint
      * @description Note:
      * This is a Primary Key.<pk/>
      */
-    deviceId: string;
+    id: number;
     /**
      * Format: timestamp with time zone
      * @default now()
      */
     created_at?: string;
+    /** Format: text */
+    deviceId?: string;
     /** Format: uuid */
     userId?: string;
     /** Format: text */
@@ -559,10 +564,12 @@ export interface parameters {
   "rowFilter.Bill.archivedDate": string;
   /** @description FCMToken */
   "body.FCMToken": definitions["FCMToken"];
-  /** Format: uuid */
-  "rowFilter.FCMToken.deviceId": string;
+  /** Format: bigint */
+  "rowFilter.FCMToken.id": string;
   /** Format: timestamp with time zone */
   "rowFilter.FCMToken.created_at": string;
+  /** Format: text */
+  "rowFilter.FCMToken.deviceId": string;
   /** Format: uuid */
   "rowFilter.FCMToken.userId": string;
   /** Format: text */
