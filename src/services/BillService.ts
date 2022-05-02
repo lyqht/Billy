@@ -86,17 +86,20 @@ class BillService {
     id?: number,
   ): Promise<void> => {
     const bills = await this.getBills();
-    const billIndex = bills.findIndex(bill => bill.id === id);
+    const billIndex = bills.findIndex(
+      bill => bill.id === id || bill.tempID === id,
+    );
     if (billIndex === -1) {
       throw Error('Cannot find bill');
     }
     const updatedBill = bills[billIndex];
-    let completedDate;
+    let completedDate = '';
     if (completed) {
       completedDate = dayjs().toDate().toISOString();
     }
 
     updatedBill.completedDate = completedDate;
+    console.log(bills);
     Cache.setBills(bills);
 
     const user = Cache.getUser();

@@ -1,5 +1,5 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {LoginMode} from './types/loginMode';
+import {LoginMode} from './types/LoginMode';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -7,6 +7,7 @@ export type RootStackParamList = {
   Login: {loginMode: LoginMode};
   MissedBills: undefined;
   Settings: undefined;
+  AccountSettings: undefined;
 };
 
 export type TabParamList = {

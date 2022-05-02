@@ -3,7 +3,7 @@ import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useCallback, useState} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
-import {RegisterPromptButton} from '../components/RegisterPromptButton';
+import {RegisterPromptButton} from '../components/PromptButtons/RegisterPromptButton';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import {getMissedBills, getUpcomingBills} from '../helpers/BillFilter';
 import {getBillIdToNumRemindersMap} from '../helpers/ReminderMapper';

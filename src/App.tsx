@@ -12,6 +12,7 @@ import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import MissedBillsScreen from './screens/MissedBillsScreen';
+import SettingsDetailScreen from './screens/SettingsDetailScreen';
 import {registerDeviceForRemoteMessages} from './services/NotificationService';
 import SyncService from './services/SyncService';
 
@@ -41,6 +42,10 @@ const NavStack = () => (
     <RootStack.Screen name={'BillForm'} component={BillFormScreen} />
     <RootStack.Screen name={'MissedBills'} component={MissedBillsScreen} />
     <RootStack.Screen name={'Login'} component={LoginScreen} />
+    <RootStack.Screen
+      name={'AccountSettings'}
+      component={SettingsDetailScreen}
+    />
   </RootStack.Navigator>
 );
 

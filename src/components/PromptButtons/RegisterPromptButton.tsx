@@ -2,8 +2,8 @@ import {useNavigation, useTheme} from '@react-navigation/native';
 import {Button, Card, Icon, Modal, Text} from '@ui-kitten/components';
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {NavigationProps} from '../routes';
-import {LoginMode} from '../types/LoginMode';
+import {NavigationProps} from '../../routes';
+import {LoginMode} from '../../types/LoginMode';
 interface RegisterPromptButtonProps {
   description: string;
 }

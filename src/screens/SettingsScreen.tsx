@@ -3,7 +3,7 @@ import {User} from '@supabase/supabase-js';
 import {Button, Card, Icon, Layout, Text, Modal} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {FeedbackButton} from '../components/FeedbackButton';
+import {FeedbackButton} from '../components/PromptButtons/FeedbackButton';
 import {Quote} from '../components/Quote';
 import {TabNavigationProps} from '../routes';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
@@ -47,7 +47,14 @@ const SettingsScreen: React.FC = () => {
           <Text category={'s1'}>{renderGreetingText()}</Text>
         </View>
         <View style={styles.buttonsContainer}>
-          <FeedbackButton />
+          <Button
+            status={'info'}
+            style={styles.listItem}
+            accessoryLeft={<Icon name="archive-outline" />}
+            onPress={() => navigation.getParent()?.navigate('AccountSettings')}
+          >
+            Data Management
+          </Button>
           {user ? (
             <View>
               <Button
@@ -116,6 +123,9 @@ const SettingsScreen: React.FC = () => {
               Sign up / Log in
             </Button>
           )}
+          <View style={styles.listItem}>
+            <FeedbackButton />
+          </View>
         </View>
       </Layout>
     </SafeAreaView>
@@ -130,7 +140,6 @@ const styles = StyleSheet.create({
   },
   listItem: {
     marginVertical: 12,
-    flexDirection: 'row',
   },
   buttonsContainer: {
     flex: 1,

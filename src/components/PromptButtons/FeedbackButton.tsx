@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Button, Card, Icon, Modal, Text} from '@ui-kitten/components';
 import React from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
-import {NavigationProps} from '../routes';
+import {NavigationProps} from '../../routes';
 
 export const FeedbackButton: React.FC = ({}) => {
   let navigation = useNavigation<NavigationProps>();
