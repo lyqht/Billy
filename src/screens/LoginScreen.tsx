@@ -10,7 +10,14 @@ import {
 } from '@ui-kitten/components';
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, View, Image, TouchableOpacity, Linking} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  Linking,
+  ScrollView,
+} from 'react-native';
 import {CustomInput} from '../components/BillForm/CustomInput';
 import {NavigationProps, RootStackParamList} from '../routes';
 import SyncService from '../services/SyncService';
@@ -74,7 +81,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
       : 'Billy is happy to help you track your expenses! Here are some features that Billy offers ➜';
 
   return (
-    <View>
+    <ScrollView>
       <Layout style={styles.container}>
         <View>
           <TabBar
@@ -153,7 +160,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
           </Button>
         </View>
       </Layout>
-    </View>
+    </ScrollView>
   );
 };
 

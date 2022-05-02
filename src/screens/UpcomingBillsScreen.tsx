@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   lastSyncDateView: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 24,
   },
   listItemWrapper: {
     margin: 12,
