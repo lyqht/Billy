@@ -40,7 +40,7 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
   });
 
   useEffect(() => {
-    const revalidate = async () => await trigger('timeUnit');
+    const revalidate = async () => trigger('timeUnit');
     revalidate();
   }, [currentDeadline]);
 

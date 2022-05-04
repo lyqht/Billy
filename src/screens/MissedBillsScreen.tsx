@@ -2,6 +2,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
+import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Quote} from '../components/Quote';
 import {getMissedBills} from '../helpers/BillFilter';
@@ -84,9 +85,14 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
         <List
           data={bills}
           renderItem={({item}) => (
-            <View key={item.id} style={styles.listItemWrapper}>
+            <Animated.View
+              entering={FadeInLeft}
+              exiting={FadeOutRight}
+              key={item.id || item.tempID}
+              style={styles.listItemWrapper}
+            >
               <BillCard billCardType={BillCardType.MISSED_BILL} bill={item} />
-            </View>
+            </Animated.View>
           )}
           ListFooterComponent={
             <Button

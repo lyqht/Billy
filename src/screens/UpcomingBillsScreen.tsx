@@ -2,6 +2,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useCallback, useState} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
+import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/PromptButtons/RegisterPromptButton';
 import ScrollToTopButton from '../components/ScrollToTopButton';
@@ -80,9 +81,6 @@ const UpcomingBillsScreen: React.FC = () => {
     }, []),
   );
 
-  const getFormattedLastSyncDate = () =>
-    `Last Sync Date: ${refreshing ? 'Syncing...' : lastSyncDate}`;
-
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     try {
@@ -106,6 +104,9 @@ const UpcomingBillsScreen: React.FC = () => {
       ),
     }),
   };
+
+  const getFormattedLastSyncDate = () =>
+    `Last Sync Date: ${refreshing ? 'Syncing...' : lastSyncDate}`;
 
   return (
     <SafeAreaView style={styles.main}>
@@ -161,13 +162,18 @@ const UpcomingBillsScreen: React.FC = () => {
             ref={listRef}
             data={bills}
             renderItem={({item}) => (
-              <View key={item.id || item.tempID} style={styles.listItemWrapper}>
+              <Animated.View
+                entering={FadeInLeft}
+                exiting={FadeOutRight}
+                key={item.id || item.tempID}
+                style={styles.listItemWrapper}
+              >
                 <BillCard
                   billCardType={BillCardType.UPCOMING_BILL}
                   bill={item}
                   numReminders={reminders[item.tempID || item.id]}
                 />
-              </View>
+              </Animated.View>
             )}
             ListFooterComponent={<ScrollToTopButton ref={listRef} />}
             {...listProps}
