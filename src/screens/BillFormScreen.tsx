@@ -69,7 +69,7 @@ const BillFormScreen: React.FC<Props> = () => {
       payee: '',
       category: '',
       amount: '',
-      deadline: dayjs().hour(0).minute(0).toDate(),
+      deadline: dayjs().hour(22).minute(0).toDate(),
     },
   });
 

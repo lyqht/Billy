@@ -5,4 +5,4 @@ export const getReminderDate = (
   deadline: Date,
   value: string,
   timeUnit: TimeUnit,
-): Date => dayjs(deadline).subtract(parseInt(value, 10), timeUnit).toDate();
+): dayjs.Dayjs => dayjs(deadline).subtract(parseInt(value, 10), timeUnit);

@@ -67,17 +67,23 @@ export const registerDeviceForRemoteMessages = async () => {
 const ANDROID_CHANNEL_ID = 'billy-notifs';
 
 export const createAndroidNotifChannel = async () => {
-  if (!notifee.isChannelCreated(ANDROID_CHANNEL_ID)) {
-    await notifee.createChannel({
-      id: ANDROID_CHANNEL_ID,
-      name: 'Billy',
-      lights: false,
-      vibration: true,
-      importance: AndroidImportance.DEFAULT,
-    });
-    console.debug('Created Android Channel');
+  await notifee.deleteChannel(ANDROID_CHANNEL_ID);
+  await notifee.createChannel({
+    id: ANDROID_CHANNEL_ID,
+    name: ANDROID_CHANNEL_ID,
+    lights: false,
+    vibration: true,
+    importance: AndroidImportance.DEFAULT,
+    sound: 'default',
+  });
+  console.debug('Created Android Channel');
+
+  const channel = await notifee.getChannel(ANDROID_CHANNEL_ID);
+  if (channel?.blocked) {
+    console.debug(`Channel ${ANDROID_CHANNEL_ID} is disabled`);
+  } else {
+    console.debug(`Channel ${ANDROID_CHANNEL_ID} is enabled`);
   }
-  console.debug('Android channel exists');
 };
 
 export const createBaseNotification = (
@@ -99,15 +105,25 @@ export const createBaseNotification = (
   },
 });
 
-const checkAndroidAlarmPermissionSettings = async (
-  callback: () => Promise<void>,
-) => {
+const checkAndroidAlarmPermissionSettings = async () => {
   const settings = await notifee.getNotificationSettings();
-  if (settings.android.alarm === AndroidNotificationSetting.ENABLED) {
-    await callback();
-  } else {
+  if (settings.android.alarm !== AndroidNotificationSetting.ENABLED) {
     await notifee.openAlarmPermissionSettings();
   }
+};
+
+// currently only used for testing, no functionality uses this yet.
+export const displayNotification = async () => {
+  await createAndroidNotifChannel();
+  await notifee.displayNotification({
+    title: 'Test notification',
+    android: {
+      channelId: ANDROID_CHANNEL_ID,
+      pressAction: {
+        id: 'default',
+      },
+    },
+  });
 };
 
 export const createTimestampNotification = async (
@@ -115,27 +131,26 @@ export const createTimestampNotification = async (
   notification: Notification,
 ): Promise<void> => {
   await createAndroidNotifChannel();
-  await checkAndroidAlarmPermissionSettings(async () => {
-    const trigger: TimestampTrigger = {
-      type: TriggerType.TIMESTAMP,
-      timestamp: date.getTime(),
-    };
+  await checkAndroidAlarmPermissionSettings();
+  const trigger: TimestampTrigger = {
+    type: TriggerType.TIMESTAMP,
+    timestamp: date.getTime(),
+  };
 
-    const createdNotificationId = await notifee.createTriggerNotification(
-      notification,
-      trigger,
-    );
+  const createdNotificationId = await notifee.createTriggerNotification(
+    notification,
+    trigger,
+  );
 
-    const triggerNotifs = await notifee.getTriggerNotifications();
-    const createdNotif = triggerNotifs.filter(
-      t => t.notification.id === createdNotificationId,
-    )[0];
+  const triggerNotifs = await notifee.getTriggerNotifications();
+  const createdNotif = triggerNotifs.filter(
+    t => t.notification.id === createdNotificationId,
+  )[0];
 
-    console.debug(JSON.stringify(createdNotif));
+  console.debug(JSON.stringify(createdNotif));
 
-    // @ts-ignore
-    console.debug(dayjs(createdNotif.trigger.timestamp).format());
-  });
+  // @ts-ignore
+  console.debug(dayjs(createdNotif.trigger.timestamp).format());
 };
 
 export const getReminderNotificationsForBill = async (

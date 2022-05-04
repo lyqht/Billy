@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {User} from '@supabase/supabase-js';
-import {Button, Card, Icon, Layout, Text, Modal} from '@ui-kitten/components';
+import {Button, Card, Icon, Layout, Modal, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {FeedbackButton} from '../components/PromptButtons/FeedbackButton';

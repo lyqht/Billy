@@ -15,6 +15,7 @@ import MissedBillsScreen from './screens/MissedBillsScreen';
 import SettingsDetailScreen from './screens/SettingsDetailScreen';
 import {registerDeviceForRemoteMessages} from './services/NotificationService';
 import SyncService from './services/SyncService';
+import notifee, {EventType} from '@notifee/react-native';
 
 const init = async () => {
   await SyncService.syncAllData();
@@ -52,6 +53,36 @@ const NavStack = () => (
 const App: React.FC = () => {
   useEffect(() => {
     init();
+
+    return notifee.onForegroundEvent(({type, detail}) => {
+      if (type === EventType.APP_BLOCKED) {
+        console.error('User toggled app blocked', detail.blocked);
+      }
+
+      if (type === EventType.CHANNEL_BLOCKED) {
+        console.error(
+          'User toggled channel block',
+          detail.channel?.id,
+          detail.blocked,
+        );
+      }
+
+      if (type === EventType.CHANNEL_GROUP_BLOCKED) {
+        console.error(
+          'User toggled channel group block',
+          detail.channelGroup?.id,
+          detail.blocked,
+        );
+      }
+
+      if (type === EventType.DISMISSED) {
+        console.debug('User dismissed notif');
+      }
+
+      if (type === EventType.PRESS) {
+        console.debug('User pressed notif');
+      }
+    });
   }, []);
   return (
     <>
