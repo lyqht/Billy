@@ -36,7 +36,7 @@ const CardContent: React.FC<BillCardProps> = ({
       <View style={styles.leftColumn}>
         <Text category={'s1'}>{payee}</Text>
         {billCardType === BillCardType.UPCOMING_BILL && !completedDate && (
-          <BillCardReminderText numReminders={numReminders} />
+          <BillCardReminderText numReminders={numReminders!} />
         )}
         <View
           style={[
@@ -68,31 +68,21 @@ export const BillCard: React.FC<BillCardProps> = ({
   billCardType,
   numReminders,
 }) => {
-  const {id, completedDate} = bill;
-  const [cardStatus, setCardStatus] = React.useState(
-    completedDate ? 'success' : 'basic',
-  );
+  const {id, tempID, completedDate} = bill;
+  const currentBillId = id ?? tempID;
 
   const cardProps: CardProps = {
     disabled: true,
-    status: cardStatus,
+    status: completedDate ? 'success' : 'basic',
     footer:
       billCardType === BillCardType.UPCOMING_BILL ? (
         <UpcomingBillCardFooter
           completedDate={completedDate}
           onMarkComplete={async () => {
-            await BillService.setBillAsComplete(true, id);
-            LayoutAnimation.configureNext(
-              LayoutAnimation.Presets.easeInEaseOut,
-            );
-            setCardStatus('success');
+            await BillService.setBillAsComplete(true, currentBillId);
           }}
           onMarkIncomplete={async () => {
-            await BillService.setBillAsComplete(false, id);
-            LayoutAnimation.configureNext(
-              LayoutAnimation.Presets.easeInEaseOut,
-            );
-            setCardStatus('basic');
+            await BillService.setBillAsComplete(false, currentBillId);
           }}
         />
       ) : (

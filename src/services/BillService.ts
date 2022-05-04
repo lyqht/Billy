@@ -93,13 +93,8 @@ class BillService {
       throw Error('Cannot find bill');
     }
     const updatedBill = bills[billIndex];
-    let completedDate = '';
-    if (completed) {
-      completedDate = dayjs().toDate().toISOString();
-    }
-
+    let completedDate = completed ? dayjs().toDate().toISOString() : undefined;
     updatedBill.completedDate = completedDate;
-    console.log(bills);
     Cache.setBills(bills);
 
     const user = Cache.getUser();

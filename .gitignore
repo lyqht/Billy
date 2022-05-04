@@ -66,6 +66,7 @@ GoogleService-Info.plist
 key.json
 key.properties
 *.keystore
+upload_certificate.pem
 
 # fastlane specific
 fastlane/report.xml

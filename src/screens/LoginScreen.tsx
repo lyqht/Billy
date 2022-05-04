@@ -125,7 +125,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
                   label={name}
                   value={value}
                   onChangeText={onChange}
-                  placeholder="tecktan@gmail.com"
+                  placeholder="billy@gmail.com"
                   icon="person"
                 />
               )}

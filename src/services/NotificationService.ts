@@ -13,6 +13,7 @@ import {getUniqueId} from 'react-native-device-info';
 import {v4} from 'uuid';
 import supabase from '../api/supabase';
 import UserService from './UserService';
+import dayjs from 'dayjs';
 
 // --------- FCM ---------- //
 
@@ -74,7 +75,9 @@ export const createAndroidNotifChannel = async () => {
       vibration: true,
       importance: AndroidImportance.DEFAULT,
     });
+    console.debug('Created Android Channel');
   }
+  console.debug('Android channel exists');
 };
 
 export const createBaseNotification = (
@@ -118,12 +121,20 @@ export const createTimestampNotification = async (
       timestamp: date.getTime(),
     };
 
-    const createdNotification = await notifee.createTriggerNotification(
+    const createdNotificationId = await notifee.createTriggerNotification(
       notification,
       trigger,
     );
 
-    console.debug({createdNotification});
+    const triggerNotifs = await notifee.getTriggerNotifications();
+    const createdNotif = triggerNotifs.filter(
+      t => t.notification.id === createdNotificationId,
+    )[0];
+
+    console.debug(JSON.stringify(createdNotif));
+
+    // @ts-ignore
+    console.debug(dayjs(createdNotif.trigger.timestamp).format());
   });
 };
 
@@ -142,6 +153,7 @@ export const getReminderNotificationIdsForBill = async (
   billID: string,
 ): Promise<string[]> => {
   const triggerNotifs = await getReminderNotificationsForBill(billID);
+
   return triggerNotifs.map(triggerNotif => triggerNotif.notification.id!) || [];
 };
 

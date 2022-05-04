@@ -1,7 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {
   Button,
-  Divider,
   Icon,
   Layout,
   StyleService,
@@ -13,13 +12,7 @@ import {
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, ScrollView, TouchableOpacity, View} from 'react-native';
 import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
 import CustomDatetimePicker from '../components/BillForm/CustomDatetimePicker';
 import {CustomInput} from '../components/BillForm/CustomInput';
@@ -76,7 +69,7 @@ const BillFormScreen: React.FC<Props> = () => {
       payee: '',
       category: '',
       amount: '',
-      deadline: dayjs().hour(21).minute(0).toDate(),
+      deadline: dayjs().hour(0).minute(0).toDate(),
     },
   });
 
@@ -102,7 +95,7 @@ const BillFormScreen: React.FC<Props> = () => {
     const {amount, deadline} = getValues();
     const bill: Partial<Bill> = {
       ...getValues(),
-      deadline: deadline.toDateString(),
+      deadline: deadline.toISOString(),
       amount: parseFloat(amount),
     };
 
@@ -115,7 +108,7 @@ const BillFormScreen: React.FC<Props> = () => {
 
       const notifPromises = reminderDates.map(date =>
         createTimestampNotification(
-          date,
+          dayjs(date).startOf('minutes').toDate(),
           createBaseNotification(
             id,
             'Your bill is due!',

@@ -1,4 +1,4 @@
-import {Icon, Input} from '@ui-kitten/components';
+import {Icon, Input, InputProps} from '@ui-kitten/components';
 import {RenderProp} from '@ui-kitten/components/devsupport';
 import React, {useState} from 'react';
 import {
@@ -39,11 +39,13 @@ export const CustomInput: React.FC<Props> = ({
       <Icon {...iconProps} name={icon} />
     );
 
-  const inputProps = {
+  const inputProps: InputProps = {
     ...props,
     secureTextEntry,
     keyboardType,
     ...(icon && {accessoryRight: AccessoryIcon}),
+    ...(inputSecure && {accessoryRight: AccessoryIcon}),
   };
+
   return <Input {...inputProps} />;
 };

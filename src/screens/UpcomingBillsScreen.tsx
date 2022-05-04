@@ -56,7 +56,7 @@ const UpcomingBillsScreen: React.FC = () => {
           } else if (changedKey === STORAGE_KEYS.BILLS) {
             const retrievedBills = Cache.getBills();
             if (retrievedBills) {
-              setBills(getUpcomingBills([...retrievedBills], false));
+              setBills(getUpcomingBills([...retrievedBills]));
               setMissedBills(getMissedBills([...retrievedBills]));
               getBillIdToNumRemindersMap(retrievedBills).then(
                 retrievedReminders => {
@@ -68,6 +68,8 @@ const UpcomingBillsScreen: React.FC = () => {
             const lastSyncDateFromCache = Cache.getLastSyncDate();
             setLastSyncDate(lastSyncDateFromCache ? lastSyncDateFromCache : '');
           }
+
+          //TODO: add animation
         },
       );
 
