@@ -2,9 +2,9 @@ import {Button, Icon, Text} from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {UpcomingBillStatus} from '../../types/BillStatus';
+import {UpcomingBill} from '../../types/BillStatus';
 
-interface BillCardFooterProps extends UpcomingBillStatus {
+interface BillCardFooterProps extends UpcomingBill {
   onMarkComplete: () => void;
   onMarkIncomplete: () => void;
 }

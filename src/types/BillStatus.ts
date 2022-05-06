@@ -1,3 +1,9 @@
 import {Bill} from '../models/Bill';
 
-export type UpcomingBillStatus = Pick<Bill, 'completedDate'>;
+export type UpcomingBill = Pick<Bill, 'completedDate'>;
+
+export enum BillStatus {
+  UPCOMING = 'UPCOMING',
+  COMPLETED = 'COMPLETED',
+  MISSED = 'MISSED',
+}
