@@ -23,6 +23,7 @@ import {NavigationProps, RootStackParamList} from '../routes';
 import SyncService from '../services/SyncService';
 import UserService from '../services/UserService';
 import {LoginMode} from '../types/LoginMode';
+import BillyHero from '../../assets/BillyHero.png';
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
@@ -100,7 +101,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
         <View style={styles.bottomContainer}>
           <Image
             style={styles.image}
-            source={require('../../assets/BillyHero.png')}
+            source={BillyHero}
+            accessibilityLabel={'An image of Billy giving you a concerned look'}
           />
           <Text category={'h4'}>{getGreetingText()}</Text>
           <TouchableOpacity
