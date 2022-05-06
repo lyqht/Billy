@@ -43,7 +43,13 @@ platform :android do
     current_build_number = previous_build_number + 1
     vc_and_tag(current_build_number: current_build_number)
     bundle()
-    upload_to_play_store(track: 'internal', version_name: "#{current_build_number}", version_code: current_build_number, aab: "../app/build/outputs/bundle/release/app-release.aab")
+    upload_to_play_store(
+      track: 'internal', 
+      version_name: "#{current_build_number}", 
+      version_code: current_build_number, 
+      release_status: 'draft',
+      aab: "./app/build/outputs/bundle/release/app-release.aab"
+    )
   end
 
 
