@@ -422,11 +422,11 @@ export interface paths {
 export interface definitions {
   Bill: {
     /** Format: date */
-    deadline?: string;
+    deadline: string;
     /** Format: text */
-    payee?: string;
+    payee: string;
     /** Format: double precision */
-    amount?: number;
+    amount: number;
     /** Format: text */
     category?: string;
     /**
