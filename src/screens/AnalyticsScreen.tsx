@@ -1,14 +1,24 @@
 import {Layout, Text} from '@ui-kitten/components';
 import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import Chart from '../components/Analytics/Chart';
+import {useBilly} from '../contexts/useBillyContext';
+import {mapBillsToChartDataPts} from '../helpers/AnalyticsFns';
 
 const AnalyticsScreen: React.FC = () => {
+  const {bills} = useBilly();
+  const chartData = mapBillsToChartDataPts(bills);
+
   return (
     <SafeAreaView>
       <Layout style={styles.layoutContainer}>
         <ScrollView>
           <Text category={'h4'}>Summary Report</Text>
-          <View />
+          {chartData.length > 0 ? (
+            <Chart showMissedBills={true} data={chartData} />
+          ) : (
+            <Text category={'p1'}>Loading...</Text>
+          )}
         </ScrollView>
       </Layout>
     </SafeAreaView>
