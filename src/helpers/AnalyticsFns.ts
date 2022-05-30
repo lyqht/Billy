@@ -1,12 +1,21 @@
+import {CalendarRange} from '@ui-kitten/components';
 import dayjs from 'dayjs';
-import {groupBy, sumBy, minBy, uniq} from 'lodash';
+import {groupBy, sumBy, minBy, uniq, maxBy} from 'lodash';
 import {VictoryAxisCommonProps} from 'victory-core';
 import {Bill} from '../models/Bill';
-import {ChartDataPt, ChartData, ChartDataFilter} from '../types/Analytics';
+import {
+  ChartDataPt,
+  ChartData,
+  ChartDataFilter,
+  ChartDataDateRange,
+} from '../types/Analytics';
 import {BillStatus} from '../types/BillStatus';
 
 export const getFirstBillDate = (bills: Bill[]): dayjs.Dayjs =>
   dayjs(minBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline);
+
+export const getLastBillDate = (bills: Bill[]): dayjs.Dayjs =>
+  dayjs(maxBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline);
 
 export const getPeriodIndexOfBill = (
   billDate: dayjs.Dayjs,
@@ -26,6 +35,11 @@ export const mapBillsToChartDataPts = (bills: Bill[]): ChartDataPt[] =>
       : BillStatus.UPCOMING,
   }));
 
+export const getBillDateRange = (bills: Bill[]): CalendarRange<Date> => ({
+  startDate: getFirstBillDate(bills).startOf('month').toDate(),
+  endDate: getLastBillDate(bills).endOf('month').toDate(),
+});
+
 const filterDataPoints = (points: ChartDataPt[], filters?: ChartDataFilter) =>
   points.filter(bill => {
     if (filters) {
@@ -33,7 +47,6 @@ const filterDataPoints = (points: ChartDataPt[], filters?: ChartDataFilter) =>
       Object.entries(filters).forEach(([billProperty, acceptedProperties]) => {
         const filterProperty = billProperty as keyof ChartDataFilter;
         const currentBillPropertyValue = bill[filterProperty] as string;
-        console.log({acceptedProperties, currentBillPropertyValue});
         if (!acceptedProperties.includes(currentBillPropertyValue)) {
           toReturnDataPt = false;
         }
