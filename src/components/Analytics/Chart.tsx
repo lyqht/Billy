@@ -35,6 +35,10 @@ const Chart: FC<ChartProps> = ({
   };
 
   const completedBills = getBarChartData(data, baseFilters);
+  const placeholderDataPoints = completedBills.map(b => ({
+    ...b,
+    amount: 0,
+  }));
   const axisProps = getAxisProps(data);
 
   // Due to how Victory Native works, we cannot dynamically re-rerender
@@ -68,18 +72,18 @@ const Chart: FC<ChartProps> = ({
 
   const chartStackProps = {
     firstBarData: completedBills,
-    ...(showMissedBills && {
-      secondBarData: getBarChartData(data, {
-        ...baseFilters,
-        status: [BillStatus.MISSED],
-      }),
-    }),
-    ...(showUpcomingBills && {
-      thirdBarData: getBarChartData(data, {
-        ...baseFilters,
-        status: [BillStatus.UPCOMING],
-      }),
-    }),
+    secondBarData: showMissedBills
+      ? getBarChartData(data, {
+          ...baseFilters,
+          status: [BillStatus.MISSED],
+        })
+      : placeholderDataPoints,
+    thirdBarData: showUpcomingBills
+      ? getBarChartData(data, {
+          ...baseFilters,
+          status: [BillStatus.UPCOMING],
+        })
+      : placeholderDataPoints,
   };
 
   return <ChartStackComponent {...chartStackProps} />;

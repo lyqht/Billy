@@ -12,58 +12,85 @@ import {getBillsInDateRange} from '../helpers/BillFilter';
 
 const AnalyticsScreen: React.FC = () => {
   const {bills} = useBilly();
-  const range = getBillDateRange(bills);
-  const [selectedRange, setSelectedRange] = useState(range);
+  const [loading, setLoading] = useState(true);
+  const [selectedRange, setSelectedRange] = useState(getBillDateRange(bills));
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [showMissedBills, setShowMissedBills] = useState(false);
   const [showUpcomingBills, setShowUpcomingBills] = useState(false);
   const [chartData, setChartData] = useState(mapBillsToChartDataPts(bills));
+  const finishLoading = !loading;
 
   useEffect(() => {
-    if (selectedRange.startDate && selectedRange.endDate) {
+    const {startDate, endDate} = selectedRange;
+    if (startDate && endDate) {
       const billsInNewDateRange = getBillsInDateRange(
         bills,
-        selectedRange.startDate,
-        selectedRange.endDate,
+        startDate,
+        endDate,
       );
-
-      setChartData(mapBillsToChartDataPts(billsInNewDateRange));
+      if (billsInNewDateRange.length === 0) {
+        setChartData([]);
+      } else {
+        setChartData(mapBillsToChartDataPts(billsInNewDateRange));
+      }
     }
   }, [selectedRange, bills]);
+
+  useEffect(() => {
+    if (bills.length > 0) {
+      setSelectedRange(getBillDateRange(bills));
+      setLoading(false);
+    }
+  }, [bills]);
 
   return (
     <SafeAreaView>
       <Layout style={styles.layoutContainer}>
         <ScrollView>
           <Text category={'h4'}>Summary Report</Text>
-          <View style={styles.inputContainer}>
-            <CustomDateRangePicker
-              label={'Date Range'}
-              range={selectedRange}
-              onSelect={setSelectedRange}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <CheckBox
-              checked={showMissedBills}
-              onChange={nextChecked => setShowMissedBills(nextChecked)}
-            >
-              Show Missed Bills
-            </CheckBox>
-            <CheckBox
-              checked={showUpcomingBills}
-              onChange={nextChecked => setShowUpcomingBills(nextChecked)}
-            >
-              Show Upcoming Bills
-            </CheckBox>
-          </View>
-          {chartData.length > 0 ? (
-            <Chart
-              showMissedBills={showMissedBills}
-              showUpcomingBills={showUpcomingBills}
-              data={chartData}
-            />
-          ) : (
-            <Text category={'p1'}>Loading...</Text>
+          {finishLoading && (
+            <>
+              <View testID="chart-filters-settings">
+                <View style={styles.inputContainer}>
+                  <CustomDateRangePicker
+                    label={'Date Range'}
+                    range={selectedRange}
+                    onSelect={setSelectedRange}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <CheckBox
+                    checked={showMissedBills}
+                    onChange={nextChecked => setShowMissedBills(nextChecked)}
+                  >
+                    Show Missed Bills
+                  </CheckBox>
+                  <CheckBox
+                    checked={showUpcomingBills}
+                    onChange={nextChecked => setShowUpcomingBills(nextChecked)}
+                  >
+                    Show Upcoming Bills
+                  </CheckBox>
+                </View>
+              </View>
+              {chartData.length > 0 ? (
+                <Chart
+                  showMissedBills={showMissedBills}
+                  showUpcomingBills={showUpcomingBills}
+                  selectedCategories={selectedCategories}
+                  data={chartData}
+                />
+              ) : (
+                <View style={styles.placeholderContainer}>
+                  <Text>No bills found in this period.</Text>
+                </View>
+              )}
+            </>
+          )}
+          {!loading && bills.length === 0 && (
+            <View style={styles.placeholderContainer}>
+              <Text> No analytics available yet, add some bills first!</Text>
+            </View>
           )}
         </ScrollView>
       </Layout>
@@ -83,6 +110,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: 8,
+  },
+  placeholderContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 24,
   },
 });
 

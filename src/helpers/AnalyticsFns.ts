@@ -3,12 +3,7 @@ import dayjs from 'dayjs';
 import {groupBy, sumBy, minBy, uniq, maxBy} from 'lodash';
 import {VictoryAxisCommonProps} from 'victory-core';
 import {Bill} from '../models/Bill';
-import {
-  ChartDataPt,
-  ChartData,
-  ChartDataFilter,
-  ChartDataDateRange,
-} from '../types/Analytics';
+import {ChartDataPt, ChartData, ChartDataFilter} from '../types/Analytics';
 import {BillStatus} from '../types/BillStatus';
 
 export const getFirstBillDate = (bills: Bill[]): dayjs.Dayjs =>
@@ -97,4 +92,19 @@ export const getAxisProps = (data: ChartDataPt[]): VictoryAxisCommonProps => {
     tickValues,
     tickFormat,
   };
+};
+
+export const createPlaceholderDataPts = (
+  startDate: Date,
+  endDate: Date,
+): ChartDataPt[] => {
+  const numMonths = dayjs(endDate).diff(startDate, 'months');
+  const result: ChartDataPt[] = [];
+  for (let i = 0; i < numMonths; i++) {
+    result.push({
+      month: 0,
+      amount: 0,
+    });
+  }
+  return result;
 };
