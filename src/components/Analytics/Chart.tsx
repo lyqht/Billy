@@ -7,19 +7,27 @@ import {
   VictoryTheme,
 } from 'victory-native';
 import {getAxisProps, getBarChartData} from '../../helpers/AnalyticsFns';
-import {ChartDataFilter, ChartDataPt} from '../../types/Analytics';
+import {ChartData, ChartDataFilter, ChartDataPt} from '../../types/Analytics';
 import {BillStatus} from '../../types/BillStatus';
 
 interface ChartProps {
   data: ChartDataPt[];
   selectedCategories?: string[];
   showMissedBills?: boolean;
+  showUpcomingBills?: boolean;
+}
+
+interface ChartStackProps {
+  firstBarData?: ChartData[];
+  secondBarData?: ChartData[];
+  thirdBarData?: ChartData[];
 }
 
 const Chart: FC<ChartProps> = ({
   data,
   selectedCategories = [],
   showMissedBills = false,
+  showUpcomingBills = false,
 }) => {
   const baseFilters: ChartDataFilter = {
     status: [BillStatus.COMPLETED],
@@ -29,25 +37,46 @@ const Chart: FC<ChartProps> = ({
   const completedBills = getBarChartData(data, baseFilters);
   const axisProps = getAxisProps(data);
 
-  return (
+  // Tried to move the ChartStackComponent outside of Chart,
+  // but it will cause SVG rendering issues. Hence leaving it here for now.
+
+  const ChartStackComponent: React.FC<ChartStackProps> = ({
+    firstBarData,
+    secondBarData,
+    thirdBarData,
+  }) => (
     <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
       <VictoryAxis {...axisProps} />
       <VictoryAxis dependentAxis tickFormat={x => `$${x}`} />
       <VictoryStack colorScale={['#D8F5A2', '#F97316', 'grey']}>
-        <VictoryBar data={completedBills} x="month" y="amount" />
-        {showMissedBills && (
-          <VictoryBar
-            data={getBarChartData(data, {
-              ...baseFilters,
-              status: [BillStatus.MISSED],
-            })}
-            x="month"
-            y="amount"
-          />
+        <VictoryBar data={firstBarData} x="month" y="amount" />
+        {secondBarData && (
+          <VictoryBar data={secondBarData} x="month" y="amount" />
+        )}
+        {thirdBarData && (
+          <VictoryBar data={thirdBarData} x="month" y="amount" />
         )}
       </VictoryStack>
     </VictoryChart>
   );
+
+  const chartStackProps = {
+    firstBarData: completedBills,
+    ...(showMissedBills && {
+      secondBarData: getBarChartData(data, {
+        ...baseFilters,
+        status: [BillStatus.MISSED],
+      }),
+    }),
+    ...(showUpcomingBills && {
+      thirdBarData: getBarChartData(data, {
+        ...baseFilters,
+        status: [BillStatus.UPCOMING],
+      }),
+    }),
+  };
+
+  return <ChartStackComponent {...chartStackProps} />;
 };
 
 export default Chart;

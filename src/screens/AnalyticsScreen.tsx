@@ -1,4 +1,4 @@
-import {Layout, Text} from '@ui-kitten/components';
+import {CheckBox, Layout, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Chart from '../components/Analytics/Chart';
@@ -14,6 +14,8 @@ const AnalyticsScreen: React.FC = () => {
   const {bills} = useBilly();
   const range = getBillDateRange(bills);
   const [selectedRange, setSelectedRange] = useState(range);
+  const [showMissedBills, setShowMissedBills] = useState(false);
+  const [showUpcomingBills, setShowUpcomingBills] = useState(false);
   const [chartData, setChartData] = useState(mapBillsToChartDataPts(bills));
 
   useEffect(() => {
@@ -33,15 +35,33 @@ const AnalyticsScreen: React.FC = () => {
       <Layout style={styles.layoutContainer}>
         <ScrollView>
           <Text category={'h4'}>Summary Report</Text>
-          <View style={styles.dateRangeContainer}>
+          <View style={styles.inputContainer}>
             <CustomDateRangePicker
               label={'Date Range'}
               range={selectedRange}
               onSelect={setSelectedRange}
             />
           </View>
+          <View style={styles.inputContainer}>
+            <CheckBox
+              checked={showMissedBills}
+              onChange={nextChecked => setShowMissedBills(nextChecked)}
+            >
+              Show Missed Bills
+            </CheckBox>
+            <CheckBox
+              checked={showUpcomingBills}
+              onChange={nextChecked => setShowUpcomingBills(nextChecked)}
+            >
+              Show Upcoming Bills
+            </CheckBox>
+          </View>
           {chartData.length > 0 ? (
-            <Chart showMissedBills={true} data={chartData} />
+            <Chart
+              showMissedBills={showMissedBills}
+              showUpcomingBills={showUpcomingBills}
+              data={chartData}
+            />
           ) : (
             <Text category={'p1'}>Loading...</Text>
           )}
@@ -57,7 +77,7 @@ const styles = StyleSheet.create({
     height: '100%',
     flexDirection: 'column',
   },
-  dateRangeContainer: {
+  inputContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
