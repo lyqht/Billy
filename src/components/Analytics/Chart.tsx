@@ -37,8 +37,14 @@ const Chart: FC<ChartProps> = ({
   const completedBills = getBarChartData(data, baseFilters);
   const axisProps = getAxisProps(data);
 
-  // Tried to move the ChartStackComponent outside of Chart,
-  // but it will cause SVG rendering issues. Hence leaving it here for now.
+  // Due to how Victory Native works, we cannot dynamically re-rerender
+  // only the children VictoryStack components.
+  // Hence we have this ChartStackComponent that will rerender every time
+  // any of its bar data changes due to the filters that user select.
+
+  // If this ChartStackComponent is outside of Chart,
+  // it will also cause SVG rendering issues. Hence leaving it here for now.
+  // This issue can be looked into later.
 
   const ChartStackComponent: React.FC<ChartStackProps> = ({
     firstBarData,
