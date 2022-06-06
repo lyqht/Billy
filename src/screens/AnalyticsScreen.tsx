@@ -1,8 +1,12 @@
-import {CheckBox, Layout, Text} from '@ui-kitten/components';
+import {CheckBox, IndexPath, Layout, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Chart from '../components/Analytics/Chart';
 import {CustomDateRangePicker} from '../components/BillForm/CustomDateRangePicker';
+import CustomMultiSelect, {
+  getAllValuesFromIndexPaths,
+  groupedDataForCategoriesFilter as categoriesForMultiSelect,
+} from '../components/BillForm/CustomMultiSelect';
 import {useBilly} from '../contexts/useBillyContext';
 import {
   getBillDateRange,
@@ -14,11 +18,23 @@ const AnalyticsScreen: React.FC = () => {
   const {bills} = useBilly();
   const [loading, setLoading] = useState(true);
   const [selectedRange, setSelectedRange] = useState(getBillDateRange(bills));
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const [showMissedBills, setShowMissedBills] = useState(false);
   const [showUpcomingBills, setShowUpcomingBills] = useState(false);
   const [chartData, setChartData] = useState(mapBillsToChartDataPts(bills));
+
   const finishLoading = !loading;
+
+  const [selectedCategoryIndexes, setSelectedCategoryIndexes] = React.useState<
+    IndexPath[]
+  >(
+    categoriesForMultiSelect['Default Categories'].map(
+      (_, index) => new IndexPath(index, 0),
+    ),
+  );
+  const categoryDisplayValues = getAllValuesFromIndexPaths(
+    selectedCategoryIndexes,
+    categoriesForMultiSelect,
+  );
 
   useEffect(() => {
     const {startDate, endDate} = selectedRange;
@@ -50,14 +66,22 @@ const AnalyticsScreen: React.FC = () => {
           <Text category={'h4'}>Summary Report</Text>
           {finishLoading && (
             <>
+              {chartData.length > 0 ? (
+                <Chart
+                  showMissedBills={showMissedBills}
+                  showUpcomingBills={showUpcomingBills}
+                  selectedCategories={getAllValuesFromIndexPaths(
+                    selectedCategoryIndexes,
+                    categoriesForMultiSelect,
+                  )}
+                  data={chartData}
+                />
+              ) : (
+                <Layout level={'3'} style={styles.placeholderContainer}>
+                  <Text>No data matches the filters</Text>
+                </Layout>
+              )}
               <View testID="chart-filters-settings">
-                <View style={styles.inputContainer}>
-                  <CustomDateRangePicker
-                    label={'Date Range'}
-                    range={selectedRange}
-                    onSelect={setSelectedRange}
-                  />
-                </View>
                 <View style={styles.inputContainer}>
                   <CheckBox
                     checked={showMissedBills}
@@ -72,19 +96,32 @@ const AnalyticsScreen: React.FC = () => {
                     Show Upcoming Bills
                   </CheckBox>
                 </View>
-              </View>
-              {chartData.length > 0 ? (
-                <Chart
-                  showMissedBills={showMissedBills}
-                  showUpcomingBills={showUpcomingBills}
-                  selectedCategories={selectedCategories}
-                  data={chartData}
-                />
-              ) : (
-                <View style={styles.placeholderContainer}>
-                  <Text>No bills found in this period.</Text>
+                <View style={styles.selectContainer}>
+                  <CustomDateRangePicker
+                    label={'Date Range'}
+                    range={selectedRange}
+                    onSelect={setSelectedRange}
+                  />
                 </View>
-              )}
+                <View style={styles.selectContainer}>
+                  <CustomMultiSelect
+                    label={'Show Categories'}
+                    items={categoriesForMultiSelect}
+                    selectedIndexes={selectedCategoryIndexes}
+                    onSelect={
+                      setSelectedCategoryIndexes as (
+                        indexPath: IndexPath | IndexPath[],
+                      ) => void
+                    }
+                    value={
+                      categoriesForMultiSelect['Default Categories'].length ===
+                      selectedCategoryIndexes.length
+                        ? 'All Categories'
+                        : `${categoryDisplayValues.length} categories selected`
+                    }
+                  />
+                </View>
+              </View>
             </>
           )}
           {!loading && bills.length === 0 && (
@@ -111,10 +148,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 8,
   },
+  selectContainer: {
+    marginVertical: 8,
+  },
   placeholderContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 24,
+    height: 350,
   },
 });
 

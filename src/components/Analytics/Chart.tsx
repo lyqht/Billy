@@ -1,3 +1,4 @@
+import {Layout, Text} from '@ui-kitten/components';
 import React, {FC} from 'react';
 import {
   VictoryAxis,
@@ -9,6 +10,7 @@ import {
 import {getAxisProps, getBarChartData} from '../../helpers/AnalyticsFns';
 import {ChartData, ChartDataFilter, ChartDataPt} from '../../types/Analytics';
 import {BillStatus} from '../../types/BillStatus';
+import {StyleSheet} from 'react-native';
 
 interface ChartProps {
   data: ChartDataPt[];
@@ -31,7 +33,7 @@ const Chart: FC<ChartProps> = ({
 }) => {
   const baseFilters: ChartDataFilter = {
     status: [BillStatus.COMPLETED],
-    ...(selectedCategories.length > 0 && {category: selectedCategories}),
+    category: selectedCategories,
   };
 
   const completedBills = getBarChartData(data, baseFilters);
@@ -55,7 +57,7 @@ const Chart: FC<ChartProps> = ({
     secondBarData,
     thirdBarData,
   }) => (
-    <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+    <VictoryChart domainPadding={24} theme={VictoryTheme.material}>
       <VictoryAxis {...axisProps} />
       <VictoryAxis dependentAxis tickFormat={x => `$${x}`} />
       <VictoryStack colorScale={['#D8F5A2', '#F97316', 'grey']}>
@@ -86,7 +88,26 @@ const Chart: FC<ChartProps> = ({
       : placeholderDataPoints,
   };
 
-  return <ChartStackComponent {...chartStackProps} />;
+  const notDisplayingData =
+    Object.values(chartStackProps).filter(
+      b => b.filter(item => item.amount === 0).length === b.length,
+    ).length === Object.values(chartStackProps).length;
+
+  return notDisplayingData ? (
+    <Layout level={'3'} style={styles.placeholderContainer}>
+      <Text>No data matches the filters</Text>
+    </Layout>
+  ) : (
+    <ChartStackComponent {...chartStackProps} />
+  );
 };
+
+const styles = StyleSheet.create({
+  placeholderContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 350,
+  },
+});
 
 export default Chart;
