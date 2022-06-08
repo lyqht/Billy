@@ -79,8 +79,15 @@ const AnalyticsScreen: React.FC = () => {
                   latestBillDate={getLastBillDate(bills).format('DD MMM YYYY')}
                 />
               ) : (
-                <Layout level={'3'} style={styles.placeholderContainer}>
-                  <Text>No data matches the filters</Text>
+                <Layout style={styles.placeholderContainer}>
+                  <Text category={'h6'}>No data matches the filters 😶‍🌫️</Text>
+                  <Text>
+                    The latest bill that can be found is on{' '}
+                    <Text category={'s1'}>
+                      {getLastBillDate(bills).format('DD MMM YYYY')}
+                    </Text>
+                    .
+                  </Text>
                 </Layout>
               )}
               <View testID="chart-filters-settings">
