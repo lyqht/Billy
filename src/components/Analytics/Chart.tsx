@@ -76,6 +76,8 @@ const Chart: FC<ChartProps> = ({
     let firstBarStyleProps: Record<string, any> = {...barStyleProps};
     let secondBarStyleProps: Record<string, any> = {...barStyleProps};
 
+    // this logic is so that only the exterior bar gets the corner radius
+
     if (!dataPointsHasAmount(thirdBarData)) {
       delete secondBarStyleProps.cornerRadius;
       delete firstBarStyleProps.cornerRadius;
