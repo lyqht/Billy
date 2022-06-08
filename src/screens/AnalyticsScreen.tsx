@@ -10,6 +10,7 @@ import CustomMultiSelect, {
 import {useBilly} from '../contexts/useBillyContext';
 import {
   getBillDateRange,
+  getLastBillDate,
   mapBillsToChartDataPts,
 } from '../helpers/AnalyticsFns';
 import {getBillsInDateRange} from '../helpers/BillFilter';
@@ -75,6 +76,7 @@ const AnalyticsScreen: React.FC = () => {
                     categoriesForMultiSelect,
                   )}
                   data={chartData}
+                  latestBillDate={getLastBillDate(bills).format('DD MMM YYYY')}
                 />
               ) : (
                 <Layout level={'3'} style={styles.placeholderContainer}>
@@ -125,9 +127,9 @@ const AnalyticsScreen: React.FC = () => {
             </>
           )}
           {!loading && bills.length === 0 && (
-            <View style={styles.placeholderContainer}>
+            <Layout style={styles.placeholderContainer}>
               <Text> No analytics available yet, add some bills first!</Text>
-            </View>
+            </Layout>
           )}
         </ScrollView>
       </Layout>

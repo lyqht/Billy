@@ -94,7 +94,10 @@ export const getAxisProps = (data: ChartDataPt[]): VictoryAxisCommonProps => {
   };
 };
 
-export const createPlaceholderDataPts = (
+export const dataPointsArePlaceholder = (data: ChartData[]): boolean =>
+  data.filter(pt => pt.amount !== 0).length === 0;
+
+export const createPlaceholderDataPtsInDateRange = (
   startDate: Date,
   endDate: Date,
 ): ChartDataPt[] => {
