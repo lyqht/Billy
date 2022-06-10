@@ -43,10 +43,10 @@ For now, this project is developed solely by [Estee Tey](https://www.github.com/
 - [Supabase](https://github.com/supabase/supabase) for Database & Auth. Data is served by REST.
 - [React Native MMKV](https://github.com/mrousavy/react-native-mmkv) for caching
 - [Notifee](https://github.com/invertase/notifee) for creating notifications
+- [Victory](https://github.com/FormidableLabs/victory) for creating charts
 - [Custom GitHub action for generating Supabase database types](https://blog.esteetey.dev/how-to-create-and-test-a-github-action-that-generates-types-from-supabase-database)
-### Misc Tech Notes
 
-If you are interested on some other tech notes how this app is built (e.g. how the app is bootstrapped, mockup etc), check out the [tech notes](./docs/TECH_NOTES.md).
+If you are interested on other aspects of how this app is built (e.g. how the app is bootstrapped, tech architecture, mockup etc), check out [Billy's documentation](https://lyqht.github.io/Billy/).
 
 ## Set up instructions ⚙️
 
