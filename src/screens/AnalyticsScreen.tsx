@@ -2,11 +2,12 @@ import {CheckBox, IndexPath, Layout, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Chart from '../components/Analytics/Chart';
-import {CustomDateRangePicker} from '../components/BillForm/CustomDateRangePicker';
-import CustomMultiSelect, {
+import {CustomDateRangePicker} from '../components/Input/CustomDateRangePicker';
+import {
+  CustomMultiSelect,
   getAllValuesFromIndexPaths,
-  groupedDataForCategoriesFilter as categoriesForMultiSelect,
-} from '../components/BillForm/CustomMultiSelect';
+  categoriesForMultiSelect,
+} from '../components/Input/CustomMultiSelect';
 import {useBilly} from '../contexts/useBillyContext';
 import {
   getBillDateRange,

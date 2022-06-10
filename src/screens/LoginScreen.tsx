@@ -18,7 +18,7 @@ import {
   Linking,
   ScrollView,
 } from 'react-native';
-import {CustomInput} from '../components/BillForm/CustomInput';
+import {CustomInput} from '../components/Input/CustomInput';
 import {NavigationProps, RootStackParamList} from '../routes';
 import SyncService from '../services/SyncService';
 import UserService from '../services/UserService';

@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import {defaultCategories} from '../../constants/PayeeOptions';
 
-export const groupedDataForCategoriesFilter = {
+export const categoriesForMultiSelect = {
   'Default Categories': defaultCategories,
 };
 
@@ -35,7 +35,7 @@ interface Props {
   label?: string;
 }
 
-const CustomMultiSelect: React.FC<Props> = ({
+export const CustomMultiSelect: React.FC<Props> = ({
   selectedIndexes: selectedIndex,
   onSelect,
   items,
@@ -60,5 +60,3 @@ const CustomMultiSelect: React.FC<Props> = ({
     </Select>
   );
 };
-
-export default CustomMultiSelect;
