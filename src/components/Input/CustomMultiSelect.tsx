@@ -50,6 +50,7 @@ export const CustomMultiSelect: React.FC<Props> = ({
       value={value}
       label={label}
       status={'primary'}
+      accessibilityLabel={label}
     >
       {Object.entries(items).map(([group, groupItems]) => (
         <SelectGroup key={`category-group-option-${group}`} title={group}>
