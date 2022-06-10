@@ -1,4 +1,4 @@
-import {Layout, Text} from '@ui-kitten/components';
+import {Layout, Text, CalendarRange} from '@ui-kitten/components';
 import React, {FC} from 'react';
 import {StyleSheet} from 'react-native';
 import {VictoryAxisCommonProps} from 'victory-core';
@@ -16,11 +16,12 @@ import {
 } from '../../helpers/AnalyticsFns';
 import {ChartData, ChartDataFilter, ChartDataPt} from '../../types/Analytics';
 import {BillStatus} from '../../types/BillStatus';
+import dayjs from 'dayjs';
 
 interface ChartProps {
   data: ChartDataPt[];
-  latestBillDate: string;
   selectedCategories?: string[];
+  selectedRange: CalendarRange<Date>;
   showMissedBills?: boolean;
   showUpcomingBills?: boolean;
 }
@@ -102,8 +103,8 @@ const ChartStack: React.FC<ChartStackProps> = ({
 
 const Chart: FC<ChartProps> = ({
   data,
-  latestBillDate,
   selectedCategories = [],
+  selectedRange,
   showMissedBills = false,
   showUpcomingBills = false,
 }) => {
@@ -133,7 +134,10 @@ const Chart: FC<ChartProps> = ({
         })
       : placeholderDataPoints,
   };
-  const chartStackProps = {axisProps: getAxisProps(data), ...barData};
+  const chartStackProps = {
+    axisProps: getAxisProps(data, selectedRange),
+    ...barData,
+  };
 
   const notDisplayingData =
     Object.values(barData).filter(b => dataPointsHasAmount(b)).length ===
@@ -144,7 +148,10 @@ const Chart: FC<ChartProps> = ({
       <Text category={'h6'}>No data matches the filters 😶‍🌫️</Text>
       <Text>
         The latest bill that can be found is on{' '}
-        <Text category={'s1'}>{latestBillDate}</Text>.
+        <Text category={'s1'}>
+          {dayjs(selectedRange.endDate?.getDate()).format('DD MMM YYYY (DDD)')}
+        </Text>
+        .
       </Text>
     </Layout>
   ) : (

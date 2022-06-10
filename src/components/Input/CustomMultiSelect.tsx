@@ -49,6 +49,7 @@ export const CustomMultiSelect: React.FC<Props> = ({
       onSelect={onSelect}
       value={value}
       label={label}
+      status={'primary'}
     >
       {Object.entries(items).map(([group, groupItems]) => (
         <SelectGroup key={`category-group-option-${group}`} title={group}>

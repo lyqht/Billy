@@ -65,7 +65,7 @@ const AnalyticsScreen: React.FC = () => {
     <SafeAreaView>
       <Layout style={styles.layoutContainer}>
         <ScrollView>
-          <Text category={'h4'}>Summary Report</Text>
+          <Text category={'h4'}>Analytics</Text>
           {finishLoading && (
             <>
               {chartData.length > 0 ? (
@@ -76,8 +76,8 @@ const AnalyticsScreen: React.FC = () => {
                     selectedCategoryIndexes,
                     categoriesForMultiSelect,
                   )}
+                  selectedRange={selectedRange}
                   data={chartData}
-                  latestBillDate={getLastBillDate(bills).format('DD MMM YYYY')}
                 />
               ) : (
                 <Layout style={styles.placeholderContainer}>

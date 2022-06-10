@@ -36,7 +36,7 @@ interface Props {
 }
 
 export const CustomDateRangePicker: React.FC<Props> = props => {
-  return <RangeDatepicker {...props} />;
+  return <RangeDatepicker status={'primary'} {...props} />;
 };
 
 const styles = StyleSheet.create({

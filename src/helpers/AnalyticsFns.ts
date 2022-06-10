@@ -84,9 +84,16 @@ export const getBarChartData = (
   return result;
 };
 
-export const getAxisProps = (data: ChartDataPt[]): VictoryAxisCommonProps => {
+export const getAxisProps = (
+  data: ChartDataPt[],
+  dateRange: CalendarRange<Date>,
+): VictoryAxisCommonProps => {
   const tickValues: number[] = uniq(data.map(pt => pt.month));
-  const tickFormat: string[] = tickValues.map(value => `month ${value}`);
+  const tickFormat: string[] = tickValues.map(value =>
+    dayjs(dateRange.startDate)
+      .add(value - 1, 'month')
+      .format('MMM'),
+  );
 
   return {
     tickValues,
