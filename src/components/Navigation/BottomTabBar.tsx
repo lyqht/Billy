@@ -3,12 +3,18 @@ import {
   BottomNavigation,
   BottomNavigationTab,
   Icon,
+  IconProps,
 } from '@ui-kitten/components';
 import React from 'react';
 import {StyleSheet} from 'react-native';
 
-const SettingsIcon = props => <Icon {...props} name="settings-outline" />;
-const BellIcon = props => <Icon {...props} name="bell-outline" />;
+const SummaryReportIcon = (props: IconProps) => (
+  <Icon {...props} name="book-open-outline" />
+);
+const SettingsIcon = (props: IconProps) => (
+  <Icon {...props} name="settings-outline" />
+);
+const BellIcon = (props: IconProps) => <Icon {...props} name="bell-outline" />;
 
 const BottomTabBar: React.FC<BottomTabBarProps> = ({navigation, state}) => {
   return (
@@ -18,7 +24,8 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({navigation, state}) => {
         selectedIndex={state.index}
         onSelect={index => navigation.navigate(state.routeNames[index])}
       >
-        <BottomNavigationTab title="Bills" icon={BellIcon} />
+        <BottomNavigationTab title="Upcoming Bills" icon={BellIcon} />
+        <BottomNavigationTab title="Analytics" icon={SummaryReportIcon} />
         <BottomNavigationTab title="Settings" icon={SettingsIcon} />
       </BottomNavigation>
     </React.Fragment>

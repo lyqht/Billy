@@ -13,9 +13,9 @@ import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {SafeAreaView, ScrollView, TouchableOpacity, View} from 'react-native';
-import {CustomAutoComplete} from '../components/BillForm/CustomAutocomplete';
-import CustomDatetimePicker from '../components/BillForm/CustomDatetimePicker';
-import {CustomInput} from '../components/BillForm/CustomInput';
+import {CustomAutoComplete} from '../components/Input/CustomAutocomplete';
+import CustomDatetimePicker from '../components/Input/CustomDatetimePicker';
+import {CustomInput} from '../components/Input/CustomInput';
 import ReminderForm from '../components/BillForm/ReminderForm';
 import {
   defaultCategoryIcons,

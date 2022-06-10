@@ -12,7 +12,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {getReminderDate} from '../../helpers/DateFns';
 import {ReminderFormData, TimeUnit} from '../../models/Reminder';
-import {CustomInput} from './CustomInput';
+import {CustomInput} from '../Input/CustomInput';
 
 interface Props {
   currentDeadline: Date;

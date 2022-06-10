@@ -1,33 +1,19 @@
 import {useNavigation} from '@react-navigation/native';
-import {User} from '@supabase/supabase-js';
 import {Button, Card, Icon, Layout, Modal, Text} from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
+
 import {FeedbackButton} from '../components/PromptButtons/FeedbackButton';
 import {Quote} from '../components/Quote';
+import {useBilly} from '../contexts/useBillyContext';
 import {TabNavigationProps} from '../routes';
-import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
 import {LoginMode} from '../types/LoginMode';
 
 const SettingsScreen: React.FC = () => {
-  const retrievedUser = UserService.getUser();
-  const [user, setUser] = useState<User | null>(retrievedUser);
+  const {user} = useBilly();
   const navigation = useNavigation<TabNavigationProps>();
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-
-  useEffect(() => {
-    const listener = Cache.getStorage().addOnValueChangedListener(
-      changedKey => {
-        if (changedKey === STORAGE_KEYS.AUTH_TOKEN) {
-          const updatedUser = UserService.getUser();
-          setUser(updatedUser);
-        }
-      },
-    );
-
-    return () => listener.remove();
-  }, []);
 
   const renderGreetingText = () => {
     if (user) {

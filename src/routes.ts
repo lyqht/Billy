@@ -12,6 +12,7 @@ export type RootStackParamList = {
 
 export type TabParamList = {
   Bills: undefined;
+  Analytics: undefined;
   Settings: undefined;
 };
 

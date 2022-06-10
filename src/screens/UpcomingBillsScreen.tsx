@@ -1,87 +1,27 @@
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useRef} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
 import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
+
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/PromptButtons/RegisterPromptButton';
 import ScrollToTopButton from '../components/ScrollToTopButton';
-import {getMissedBills, getUpcomingBills} from '../helpers/BillFilter';
-import {getBillIdToNumRemindersMap} from '../helpers/ReminderMapper';
+import {useBilly} from '../contexts/useBillyContext';
 import {showToast} from '../helpers/Toast';
-import {Bill} from '../models/Bill';
 import {NavigationProps} from '../routes';
-import BillService from '../services/BillService';
-import Cache, {STORAGE_KEYS} from '../services/Cache';
 import SyncService from '../services/SyncService';
-import UserService from '../services/UserService';
 
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
-  const [bills, setBills] = useState<Bill[]>([]);
-  const [missedBills, setMissedBills] = useState<Bill[]>([]);
-  const [lastSyncDate, setLastSyncDate] = useState<string>('');
-  const [reminders, setReminders] = useState<Record<string, number>>({});
-  const [userIsPresent, setUserIsPresent] = useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const {upcomingBills, missedBills, reminders, lastSyncDate, user} =
+    useBilly();
+  const userIsPresent = user ? true : false;
+  const [refreshing, setRefreshing] = useState(false);
 
-  const listRef = React.useRef<List>(null);
+  const listRef = useRef<List>(null);
 
-  const init = async () => {
-    const user = UserService.getUser();
-    setUserIsPresent(user ? true : false);
-
-    const retrievedBills = await BillService.getBills();
-    const upcomingBills = getUpcomingBills(retrievedBills);
-    const retrievedMissedBills = getMissedBills(retrievedBills);
-    setBills(upcomingBills);
-    setMissedBills(retrievedMissedBills);
-
-    const lastSyncDateFromCache = Cache.getLastSyncDate();
-    setLastSyncDate(lastSyncDateFromCache ? lastSyncDateFromCache : '');
-
-    const retrievedReminders = await getBillIdToNumRemindersMap(retrievedBills);
-    setReminders(retrievedReminders);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      init();
-
-      console.debug('Adding cache listener');
-      const listener = Cache.getStorage().addOnValueChangedListener(
-        changedKey => {
-          if (changedKey === STORAGE_KEYS.AUTH_TOKEN) {
-            const user = UserService.getUser();
-            setUserIsPresent(user ? true : false);
-          } else if (changedKey === STORAGE_KEYS.BILLS) {
-            const retrievedBills = Cache.getBills();
-            if (retrievedBills) {
-              setBills(getUpcomingBills([...retrievedBills]));
-              setMissedBills(getMissedBills([...retrievedBills]));
-              getBillIdToNumRemindersMap(retrievedBills).then(
-                retrievedReminders => {
-                  setReminders(retrievedReminders);
-                },
-              );
-            }
-          } else if (changedKey === STORAGE_KEYS.LAST_SYNC_DATE) {
-            const lastSyncDateFromCache = Cache.getLastSyncDate();
-            setLastSyncDate(lastSyncDateFromCache ? lastSyncDateFromCache : '');
-          }
-
-          //TODO: add animation
-        },
-      );
-
-      return () => {
-        console.debug('Removing cache listener');
-        listener.remove();
-      };
-    }, []),
-  );
-
-  const onRefresh = React.useCallback(async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
       await SyncService.syncAllData();
@@ -122,7 +62,7 @@ const UpcomingBillsScreen: React.FC = () => {
               ) : (
                 <Text category="p1">Not synced yet</Text>
               )}
-              {!userIsPresent && (
+              {userIsPresent && (
                 <RegisterPromptButton
                   description={
                     'Billy can only sync to the cloud when you have a registered account.'
@@ -157,23 +97,18 @@ const UpcomingBillsScreen: React.FC = () => {
             </Text>
           </Button>
         )}
-        {bills.length > 0 ? (
+        {upcomingBills.length > 0 ? (
           <List
             ref={listRef}
-            data={bills}
+            data={upcomingBills}
             renderItem={({item}) => (
-              <Animated.View
-                entering={FadeInLeft}
-                exiting={FadeOutRight}
-                key={item.id || item.tempID}
-                style={styles.listItemWrapper}
-              >
+              <View key={item.id || item.tempID} style={styles.listItemWrapper}>
                 <BillCard
                   billCardType={BillCardType.UPCOMING_BILL}
                   bill={item}
                   numReminders={reminders[item.tempID || item.id]}
                 />
-              </Animated.View>
+              </View>
             )}
             ListFooterComponent={<ScrollToTopButton ref={listRef} />}
             {...listProps}

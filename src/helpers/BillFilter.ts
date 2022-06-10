@@ -39,3 +39,14 @@ export const getMissedBills = (bills: Bill[]) => {
     )
     .sort((a, b) => (dayjs(a.deadline).isAfter(b.deadline) ? 1 : -1));
 };
+
+export const getBillsInDateRange = (
+  bills: Bill[],
+  startDate: Date,
+  endDate: Date,
+) =>
+  bills.filter(
+    bill =>
+      dayjs(bill.deadline).isSameOrAfter(startDate) &&
+      dayjs(bill.deadline).isSameOrBefore(endDate),
+  );

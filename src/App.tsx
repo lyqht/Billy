@@ -16,11 +16,8 @@ import SettingsDetailScreen from './screens/SettingsDetailScreen';
 import {registerDeviceForRemoteMessages} from './services/NotificationService';
 import SyncService from './services/SyncService';
 import notifee, {EventType} from '@notifee/react-native';
-
-const init = async () => {
-  await SyncService.syncAllData();
-  await registerDeviceForRemoteMessages();
-};
+import {useBilly} from './contexts/useBillyContext';
+import BillyContext from './contexts/BillyContext';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -51,6 +48,13 @@ const NavStack = () => (
 );
 
 const App: React.FC = () => {
+  const bills = useBilly();
+
+  const init = async () => {
+    await SyncService.syncAllData();
+    await registerDeviceForRemoteMessages();
+  };
+
   useEffect(() => {
     init();
 
@@ -84,15 +88,18 @@ const App: React.FC = () => {
       }
     });
   }, []);
+
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <NavStack />
-          </NavigationContainer>
-        </SafeAreaProvider>
+        <BillyContext.Provider value={bills}>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <NavStack />
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </BillyContext.Provider>
       </ApplicationProvider>
       <Toast />
     </>

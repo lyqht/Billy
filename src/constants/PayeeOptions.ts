@@ -10,6 +10,8 @@ const defaultCategoryIcons = {
   [Category.Utilities]: 'droplet-outline',
 };
 
+const defaultCategories = Object.keys(defaultCategoryIcons);
+
 const defaultPayeesWithCategory: PayeeWithCategory[] = [
   {
     payee: 'Singtel',
@@ -73,6 +75,7 @@ const getCategoryForPayee = (payee: string) =>
 export {
   getCategoryForPayee,
   defaultCategoryIcons,
+  defaultCategories,
   defaultPayees,
   defaultPayeesWithCategory,
 };

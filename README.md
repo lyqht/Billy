@@ -32,7 +32,7 @@ Billy is your mobile companion app to help you manage your upcoming bills and re
 For now, this project is developed solely by [Estee Tey](https://www.github.com/lyqht). 
 
 - If you are keen on how the app idea came about, you can refer to the [motivations section](./docs/motivations.md).
-- Live progress on this project can be found in [this #BuildInPublic tweet thread](https://twitter.com/estee_tey/status/1511017683440996359).  
+- Live progress on this project can be tracked via [the dev's tweets](https://twitter.com/search?q=Billy%20(from%3Aestee_tey)&src=typed_query&f=top).  
 - For more in-depth details on planned & implemented features, you could refer to [ROADMAP.md](./docs/roadmap.md).
 
 ## Tech Notes 🗒
@@ -43,10 +43,10 @@ For now, this project is developed solely by [Estee Tey](https://www.github.com/
 - [Supabase](https://github.com/supabase/supabase) for Database & Auth. Data is served by REST.
 - [React Native MMKV](https://github.com/mrousavy/react-native-mmkv) for caching
 - [Notifee](https://github.com/invertase/notifee) for creating notifications
+- [Victory](https://github.com/FormidableLabs/victory) for creating charts
 - [Custom GitHub action for generating Supabase database types](https://blog.esteetey.dev/how-to-create-and-test-a-github-action-that-generates-types-from-supabase-database)
-### Misc Tech Notes
 
-If you are interested on some other tech notes how this app is built (e.g. how the app is bootstrapped, mockup etc), check out the [tech notes](./docs/TECH_NOTES.md).
+If you are interested on other aspects of how this app is built (e.g. how the app is bootstrapped, tech architecture, mockup etc), check out [Billy's documentation](https://lyqht.github.io/Billy/).
 
 ## Set up instructions ⚙️
 
