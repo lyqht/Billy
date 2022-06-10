@@ -32,7 +32,7 @@ Billy is your mobile companion app to help you manage your upcoming bills and re
 For now, this project is developed solely by [Estee Tey](https://www.github.com/lyqht). 
 
 - If you are keen on how the app idea came about, you can refer to the [motivations section](./docs/motivations.md).
-- Live progress on this project can be found in [this #BuildInPublic tweet thread](https://twitter.com/estee_tey/status/1511017683440996359).  
+- Live progress on this project can be tracked via [the dev's tweets](https://twitter.com/search?q=Billy%20(from%3Aestee_tey)&src=typed_query&f=top).  
 - For more in-depth details on planned & implemented features, you could refer to [ROADMAP.md](./docs/roadmap.md).
 
 ## Tech Notes 🗒

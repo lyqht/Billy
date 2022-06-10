@@ -4,9 +4,9 @@ import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Chart from '../components/Analytics/Chart';
 import {CustomDateRangePicker} from '../components/Input/CustomDateRangePicker';
 import {
+  categoriesForMultiSelect,
   CustomMultiSelect,
   getAllValuesFromIndexPaths,
-  categoriesForMultiSelect,
 } from '../components/Input/CustomMultiSelect';
 import {useBilly} from '../contexts/useBillyContext';
 import {
