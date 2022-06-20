@@ -9,8 +9,11 @@ import {BillStatus} from '../types/BillStatus';
 export const getFirstBillDate = (bills: Bill[]): dayjs.Dayjs =>
   dayjs(minBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline);
 
-export const getLastBillDate = (bills: Bill[]): dayjs.Dayjs =>
-  dayjs(maxBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline);
+export const getLastBillDate = (bills: Bill[]): dayjs.Dayjs => {
+  return dayjs(
+    maxBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline,
+  );
+};
 
 export const getPeriodIndexOfBill = (
   billDate: dayjs.Dayjs,

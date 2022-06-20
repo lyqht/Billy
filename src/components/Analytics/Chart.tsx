@@ -1,6 +1,5 @@
-import {Layout, Text, CalendarRange} from '@ui-kitten/components';
+import {CalendarRange} from '@ui-kitten/components';
 import React, {FC} from 'react';
-import {StyleSheet} from 'react-native';
 import {VictoryAxisCommonProps} from 'victory-core';
 import {
   VictoryAxis,
@@ -16,7 +15,7 @@ import {
 } from '../../helpers/AnalyticsFns';
 import {ChartData, ChartDataFilter, ChartDataPt} from '../../types/Analytics';
 import {BillStatus} from '../../types/BillStatus';
-import dayjs from 'dayjs';
+import NoChartDataPlaceholder from './NoChartDataPlaceholder';
 
 interface ChartProps {
   data: ChartDataPt[];
@@ -24,6 +23,7 @@ interface ChartProps {
   selectedRange: CalendarRange<Date>;
   showMissedBills?: boolean;
   showUpcomingBills?: boolean;
+  latestBillDate?: string;
 }
 
 interface ChartStackProps {
@@ -107,6 +107,7 @@ const Chart: FC<ChartProps> = ({
   selectedRange,
   showMissedBills = false,
   showUpcomingBills = false,
+  latestBillDate,
 }) => {
   const baseFilters: ChartDataFilter = {
     status: [BillStatus.COMPLETED],
@@ -144,27 +145,10 @@ const Chart: FC<ChartProps> = ({
     Object.values(barData).length;
 
   return notDisplayingData ? (
-    <Layout style={styles.placeholderContainer}>
-      <Text category={'h6'}>No data matches the filters 😶‍🌫️</Text>
-      <Text>
-        The latest bill that can be found is on{' '}
-        <Text category={'s1'}>
-          {dayjs(selectedRange.endDate?.getDate()).format('DD MMM YYYY (DDD)')}
-        </Text>
-        .
-      </Text>
-    </Layout>
+    <NoChartDataPlaceholder latestBillDate={latestBillDate} />
   ) : (
     <ChartStack {...chartStackProps} />
   );
 };
-
-const styles = StyleSheet.create({
-  placeholderContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 350,
-  },
-});
 
 export default Chart;

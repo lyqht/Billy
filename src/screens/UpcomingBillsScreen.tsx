@@ -2,8 +2,6 @@ import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useCallback, useState, useRef} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
-import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
-
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/PromptButtons/RegisterPromptButton';
 import ScrollToTopButton from '../components/ScrollToTopButton';
