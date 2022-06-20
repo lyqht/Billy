@@ -12,7 +12,13 @@ import {
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {SafeAreaView, ScrollView, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CustomAutoComplete} from '../components/Input/CustomAutocomplete';
 import CustomDatetimePicker from '../components/Input/CustomDatetimePicker';
 import {CustomInput} from '../components/Input/CustomInput';
@@ -56,6 +62,8 @@ const BillFormScreen: React.FC<Props> = () => {
     ReminderFormData[]
   >([]);
   const [showWarningTooltips, setShowWarningTooltips] = useState<boolean[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -92,6 +100,7 @@ const BillFormScreen: React.FC<Props> = () => {
   }, [currentDeadline, relativeReminderDates]);
 
   const onSubmit = async () => {
+    setLoading(true);
     const {amount, deadline} = getValues();
     const bill: Partial<Bill> = {
       ...getValues(),
@@ -130,6 +139,8 @@ const BillFormScreen: React.FC<Props> = () => {
           text1: 'Ops! Billy cannot create notifications 😥',
           text2: 'Check if the notification dates are valid.',
         });
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -320,9 +331,10 @@ const BillFormScreen: React.FC<Props> = () => {
           <Button
             style={styles.reminderSection}
             size="medium"
+            disabled={loading}
             onPress={handleSubmit(onSubmit)}
           >
-            Submit
+            {loading ? <ActivityIndicator color={'#5C940D'} /> : 'Submit'}
           </Button>
         </ScrollView>
       </Layout>
