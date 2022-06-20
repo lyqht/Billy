@@ -1,0 +1,6 @@
+- fix archive bill bug
+- fix analytics latest bill display date
+- enable analytics to show uncategorized bills
+- improve add reminder form ui
+- add loading indicators to login
+- improve purge data description
