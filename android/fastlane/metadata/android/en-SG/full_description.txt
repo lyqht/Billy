@@ -1,0 +1,5 @@
+Billy offers the following features:
+
+- You can tell Billy the upcoming bills that you have, and set custom reminders for each of them
+- Bill expense analytics over the months (missed bills, upcoming bills, bills based on category)
+- Cloud sync if you sign up for an account with Billy

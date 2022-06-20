@@ -23,13 +23,29 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Runs all the tests
 
+### android vc_and_tag
+
+```sh
+[bundle exec] fastlane android vc_and_tag
+```
+
+Increment version code and add git tag
+
+### android bundle
+
+```sh
+[bundle exec] fastlane android bundle
+```
+
+Create a new app bundle for release
+
 ### android internal
 
 ```sh
 [bundle exec] fastlane android internal
 ```
 
-Submit a new Test Internal Build to Play Store
+Submit a new bundle to Play Store: Internal Track
 
 ----
 
