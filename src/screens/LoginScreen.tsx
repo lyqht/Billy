@@ -17,6 +17,7 @@ import {
   TouchableOpacity,
   Linking,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {CustomInput} from '../components/Input/CustomInput';
 import {NavigationProps, RootStackParamList} from '../routes';
@@ -40,6 +41,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
     loginMode === LoginMode.SIGN_UP ? 0 : 1,
   );
   const [errorText, setErrorText] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -56,6 +58,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
 
   const onSubmit = async () => {
     const {email, password} = getValues();
+    setLoading(true);
+
     try {
       switch (selectedLoginMode) {
         case LoginMode.SIGN_UP:
@@ -70,6 +74,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
     } catch (err) {
       setErrorText(`${err}, please try again later.`);
     }
+
+    setLoading(false);
   };
 
   const getButtonText = () =>
@@ -133,7 +139,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
               )}
             />
             {errors.email && (
-              <Text category={'label'}>This field is required</Text>
+              <Text status={'warning'} category={'label'}>
+                This field is required
+              </Text>
             )}
           </View>
           <View style={styles.formFieldContainer}>
@@ -154,12 +162,20 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
               )}
             />
           </View>
+          <Button
+            size="medium"
+            disabled={loading}
+            onPress={handleSubmit(onSubmit)}
+          >
+            {loading ? (
+              <ActivityIndicator color={'#5C940D'} />
+            ) : (
+              getButtonText()
+            )}
+          </Button>
           <Text style={styles.errorText} status={'danger'}>
             {errorText}
           </Text>
-          <Button size="medium" onPress={handleSubmit(onSubmit)}>
-            {getButtonText()}
-          </Button>
         </View>
       </Layout>
     </ScrollView>
