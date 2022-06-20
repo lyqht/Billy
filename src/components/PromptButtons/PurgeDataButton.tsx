@@ -28,11 +28,17 @@ export const PurgeDataButton: React.FC = ({}) => {
           <Text category={'h4'} style={styles.descriptionText}>
             Purge data
           </Text>
-          <Text category={'s1'} style={styles.descriptionText}>
-            Are you sure you want to purge all data on this device?
+          <Text category={'p1'} style={styles.descriptionText}>
+            If you choose to proceed, all the data on this device will be
+            deleted.
           </Text>
           <Text category={'p1'} style={styles.descriptionText}>
-            This action is irreversible!
+            This includes the bill expenses you have added, the upcoming
+            notifications that you are supposed to receive for them, and you
+            will be logged out instantly.
+          </Text>
+          <Text category={'s1'} status="danger" style={styles.descriptionText}>
+            Are you sure you want to proceed? This action is irreversible!
           </Text>
           <Button
             style={styles.modalButton}
@@ -41,7 +47,8 @@ export const PurgeDataButton: React.FC = ({}) => {
               setVisible(false);
               showToast({
                 text1: 'Purge data',
-                text2: 'All data has been purged',
+                text2:
+                  'All local data has been purged on this device. If you wish to purge your synced data (if you have any), please send an email to billyappuwu@gmail.com with the email you have registered with Billy',
                 type: 'success',
               });
 
