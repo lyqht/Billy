@@ -13,8 +13,8 @@ export const useBilly = (): Context => {
   const [bills, setBills] = useState<Bill[]>([]);
   const [upcomingBills, setUpcomingBills] = useState<Bill[]>([]);
   const [missedBills, setMissedBills] = useState<Bill[]>([]);
-  const [latestBillDate, setLatestBillDate] = useState<string | null>(null);
-  const [lastSyncDate, setLastSyncDate] = useState<string>('');
+  const [latestBillDate, setLatestBillDate] = useState<string>();
+  const [lastSyncDate, setLastSyncDate] = useState<string>();
   const [reminders, setReminders] = useState<Record<string, number>>({});
   const [user, setUser] = useState<User | null>(null);
 

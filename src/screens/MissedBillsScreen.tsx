@@ -10,6 +10,7 @@ import {Bill} from '../models/Bill';
 import {RootStackParamList} from '../routes';
 import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
+import {useBilly} from '../contexts/useBillyContext';
 
 type MissedBillsScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -17,38 +18,14 @@ type MissedBillsScreenProps = NativeStackScreenProps<
 >;
 
 const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
-  const [bills, setMissedBills] = useState<Bill[]>([]);
-
-  useEffect(() => {
-    const init = async () => {
-      const retrievedBills = await BillService.getBills();
-      const retrievedMissedBills = getMissedBills(retrievedBills);
-
-      setMissedBills(retrievedMissedBills);
-    };
-
-    const listener = Cache.getStorage().addOnValueChangedListener(
-      changedKey => {
-        if (changedKey === STORAGE_KEYS.BILLS) {
-          const updatedBills = Cache.getBills();
-          if (updatedBills) {
-            setMissedBills(getMissedBills([...updatedBills]));
-          }
-        }
-      },
-    );
-
-    init();
-
-    return () => listener.remove();
-  }, []);
+  const {missedBills} = useBilly();
 
   const headerText =
-    bills.length > 0
-      ? `You didn't pay ${bills.length} bill(s) on time 😰`
+    missedBills.length > 0
+      ? `You didn't pay ${missedBills.length} bill(s) on time 😰`
       : 'You have no missed bills 🥳';
 
-  if (bills.length === 0) {
+  if (missedBills.length === 0) {
     return (
       <SafeAreaView>
         <Layout style={styles.layoutContainer}>
@@ -83,7 +60,7 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
 
         <Divider />
         <List
-          data={bills}
+          data={missedBills}
           renderItem={({item}) => (
             <Animated.View
               entering={FadeInLeft}

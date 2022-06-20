@@ -86,8 +86,8 @@ class BillService {
     id?: number,
   ): Promise<void> => {
     const bills = await this.getBills();
-    const billIndex = bills.findIndex(
-      bill => bill.id === id || bill.tempID === id,
+    const billIndex = bills.findIndex(bill =>
+      bill.id ? bill.id === id : bill.tempID === id,
     );
     if (billIndex === -1) {
       throw Error('Cannot find bill');
@@ -126,18 +126,16 @@ class BillService {
       await this.getBillsFromDB();
     } else {
       const bills = await this.getBills();
-      let updatedBill: Bill;
-      const billIndex = bills.findIndex(
-        b => b.id === bill.id || b.tempID === bill.tempID,
+      const billIndex = bills.findIndex(b =>
+        b.id ? b.id === bill.id : b.tempID === bill.tempID,
       );
       if (billIndex === -1) {
         throw Error('Cannot find bill');
       }
-      updatedBill = bills[billIndex];
 
-      updatedBill.archivedDate = archivedDate;
-      console.debug({bill, updatedBill});
-      Cache.setBills(bills);
+      const updatedBills = [...bills];
+      updatedBills[billIndex].archivedDate = archivedDate;
+      Cache.setBills(updatedBills);
     }
   };
 
