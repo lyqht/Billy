@@ -1,5 +1,5 @@
 import {
-  Icon,
+  Button,
   IndexPath,
   Select,
   SelectItem,
@@ -9,7 +9,7 @@ import {
 import dayjs from 'dayjs';
 import React, {useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {getReminderDate} from '../../helpers/DateFns';
 import {ReminderFormData, TimeUnit} from '../../models/Reminder';
 import {CustomInput} from '../Input/CustomInput';
@@ -127,22 +127,8 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
           />
         </View>
       </View>
-      {Object.keys(errors).length > 0 && (
-        <View style={styles.sectionContainer}>
-          <Text category={'label'} appearance={'alternative'}>
-            {`* ${getErrorMessage()}`}
-          </Text>
-        </View>
-      )}
       <View
-        style={[
-          styles.row,
-          styles.sectionContainer,
-          styles.confirmSection,
-          Object.keys(errors).length > 0 && {
-            backgroundColor: theme['color-basic-600'],
-          },
-        ]}
+        style={[styles.row, styles.sectionContainer, styles.confirmSection]}
       >
         <View style={[styles.row, styles.reminderButtonContainer]}>
           <View>
@@ -156,17 +142,18 @@ const ReminderForm: React.FC<Props> = ({onSubmit, currentDeadline}) => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          disabled={Object.keys(errors).length > 0}
-        >
-          <Icon
-            style={styles.confirmIcon}
-            fill={theme['color-basic-300']}
-            name="plus-square"
-          />
-        </TouchableOpacity>
       </View>
+      {Object.keys(errors).length > 0 ? (
+        <View style={styles.sectionContainer}>
+          <Text category={'label'} appearance={'alternative'}>
+            {`* ${getErrorMessage()}`}
+          </Text>
+        </View>
+      ) : (
+        <Button status={'control'} onPress={handleSubmit(onSubmit)}>
+          <Text>Add reminder</Text>
+        </Button>
+      )}
     </View>
   );
 };
