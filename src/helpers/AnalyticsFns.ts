@@ -44,6 +44,12 @@ const filterDataPoints = (points: ChartDataPt[], filters?: ChartDataFilter) =>
       let toReturnDataPt = true;
       Object.entries(filters).forEach(([billProperty, acceptedProperties]) => {
         const filterProperty = billProperty as keyof ChartDataFilter;
+
+        // special condition since category can be undefined
+        if (filterProperty === 'category' && acceptedProperties.length === 0) {
+          return;
+        }
+
         const currentBillPropertyValue = bill[filterProperty] as string;
         if (!acceptedProperties.includes(currentBillPropertyValue)) {
           toReturnDataPt = false;
