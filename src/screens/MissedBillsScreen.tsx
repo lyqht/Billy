@@ -1,16 +1,11 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Quote} from '../components/Quote';
-import {getMissedBills} from '../helpers/BillFilter';
-import {Bill} from '../models/Bill';
-import {RootStackParamList} from '../routes';
-import BillService from '../services/BillService';
-import Cache, {STORAGE_KEYS} from '../services/Cache';
 import {useBilly} from '../contexts/useBillyContext';
+import {RootStackParamList} from '../routes';
 
 type MissedBillsScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -62,14 +57,9 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
         <List
           data={missedBills}
           renderItem={({item}) => (
-            <Animated.View
-              entering={FadeInLeft}
-              exiting={FadeOutRight}
-              key={item.id || item.tempID}
-              style={styles.listItemWrapper}
-            >
+            <View key={item.id || item.tempID} style={styles.listItemWrapper}>
               <BillCard billCardType={BillCardType.MISSED_BILL} bill={item} />
-            </Animated.View>
+            </View>
           )}
           ListFooterComponent={
             <Button
