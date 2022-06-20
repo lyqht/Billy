@@ -52,7 +52,10 @@ export const useBilly = (): Context => {
     getBillIdToNumRemindersMap(bills).then(retrievedReminders => {
       setReminders(retrievedReminders);
     });
-    setLatestBillDate(getLastBillDate(bills).format('DD MMM YYYY'));
+
+    if (bills.length > 0) {
+      setLatestBillDate(getLastBillDate(bills).format('DD MMM YYYY'));
+    }
   }, [bills]);
 
   const setCurrentBills = useCallback((items: Bill[]) => {
