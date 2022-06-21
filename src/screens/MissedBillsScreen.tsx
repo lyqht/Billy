@@ -1,15 +1,11 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Quote} from '../components/Quote';
-import {getMissedBills} from '../helpers/BillFilter';
-import {Bill} from '../models/Bill';
+import {useBilly} from '../contexts/useBillyContext';
 import {RootStackParamList} from '../routes';
-import BillService from '../services/BillService';
-import Cache, {STORAGE_KEYS} from '../services/Cache';
 
 type MissedBillsScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -17,38 +13,14 @@ type MissedBillsScreenProps = NativeStackScreenProps<
 >;
 
 const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
-  const [bills, setMissedBills] = useState<Bill[]>([]);
-
-  useEffect(() => {
-    const init = async () => {
-      const retrievedBills = await BillService.getBills();
-      const retrievedMissedBills = getMissedBills(retrievedBills);
-
-      setMissedBills(retrievedMissedBills);
-    };
-
-    const listener = Cache.getStorage().addOnValueChangedListener(
-      changedKey => {
-        if (changedKey === STORAGE_KEYS.BILLS) {
-          const updatedBills = Cache.getBills();
-          if (updatedBills) {
-            setMissedBills(getMissedBills([...updatedBills]));
-          }
-        }
-      },
-    );
-
-    init();
-
-    return () => listener.remove();
-  }, []);
+  const {missedBills} = useBilly();
 
   const headerText =
-    bills.length > 0
-      ? `You didn't pay ${bills.length} bill(s) on time 😰`
+    missedBills.length > 0
+      ? `You didn't pay ${missedBills.length} bill(s) on time 😰`
       : 'You have no missed bills 🥳';
 
-  if (bills.length === 0) {
+  if (missedBills.length === 0) {
     return (
       <SafeAreaView>
         <Layout style={styles.layoutContainer}>
@@ -83,16 +55,11 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
 
         <Divider />
         <List
-          data={bills}
+          data={missedBills}
           renderItem={({item}) => (
-            <Animated.View
-              entering={FadeInLeft}
-              exiting={FadeOutRight}
-              key={item.id || item.tempID}
-              style={styles.listItemWrapper}
-            >
+            <View key={item.id || item.tempID} style={styles.listItemWrapper}>
               <BillCard billCardType={BillCardType.MISSED_BILL} bill={item} />
-            </Animated.View>
+            </View>
           )}
           ListFooterComponent={
             <Button

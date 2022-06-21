@@ -2,6 +2,7 @@ import {CheckBox, IndexPath, Layout, Text} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import Chart from '../components/Analytics/Chart';
+import NoChartDataPlaceholder from '../components/Analytics/NoChartDataPlaceholder';
 import {CustomDateRangePicker} from '../components/Input/CustomDateRangePicker';
 import {
   categoriesForMultiSelect,
@@ -11,20 +12,17 @@ import {
 import {useBilly} from '../contexts/useBillyContext';
 import {
   getBillDateRange,
-  getLastBillDate,
   mapBillsToChartDataPts,
 } from '../helpers/AnalyticsFns';
 import {getBillsInDateRange} from '../helpers/BillFilter';
 
 const AnalyticsScreen: React.FC = () => {
-  const {bills} = useBilly();
+  const {bills, latestBillDate} = useBilly();
   const [loading, setLoading] = useState(true);
   const [selectedRange, setSelectedRange] = useState(getBillDateRange(bills));
   const [showMissedBills, setShowMissedBills] = useState(false);
   const [showUpcomingBills, setShowUpcomingBills] = useState(false);
   const [chartData, setChartData] = useState(mapBillsToChartDataPts(bills));
-
-  const finishLoading = !loading;
 
   const [selectedCategoryIndexes, setSelectedCategoryIndexes] = React.useState<
     IndexPath[]
@@ -55,10 +53,12 @@ const AnalyticsScreen: React.FC = () => {
   }, [selectedRange, bills]);
 
   useEffect(() => {
+    setLoading(true);
     if (bills.length > 0) {
       setSelectedRange(getBillDateRange(bills));
-      setLoading(false);
     }
+
+    setLoading(false);
   }, [bills]);
 
   return (
@@ -66,10 +66,11 @@ const AnalyticsScreen: React.FC = () => {
       <Layout style={styles.layoutContainer}>
         <ScrollView>
           <Text category={'h4'}>Analytics</Text>
-          {finishLoading && (
+          {!loading && (
             <>
               {chartData.length > 0 ? (
                 <Chart
+                  latestBillDate={latestBillDate}
                   showMissedBills={showMissedBills}
                   showUpcomingBills={showUpcomingBills}
                   selectedCategories={getAllValuesFromIndexPaths(
@@ -80,16 +81,7 @@ const AnalyticsScreen: React.FC = () => {
                   data={chartData}
                 />
               ) : (
-                <Layout style={styles.placeholderContainer}>
-                  <Text category={'h6'}>No data matches the filters 😶‍🌫️</Text>
-                  <Text>
-                    The latest bill that can be found is on{' '}
-                    <Text category={'s1'}>
-                      {getLastBillDate(bills).format('DD MMM YYYY')}
-                    </Text>
-                    .
-                  </Text>
-                </Layout>
+                <NoChartDataPlaceholder latestBillDate={latestBillDate} />
               )}
               <View testID="chart-filters-settings">
                 <View style={styles.inputContainer}>
@@ -133,11 +125,6 @@ const AnalyticsScreen: React.FC = () => {
                 </View>
               </View>
             </>
-          )}
-          {!loading && bills.length === 0 && (
-            <Layout style={styles.placeholderContainer}>
-              <Text> No analytics available yet, add some bills first!</Text>
-            </Layout>
           )}
         </ScrollView>
       </Layout>

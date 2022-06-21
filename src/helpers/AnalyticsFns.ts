@@ -9,8 +9,11 @@ import {BillStatus} from '../types/BillStatus';
 export const getFirstBillDate = (bills: Bill[]): dayjs.Dayjs =>
   dayjs(minBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline);
 
-export const getLastBillDate = (bills: Bill[]): dayjs.Dayjs =>
-  dayjs(maxBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline);
+export const getLastBillDate = (bills: Bill[]): dayjs.Dayjs => {
+  return dayjs(
+    maxBy(bills, (bill: Bill) => dayjs(bill.deadline).unix())?.deadline,
+  );
+};
 
 export const getPeriodIndexOfBill = (
   billDate: dayjs.Dayjs,
@@ -41,6 +44,12 @@ const filterDataPoints = (points: ChartDataPt[], filters?: ChartDataFilter) =>
       let toReturnDataPt = true;
       Object.entries(filters).forEach(([billProperty, acceptedProperties]) => {
         const filterProperty = billProperty as keyof ChartDataFilter;
+
+        // special condition since category can be undefined
+        if (filterProperty === 'category' && acceptedProperties.length === 0) {
+          return;
+        }
+
         const currentBillPropertyValue = bill[filterProperty] as string;
         if (!acceptedProperties.includes(currentBillPropertyValue)) {
           toReturnDataPt = false;

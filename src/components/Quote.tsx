@@ -15,9 +15,12 @@ const styles = StyleSheet.create({
   },
   quoteLine: {
     borderColor: '#abcbca',
+    backgroundColor: '#abcbca',
     borderWidth: 2,
     width: 0,
     height: '100%',
+    padding: 0,
+    margin: 0,
   },
   content: {
     paddingLeft: 12,

@@ -6,8 +6,9 @@ export interface Context {
   bills: Bill[];
   missedBills: Bill[];
   upcomingBills: Bill[];
+  latestBillDate?: string;
   reminders: Record<string, number>;
-  lastSyncDate: string;
+  lastSyncDate?: string;
   user: User | null;
   setCurrentBills: (bills: Bill[]) => void;
 }
@@ -16,7 +17,6 @@ const defaultContext: Context = {
   bills: [],
   missedBills: [],
   upcomingBills: [],
-  lastSyncDate: '',
   reminders: {},
   user: null,
   setCurrentBills: () => {},

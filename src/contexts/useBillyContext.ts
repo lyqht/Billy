@@ -7,12 +7,14 @@ import BillService from '../services/BillService';
 import Cache, {STORAGE_KEYS} from '../services/Cache';
 import UserService from '../services/UserService';
 import {Context} from './BillyContext';
+import {getLastBillDate} from '../helpers/AnalyticsFns';
 
 export const useBilly = (): Context => {
   const [bills, setBills] = useState<Bill[]>([]);
   const [upcomingBills, setUpcomingBills] = useState<Bill[]>([]);
   const [missedBills, setMissedBills] = useState<Bill[]>([]);
-  const [lastSyncDate, setLastSyncDate] = useState<string>('');
+  const [latestBillDate, setLatestBillDate] = useState<string>();
+  const [lastSyncDate, setLastSyncDate] = useState<string>();
   const [reminders, setReminders] = useState<Record<string, number>>({});
   const [user, setUser] = useState<User | null>(null);
 
@@ -50,6 +52,10 @@ export const useBilly = (): Context => {
     getBillIdToNumRemindersMap(bills).then(retrievedReminders => {
       setReminders(retrievedReminders);
     });
+
+    if (bills.length > 0) {
+      setLatestBillDate(getLastBillDate(bills).format('DD MMM YYYY'));
+    }
   }, [bills]);
 
   const setCurrentBills = useCallback((items: Bill[]) => {
@@ -60,6 +66,7 @@ export const useBilly = (): Context => {
     bills,
     missedBills,
     upcomingBills,
+    latestBillDate,
     reminders,
     lastSyncDate,
     user,
