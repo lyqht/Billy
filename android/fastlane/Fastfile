@@ -13,11 +13,10 @@ platform :android do
   lane :vc_and_tag do |options|
     increment_version_code(
       gradle_file_path: "./app/build.gradle",
-      version_code: options[:current_build_number]
     )
 
     add_git_tag(
-      grouping: "builds",
+      grouping: options[:lane] + "/builds",
       includes_lane: false,
       prefix: "android",
       build_number: options[:current_build_number],
@@ -48,6 +47,24 @@ platform :android do
       version_name: "#{current_build_number}", 
       version_code: current_build_number, 
       release_status: 'draft',
+      aab: "./app/build/outputs/bundle/release/app-release.aab"
+    )
+  end
+
+  desc "Submit a new bundle to Play Store: Closed Testing Track"
+  lane :alpha do
+    previous_build_number = google_play_track_version_codes(
+      track: "alpha",
+    ).first
+
+    current_build_number = previous_build_number + 1
+    vc_and_tag(current_build_number: current_build_number)
+    bundle()
+    upload_to_play_store(
+      track: 'alpha',
+      version_name: "#{current_build_number}.0", 
+      release_status: 'draft',
+      version_code: current_build_number, 
       aab: "./app/build/outputs/bundle/release/app-release.aab"
     )
   end
