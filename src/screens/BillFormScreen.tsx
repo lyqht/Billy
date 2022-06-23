@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {useAnalytics} from '@segment/analytics-react-native';
 import {
   Button,
   Icon,
@@ -19,10 +20,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ReminderForm from '../components/BillForm/ReminderForm';
 import {CustomAutoComplete} from '../components/Input/CustomAutocomplete';
 import CustomDatetimePicker from '../components/Input/CustomDatetimePicker';
 import {CustomInput} from '../components/Input/CustomInput';
-import ReminderForm from '../components/BillForm/ReminderForm';
 import {
   defaultCategoryIcons,
   defaultPayees,
@@ -38,6 +39,7 @@ import {
   createBaseNotification,
   createTimestampNotification,
 } from '../services/NotificationService';
+
 interface Props {
   bill?: Bill;
 }
@@ -57,6 +59,8 @@ const BillFormScreen: React.FC<Props> = () => {
   const theme = useTheme();
   const styles = useStyleSheet(themedStyles);
   const navigator = useNavigation<NavigationProps>();
+  const {track} = useAnalytics();
+
   const [showReminderForm, setShowReminderForm] = useState(false);
   const [relativeReminderDates, setRelativeReminderDates] = useState<
     ReminderFormData[]
@@ -101,7 +105,15 @@ const BillFormScreen: React.FC<Props> = () => {
 
   const onSubmit = async () => {
     setLoading(true);
-    const {amount, deadline} = getValues();
+    const {amount, deadline, category} = getValues();
+
+    track('submit_bill', {
+      category,
+      reminders: {
+        timestamp: relativeReminderDates.length,
+      },
+    });
+
     const bill: Partial<Bill> = {
       ...getValues(),
       deadline: deadline.toISOString(),
@@ -148,6 +160,7 @@ const BillFormScreen: React.FC<Props> = () => {
   const onReminderFormSubmit = ({value, timeUnit}: ReminderFormData) => {
     const updatedDates = [...relativeReminderDates, {value, timeUnit}];
     setRelativeReminderDates(updatedDates);
+    track('add_reminder', {value, timeUnit});
 
     setShowReminderForm(false);
   };

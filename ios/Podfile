@@ -5,6 +5,8 @@ platform :ios, '11.0'
 
 target 'Billy' do
   config = use_native_modules!
+  
+  pod 'Segment-Firebase'
 
   use_react_native!(
     :path => config[:reactNativePath],

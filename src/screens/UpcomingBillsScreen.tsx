@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {useAnalytics} from '@segment/analytics-react-native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useCallback, useState, useRef} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
@@ -12,15 +13,18 @@ import SyncService from '../services/SyncService';
 
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
+  const {track} = useAnalytics();
+
+  const [refreshing, setRefreshing] = useState(false);
   const {upcomingBills, missedBills, reminders, lastSyncDate, user} =
     useBilly();
   const userIsPresent = user ? true : false;
-  const [refreshing, setRefreshing] = useState(false);
 
   const listRef = useRef<List>(null);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
+    track('refresh_screen_upcoming_bills');
     try {
       await SyncService.syncAllData();
     } catch (err) {
@@ -72,7 +76,10 @@ const UpcomingBillsScreen: React.FC = () => {
           <Button
             size="small"
             accessoryRight={<Icon name="plus-outline" />}
-            onPress={() => navigator.navigate('BillForm')}
+            onPress={() => {
+              track('add_bill');
+              navigator.navigate('BillForm');
+            }}
             style={styles.addBillButton}
           >
             <Text category={'label'}>Add Bill</Text>

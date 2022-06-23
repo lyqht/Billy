@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useAnalytics} from '@segment/analytics-react-native';
 import {
   Button,
   Divider,
@@ -11,20 +12,20 @@ import {
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
-  StyleSheet,
-  View,
+  ActivityIndicator,
   Image,
-  TouchableOpacity,
   Linking,
   ScrollView,
-  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import BillyHero from '../../assets/BillyHero.png';
 import {CustomInput} from '../components/Input/CustomInput';
 import {NavigationProps, RootStackParamList} from '../routes';
 import SyncService from '../services/SyncService';
 import UserService from '../services/UserService';
 import {LoginMode} from '../types/LoginMode';
-import BillyHero from '../../assets/BillyHero.png';
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
@@ -35,6 +36,7 @@ interface FormData {
 
 const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
   const navigation = useNavigation<NavigationProps>();
+  const {track} = useAnalytics();
   const {loginMode} = route.params;
   const [selectedLoginMode, setSelectedLoginMode] = useState(loginMode);
   const [selectedIndex, setSelectedIndex] = useState(
@@ -63,15 +65,20 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
     try {
       switch (selectedLoginMode) {
         case LoginMode.SIGN_UP:
+          track('sign_up_user');
           await UserService.signUpUser(email, password);
+          track('sign_up_user_success');
           break;
         case LoginMode.SIGN_IN:
+          track('sign_in_user', {email});
           await UserService.signInUser(email, password);
+          track('sign_in_user_success');
           break;
       }
       await SyncService.syncAllData();
       navigation.navigate('Home');
     } catch (err) {
+      track('login_failure', {error: `${err}`});
       setErrorText(`${err}, please try again later.`);
     }
 

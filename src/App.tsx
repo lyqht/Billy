@@ -1,12 +1,17 @@
 import * as eva from '@eva-design/eva';
+import notifee, {EventType} from '@notifee/react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {AnalyticsProvider} from '@segment/analytics-react-native';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import React, {useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
+import segmentClient from './api/segment';
 import NavigationHeader from './components/Navigation/NavigationHeader';
+import BillyContext from './contexts/BillyContext';
+import {useBilly} from './contexts/useBillyContext';
 import {RootStackParamList} from './routes';
 import BillFormScreen from './screens/BillFormScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -15,9 +20,6 @@ import MissedBillsScreen from './screens/MissedBillsScreen';
 import SettingsDetailScreen from './screens/SettingsDetailScreen';
 import {registerDeviceForRemoteMessages} from './services/NotificationService';
 import SyncService from './services/SyncService';
-import notifee, {EventType} from '@notifee/react-native';
-import {useBilly} from './contexts/useBillyContext';
-import BillyContext from './contexts/BillyContext';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -94,11 +96,13 @@ const App: React.FC = () => {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
         <BillyContext.Provider value={bills}>
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <NavStack />
-            </NavigationContainer>
-          </SafeAreaProvider>
+          <AnalyticsProvider client={segmentClient}>
+            <SafeAreaProvider>
+              <NavigationContainer>
+                <NavStack />
+              </NavigationContainer>
+            </SafeAreaProvider>
+          </AnalyticsProvider>
         </BillyContext.Provider>
       </ApplicationProvider>
       <Toast />

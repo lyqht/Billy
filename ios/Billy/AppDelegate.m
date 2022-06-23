@@ -1,4 +1,5 @@
 #import <Firebase.h>
+@import segment_analytics_react_native;
 #import "AppDelegate.h"
 
 #import <React/RCTBridge.h>
@@ -25,6 +26,16 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 
 @implementation AppDelegate
+
+
+- (BOOL)application:(UIApplication *)application
+            openURL: (NSURL *)url
+            options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+
+  [AnalyticsReactNative trackDeepLink:url withOptions:options];
+  return YES;
+}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
