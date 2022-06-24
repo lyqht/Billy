@@ -2,11 +2,11 @@
 
 ## Introduction 
 
-Hello there! Thanks for considering to contribute to Billy 🧡
+Hello there! Thanks for considering to contribute to Billy 💚
 
-Billy is still **very early in the development phase** (refer to [ROADMAP](./docs/roadmap.md)).
+Billy is still **very early in the development phase** (refer to [**ROADMAP**](https://lyqht.github.io/Billy/docs/roadmap/checklist)), so there may not be a lot of features and there may be bugs 🤐
 
-As such, the project is not open for public contributions to the **mobile app codebase**. However, there are areas that you can contribute in if you find the project worthy of your investment. Read the [ground rules](#️-ground-rules) first before looking at what you can contribute tho!
+Refer to the section on [creating issues](#creating-issues) if you would like to report anything!
 
 ## ⚠️ Ground rules
 
@@ -16,17 +16,29 @@ This is an open source project. Do not harrass people for replies.
 
 ### Contributing guidelines
 
-Please open an issue first to discuss what you want to be done before implementing anything. This is to keep contributions aligned with the product roadmap and vision. In the issue, please provide sufficient mockups/ screenshots/ flow diagrams whenever applicable.
-
-- Bug and feature request issues are only prioritised if they are raised by **testers**. To be a Billy tester, please read the [section on what you can contribute in](#what-you-can-contribute-in).
+- **To be a Billy tester in Alpha Track**, fill up [this form](https://forms.gle/wuPpNzA3qiM3jcJ87).
+- Bug and feature request issues are only prioritised if they are raised by testers in the Internal/Alpha Track. 
 - PRs not linked to any issues will **not** be entertained, and **auto-closed after 3 days**.
 
+### Creating issues
+#### Feature Requests
+
+Before opening a feature request issue, 
+1. Please check the product [**ROADMAP**](https://lyqht.github.io/Billy/docs/roadmap/checklist) document if it is already planned to be implemented.
+2. In the issue, discuss what you want to be done before implementing anything. This is to keep contributions aligned with the product roadmap and vision. 
+3. Provide sufficient mockups/ screenshots/ flow diagrams whenever applicable.
+
+#### Bugs
+
+Please state your device model, and steps to replicate.
+
+> If you're a Billy tester, please also email me that the link that of the created issue as well so I can communicate to you more easily if necessary.
 
 ## What you can contribute in
 
 - **Be a Billy tester!**
-  > I've only managed to set up deployment for android, so if you're on iOS, you can still participate as a tester but you need to install the app locally by cloning the project & setting it up.
-  - Fill up [this form](https://docs.google.com/forms/d/1jP9VCxjpFBRRw_SALLVOkBdoSCMZcnvOLw6zbZSyovs/edit) if you're keen to help to try out the app. 
+  - Fill up [this form](https://docs.google.com/forms/d/e/1FAIpQLSfOIzpqG8y84FHHmqC3Jauy2RTx4xKd6M_oXDS5fBZ9kYFnlg/viewform) if you're keen to help to try out the app in the **Alpha Track**. Once you have submitted the form, I'll send an email to you within 3 working days with the app store link.
+  - ⚠️ Billy is only available for Android users on Google Playstore now. If you're on iOS, you can still participate as a tester but you need to install the app locally by cloning the project & setting it up with env variables corresponding to your own Supabase project.
 - **A product landing website**
   - it should display all the information that is already in the /docs folder.
   - it should have a form for users to request for data retrieval or removal
@@ -38,5 +50,5 @@ Please open an issue first to discuss what you want to be done before implementi
 - **GitHub Issue templates**
   - feel free to add templates for the community to contribute to Billy more easily
 - **GitHub Actions**
-  - There's E2E tests for Billy, but I haven't integrated it as part of the CICD yet. If you can help to create a workflow that runs the tests & save failing screenshots as artifacts, that will be great.
+  - There's E2E Detox tests for Billy, but I haven't integrated it as part of the CICD yet (I also haven't write a lot of it). If you can help to contribute tests or create a workflow that runs the tests & save failing screenshots as artifacts, that will be great.
 
