@@ -13,6 +13,9 @@ sidebar_position: 2
 
 ## V1.0
 
+> Formatting is a little off below if you view it on Docsaurus, you can refer to [the markdown file](https://github.com/lyqht/Billy/blob/main/docs/docs/roadmap/checklist.mdx) to see it as well. 
+> Or if you know how to fix it, create a PR for it :)
+
 - [x]  View bills
     - [x]  Retrieve cached bills if available
     - [x]  Fetch bills from Supabase if user is cached
@@ -24,12 +27,13 @@ sidebar_position: 2
     - [x]  Select deadline
     - [x]  Bills should be added to local cache first before trying to POST to Supabase
     - [x]  Post to Supabase if user is cached
-    - [ ]  Payee autocomplete: Scrape for SG local billing organisations
+    - [x]  Web Scraper for Singapore local billing organisations
+    - [ ]  Payee autocomplete based on scraped local billing organisations
     - [ ]  Caching of user inputs on BillFormScreen
     - [ ]  Upload Bill PDF from their billing organisation
     - [ ]  Config for 1-time bill or recurring bill e.g. monthly/annual subscription
     - [ ]  Duplicate bill
-- [x]  User Management
+- [ ]  User Management
     - [x]  Register Prompt to be shown on press for info icon on account-locked features
     - [x]  Log out
         - [x]  Remove user from cache
@@ -37,6 +41,8 @@ sidebar_position: 2
         - [x]  Cache user information
         - [x]  Sync existing device cache (bills, reminders that do not have ids) to cloud
         - [x]  Retrieve and cache cloud data that do not exist on device
+        - [ ] Magic link Login
+        - [ ] Verify email
 - [x]  Missed Bills
     - [x]  Mark as acknowledged (Archive bill)
 - [ ]  Create notifications
@@ -53,16 +59,16 @@ sidebar_position: 2
     - [ ]  only fetch bills for account users
     - [ ]  only post bills for account users
     - [ ]  Refresh only works if there is internet
-- [ ]  Summary View
-  - [ ]  Edge function to create bill summary
-  - [ ]  UI to show users by month
-    - [ ]  nett bill expenses they have incurred 
-    - [ ]  bills that they have missed
-  - [ ]  Show archived bills
+- []  Analytics
+  - [x]  Functionality to generate bill summary
+  - [x]  UI to show users by month
+    - [x]  nett bill expenses they have incurred 
+    - [x]  bills that they have missed
+  - [ ] Lifetime statistics e.g. Reminders sent by Billy, bills recorded in app
 - [ ]  Personalization
   - [ ]  Let users set their own name
   - [ ]  Light/dark mode toggle
-  - [ ]  Notification sound, Billy mascot
+  - [ ]  Notification sound, Billy mascot that they prefer to see on notifications & in app
 
 ## V1.1
 
@@ -77,5 +83,5 @@ sidebar_position: 2
 
 ## Going Production Checklist
 
-- [ ] [Supabase Checklist](https://supabase.com/docs/going-into-prod)
 - [ ] Add analytics
+- [ ] [Supabase Checklist](https://supabase.com/docs/going-into-prod)
