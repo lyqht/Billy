@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {RegisterPromptButton} from '../components/PromptButtons/RegisterPromptButton';
@@ -72,7 +72,7 @@ const UpcomingBillsScreen: React.FC = () => {
           <Button
             size="small"
             accessoryRight={<Icon name="plus-outline" />}
-            onPress={() => navigator.navigate('BillForm')}
+            onPress={() => navigator.navigate('BillForm', {})}
             style={styles.addBillButton}
           >
             <Text category={'label'}>Add Bill</Text>

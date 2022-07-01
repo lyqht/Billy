@@ -154,6 +154,10 @@ class BillService {
 
     return data;
   };
+
+  deleteBill = async (id: BillID): Promise<void> => {
+    //TODO:
+  };
 }
 
 export default new BillService();

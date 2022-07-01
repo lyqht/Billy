@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   Button,
   Icon,
@@ -19,10 +20,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ReminderForm from '../components/BillForm/ReminderForm';
 import {CustomAutoComplete} from '../components/Input/CustomAutocomplete';
 import CustomDatetimePicker from '../components/Input/CustomDatetimePicker';
 import {CustomInput} from '../components/Input/CustomInput';
-import ReminderForm from '../components/BillForm/ReminderForm';
 import {
   defaultCategoryIcons,
   defaultPayees,
@@ -32,15 +33,16 @@ import {getReminderDate} from '../helpers/DateFns';
 import {showToast} from '../helpers/Toast';
 import {Bill} from '../models/Bill';
 import {ReminderFormData} from '../models/Reminder';
-import {NavigationProps} from '../routes';
+import {NavigationProps, RootStackParamList} from '../routes';
 import BillService from '../services/BillService';
 import {
   createBaseNotification,
   createTimestampNotification,
 } from '../services/NotificationService';
-interface Props {
+
+type Props = NativeStackScreenProps<RootStackParamList, 'BillForm'> & {
   bill?: Bill;
-}
+};
 interface FormData {
   payee: string;
   amount: string;
@@ -53,10 +55,31 @@ interface ReminderWarningTooltipProps {
   index: number;
 }
 
-const BillFormScreen: React.FC<Props> = () => {
+const defaultBill: FormData = {
+  payee: '',
+  category: '',
+  amount: '',
+  deadline: dayjs().hour(22).minute(0).toDate(),
+  reminderDates: [],
+};
+
+const BillFormScreen: React.FC<Props> = ({route}) => {
   const theme = useTheme();
   const styles = useStyleSheet(themedStyles);
   const navigator = useNavigation<NavigationProps>();
+  let bill = defaultBill;
+
+  if (route.params && route.params.bill !== undefined) {
+    const {payee, category, amount, deadline} = route.params.bill;
+    bill = {
+      ...bill,
+      payee,
+      category: category ?? '',
+      deadline: dayjs(deadline).toDate(),
+      amount: `${amount}`,
+    };
+  }
+
   const [showReminderForm, setShowReminderForm] = useState(false);
   const [relativeReminderDates, setRelativeReminderDates] = useState<
     ReminderFormData[]
@@ -74,10 +97,10 @@ const BillFormScreen: React.FC<Props> = () => {
   } = useForm<FormData>({
     mode: 'onBlur',
     defaultValues: {
-      payee: '',
-      category: '',
-      amount: '',
-      deadline: dayjs().hour(22).minute(0).toDate(),
+      payee: bill.payee,
+      category: bill.category,
+      amount: `${bill.amount}`,
+      deadline: dayjs(bill.deadline).toDate(),
     },
   });
 

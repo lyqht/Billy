@@ -7,6 +7,8 @@ import BillService from '../../services/BillService';
 import BillCardReminderText from './BillCardReminderText';
 import MissedBillCardFooter from './MissedBillCardFooter';
 import UpcomingBillCardFooter from './UpcomingBillCardFooter';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps} from '../../routes';
 
 export enum BillCardType {
   UPCOMING_BILL = 'UpcomingBill',
@@ -69,20 +71,20 @@ export const BillCard: React.FC<BillCardProps> = ({
   numReminders,
 }) => {
   const {id, tempID, completedDate} = bill;
-  const currentBillId = id ?? tempID;
+  const billId = id ?? tempID;
+  const navigation = useNavigation<NavigationProps>();
 
   const cardProps: CardProps = {
-    disabled: true,
     status: completedDate ? 'success' : 'basic',
     footer:
       billCardType === BillCardType.UPCOMING_BILL ? (
         <UpcomingBillCardFooter
           completedDate={completedDate}
           onMarkComplete={async () => {
-            await BillService.setBillAsComplete(true, currentBillId);
+            await BillService.setBillAsComplete(true, billId);
           }}
           onMarkIncomplete={async () => {
-            await BillService.setBillAsComplete(false, currentBillId);
+            await BillService.setBillAsComplete(false, billId);
           }}
         />
       ) : (
@@ -96,7 +98,12 @@ export const BillCard: React.FC<BillCardProps> = ({
   };
 
   return (
-    <Card {...cardProps}>
+    <Card
+      {...cardProps}
+      onPress={() => {
+        navigation.navigate('BillDetails', {bill});
+      }}
+    >
       <CardContent
         bill={bill}
         billCardType={billCardType}
