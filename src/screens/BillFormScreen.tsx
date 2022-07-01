@@ -35,10 +35,7 @@ import {Bill} from '../models/Bill';
 import {ReminderFormData} from '../models/Reminder';
 import {NavigationProps, RootStackParamList} from '../routes';
 import BillService from '../services/BillService';
-import {
-  createBaseNotification,
-  createTimestampNotification,
-} from '../services/NotificationService';
+import NotificationService from '../services/NotificationService';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'BillForm'> & {
   bill?: Bill;
@@ -139,9 +136,9 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
         .filter(date => dayjs(date).isAfter(dayjs()));
 
       const notifPromises = reminderDates.map(date =>
-        createTimestampNotification(
+        NotificationService.createTimestampNotification(
           dayjs(date).startOf('minutes').toDate(),
-          createBaseNotification(
+          NotificationService.createBaseNotification(
             id,
             'Your bill is due!',
             `You have a pending bill to ${currentPayee} due on ${dayjs(

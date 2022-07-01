@@ -9,7 +9,7 @@ import Toast from 'react-native-toast-message';
 import {RootNavStack} from './components/Navigation/RootNavStack';
 import BillyContext from './contexts/BillyContext';
 import {useBilly} from './contexts/useBillyContext';
-import {registerDeviceForRemoteMessages} from './services/NotificationService';
+import FCMService from './services/FCMService';
 import SyncService from './services/SyncService';
 
 const App: React.FC = () => {
@@ -17,7 +17,7 @@ const App: React.FC = () => {
 
   const init = async () => {
     await SyncService.syncAllData();
-    await registerDeviceForRemoteMessages();
+    await FCMService.registerDeviceForRemoteMessages();
   };
 
   useEffect(() => {

@@ -2,11 +2,7 @@ import {v4} from 'uuid';
 import {getUnsyncBills} from '../helpers/BillFilter';
 import BillService from './BillService';
 import Cache from './Cache';
-import {
-  clearAllNotifications,
-  getReminderNotificationsForBill,
-  updateNotificationsWithNewBillId,
-} from './NotificationService';
+import NotificationService from './NotificationService';
 import UserService from './UserService';
 
 class SyncService {
@@ -45,10 +41,11 @@ class SyncService {
       );
 
       try {
-        const triggerNotifications = await getReminderNotificationsForBill(
-          bill.tempID!,
-        );
-        await updateNotificationsWithNewBillId(
+        const triggerNotifications =
+          await NotificationService.getReminderNotificationsForBill(
+            bill.tempID!,
+          );
+        await NotificationService.updateNotificationsWithNewBillId(
           triggerNotifications,
           newBill.id,
         );
@@ -62,7 +59,7 @@ class SyncService {
 
   clearAllData = async (): Promise<void> => {
     await UserService.logOutUser();
-    await clearAllNotifications();
+    await NotificationService.clearAllNotifications();
     Cache.clearAllData();
   };
 }
