@@ -71,7 +71,7 @@ export const BillCard: React.FC<BillCardProps> = ({
   numReminders,
 }) => {
   const {id, tempID, completedDate} = bill;
-  const billId = id ?? tempID;
+  const billID = id ?? tempID;
   const navigation = useNavigation<NavigationProps>();
 
   const cardProps: CardProps = {
@@ -81,10 +81,10 @@ export const BillCard: React.FC<BillCardProps> = ({
         <UpcomingBillCardFooter
           completedDate={completedDate}
           onMarkComplete={async () => {
-            await BillService.setBillAsComplete(true, billId);
+            await BillService.setBillAsComplete(true, billID);
           }}
           onMarkIncomplete={async () => {
-            await BillService.setBillAsComplete(false, billId);
+            await BillService.setBillAsComplete(false, billID);
           }}
         />
       ) : (

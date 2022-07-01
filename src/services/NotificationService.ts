@@ -93,18 +93,9 @@ class NotificationService {
     const triggerNotifs = await notifee.getTriggerNotifications();
     return (
       triggerNotifs.filter(
-        trigger => trigger.notification.data?.billId === billID,
+        ({notification}) =>
+          (notification.data?.billID || notification.data?.billId) === billID,
       ) || []
-    );
-  };
-
-  public getReminderNotificationIdsForBill = async (
-    billID: string,
-  ): Promise<string[]> => {
-    const triggerNotifs = await this.getReminderNotificationsForBill(billID);
-
-    return (
-      triggerNotifs.map(triggerNotif => triggerNotif.notification.id!) || []
     );
   };
 
@@ -114,7 +105,7 @@ class NotificationService {
   ) => {
     const promises = triggerNotifications.map(triggerNotif =>
       notifee.createTriggerNotification(
-        {...triggerNotif.notification, data: {billId: billID}},
+        {...triggerNotif.notification, data: {billID}},
         {...triggerNotif.trigger, repeatFrequency: undefined} as Trigger,
       ),
     );
