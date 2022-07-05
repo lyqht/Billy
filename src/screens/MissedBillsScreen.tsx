@@ -1,11 +1,12 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
 import {Quote} from '../components/Quote';
 import {useBilly} from '../contexts/useBillyContext';
 import {RootStackParamList} from '../routes';
+import BillService from '../services/BillService';
 
 type MissedBillsScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -14,6 +15,7 @@ type MissedBillsScreenProps = NativeStackScreenProps<
 
 const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
   const {missedBills} = useBilly();
+  const [loading, setLoading] = useState(false);
 
   const headerText =
     missedBills.length > 0
@@ -68,8 +70,17 @@ const MissedBillsScreen: React.FC<MissedBillsScreenProps> = () => {
               appearance={'filled'}
               accessoryLeft={<Icon name="archive" />}
               status={'danger'}
+              onPress={async () => {
+                setLoading(true);
+                await BillService.setBillsAsArchived(missedBills);
+                setLoading(false);
+              }}
             >
-              Archive all bills
+              {loading ? (
+                <ActivityIndicator color={'#FFFFFF'} />
+              ) : (
+                'Archive all bills'
+              )}
             </Button>
           }
         />
