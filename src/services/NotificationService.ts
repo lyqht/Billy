@@ -9,6 +9,8 @@ import notifee, {
 } from '@notifee/react-native';
 import dayjs from 'dayjs';
 import {v4} from 'uuid';
+import {BillID} from '../models/Bill';
+import {TimeUnit} from './../models/Reminder';
 
 //Starting in Android 8.0 (API level 26), all notifications must be assigned to a channel.
 const ANDROID_CHANNEL_ID = 'billy-notifs';
@@ -34,17 +36,15 @@ class NotificationService {
     }
   };
 
-  public createBaseNotification = (
-    billId: string,
+  private createBaseNotification = (
     title: string,
     body: string,
+    data: {[key: string]: string},
   ): Notification => ({
     id: v4(),
     title,
     body,
-    data: {
-      billId,
-    },
+    data,
     android: {
       channelId: ANDROID_CHANNEL_ID,
       pressAction: {
@@ -53,6 +53,36 @@ class NotificationService {
     },
   });
 
+  public createPendingBillNotification = async (notificationDetails: {
+    billID: BillID;
+    payee: string;
+    deadline: string;
+    value: string;
+    timeUnit: TimeUnit;
+    reminderDate: string;
+  }): Promise<void> => {
+    const notificationData = {
+      billID: `${notificationDetails.billID}`,
+      deadline: `${notificationDetails.deadline}`,
+      value: `${notificationDetails.value}`,
+      timeUnit: `${notificationDetails.timeUnit}`,
+    };
+
+    const {payee, deadline, reminderDate} = notificationDetails;
+    const notification = this.createBaseNotification(
+      'Your bill is due!',
+      `You have a pending bill to ${payee} due on ${dayjs(deadline).format(
+        'DD/MM/YYYY',
+      )}`,
+      notificationData,
+    );
+
+    await this.createTimestampNotification(
+      dayjs(reminderDate).startOf('minutes').toDate(),
+      notification,
+    );
+  };
+
   private checkAndroidAlarmPermissionSettings = async () => {
     const settings = await notifee.getNotificationSettings();
     if (settings.android.alarm !== AndroidNotificationSetting.ENABLED) {
@@ -60,7 +90,7 @@ class NotificationService {
     }
   };
 
-  public createTimestampNotification = async (
+  private createTimestampNotification = async (
     date: Date,
     notification: Notification,
   ): Promise<void> => {
@@ -93,8 +123,7 @@ class NotificationService {
     const triggerNotifs = await notifee.getTriggerNotifications();
     return (
       triggerNotifs.filter(
-        ({notification}) =>
-          (notification.data?.billID || notification.data?.billId) === billID,
+        ({notification}) => notification.data?.billID === billID,
       ) || []
     );
   };

@@ -121,32 +121,35 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
 
   const onSubmit = async () => {
     setLoading(true);
-    const {amount, deadline} = getValues();
-    const bill: Partial<Bill> = {
-      ...getValues(),
+    const {amount, deadline, payee} = getValues();
+    const billToSubmit: Partial<Bill> = {
       deadline: deadline.toISOString(),
       amount: parseFloat(amount),
+      category: getValues().category,
+      payee: getValues().payee,
     };
 
-    const {id, ...toastParams} = await BillService.addBill(bill);
+    const {id: billID, ...toastParams} = await BillService.addBill(
+      billToSubmit,
+    );
 
     if (toastParams.type !== 'error') {
-      const reminderDates = relativeReminderDates
-        .map(({value, timeUnit}) => getReminderDate(deadline, value, timeUnit))
-        .filter(date => dayjs(date).isAfter(dayjs()));
-
-      const notifPromises = reminderDates.map(date =>
-        NotificationService.createTimestampNotification(
-          dayjs(date).startOf('minutes').toDate(),
-          NotificationService.createBaseNotification(
-            id,
-            'Your bill is due!',
-            `You have a pending bill to ${currentPayee} due on ${dayjs(
-              deadline,
-            ).format('DD/MM/YYYY')}`,
-          ),
-        ),
-      );
+      const notifPromises: Promise<void>[] = [];
+      relativeReminderDates.forEach(({value, timeUnit}) => {
+        const reminderDate = getReminderDate(deadline, value, timeUnit);
+        if (dayjs(reminderDate).isAfter(dayjs())) {
+          notifPromises.push(
+            NotificationService.createPendingBillNotification({
+              billID,
+              payee,
+              deadline: deadline.toISOString(),
+              value,
+              timeUnit,
+              reminderDate: reminderDate.toISOString(),
+            }),
+          );
+        }
+      });
 
       try {
         await Promise.all(notifPromises);
@@ -156,8 +159,8 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
         console.error(err);
         showToast({
           type: 'error',
-          text1: 'Ops! Billy cannot create notifications 😥',
-          text2: 'Check if the notification dates are valid.',
+          text1: 'Failed to create notifications 😥',
+          text2: 'Check if any of the notification dates are in the past.',
         });
       } finally {
         setLoading(false);
