@@ -76,6 +76,7 @@ export const BillCard: React.FC<BillCardProps> = ({
 
   const cardProps: CardProps = {
     status: completedDate ? 'success' : 'basic',
+    disabled: billCardType === BillCardType.MISSED_BILL,
     footer:
       billCardType === BillCardType.UPCOMING_BILL ? (
         <UpcomingBillCardFooter
