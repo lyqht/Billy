@@ -60,7 +60,7 @@ const UpcomingBillsScreen: React.FC = () => {
               ) : (
                 <Text category="p1">Not synced yet</Text>
               )}
-              {userIsPresent && (
+              {!userIsPresent && (
                 <RegisterPromptButton
                   description={
                     'Billy can only sync to the cloud when you have a registered account.'
