@@ -4,7 +4,7 @@ import NotificationService from '../services/NotificationService';
 export const getBillIdToNumRemindersMap = async (bills: Bill[]) => {
   const retrievedReminders: Record<string, number> = {};
   for (let bill of bills) {
-    const identifier = `${bill.tempID || bill.id}`;
+    const identifier = `${bill.id || bill.tempID}`;
     const remindersForBill =
       await NotificationService.getReminderNotificationsForBill(
         `${identifier}`,

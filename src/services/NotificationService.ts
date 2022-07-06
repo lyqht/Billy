@@ -2,6 +2,7 @@ import notifee, {
   AndroidImportance,
   AndroidNotificationSetting,
   Notification,
+  RepeatFrequency,
   TimestampTrigger,
   Trigger,
   TriggerNotification,
@@ -11,8 +12,10 @@ import dayjs from 'dayjs';
 import {v4} from 'uuid';
 import {BillID} from '../models/Bill';
 import {TimeUnit} from './../models/Reminder';
+import {ReminderFormData} from '../models/Reminder';
 
 //Starting in Android 8.0 (API level 26), all notifications must be assigned to a channel.
+const LOGGER_PREFIX = '[NotificationService]';
 const ANDROID_CHANNEL_ID = 'billy-notifs';
 
 class NotificationService {
@@ -26,13 +29,16 @@ class NotificationService {
       importance: AndroidImportance.DEFAULT,
       sound: 'default',
     });
-    console.debug('Created Android Channel');
 
     const channel = await notifee.getChannel(ANDROID_CHANNEL_ID);
     if (channel?.blocked) {
-      console.debug(`Channel ${ANDROID_CHANNEL_ID} is disabled`);
+      console.debug(
+        `${LOGGER_PREFIX} Channel ${ANDROID_CHANNEL_ID} is disabled`,
+      );
     } else {
-      console.debug(`Channel ${ANDROID_CHANNEL_ID} is enabled`);
+      console.debug(
+        `${LOGGER_PREFIX} Channel ${ANDROID_CHANNEL_ID} is enabled`,
+      );
     }
   };
 
@@ -111,10 +117,11 @@ class NotificationService {
       t => t.notification.id === createdNotificationId,
     )[0];
 
-    console.debug(JSON.stringify(createdNotif));
-
-    // @ts-ignore
-    console.debug(dayjs(createdNotif.trigger.timestamp).format());
+    console.debug(
+      `${LOGGER_PREFIX} A notification has been created successfully for: ${dayjs(
+        createdNotif.trigger.timestamp,
+      ).format()}`,
+    );
   };
 
   public getReminderNotificationsForBill = async (
@@ -128,23 +135,57 @@ class NotificationService {
     );
   };
 
+  public getRelativeReminderNotificationDatesForBill = async (
+    billID: string,
+  ): Promise<ReminderFormData[]> => {
+    const notifications = await this.getReminderNotificationsForBill(billID);
+    const relativeReminderDates: ReminderFormData[] = [];
+    notifications.forEach(notifTrigger => {
+      const {data} = notifTrigger.notification;
+      if (data?.timeUnit && data.value) {
+        relativeReminderDates.push({
+          timeUnit: data.timeUnit as TimeUnit,
+          value: data.value,
+        });
+      }
+    });
+    return relativeReminderDates;
+  };
+
   public updateNotificationsWithNewBillId = async (
     triggerNotifications: TriggerNotification[],
     billID: string,
+    repeatFrequency?: RepeatFrequency,
   ) => {
-    const promises = triggerNotifications.map(triggerNotif =>
+    const notificationsInFuture = triggerNotifications.filter(triggerNotif =>
+      dayjs(triggerNotif.trigger.timestamp).isAfter(dayjs()),
+    );
+    const promises = notificationsInFuture.map(triggerNotif =>
       notifee.createTriggerNotification(
-        {...triggerNotif.notification, data: {billID}},
-        {...triggerNotif.trigger, repeatFrequency: undefined} as Trigger,
+        {
+          ...triggerNotif.notification,
+          data: {...triggerNotif.notification.data, billID},
+        },
+        {...triggerNotif.trigger, repeatFrequency} as Trigger,
       ),
     );
 
     try {
-      const updatedNotifications = await Promise.all(promises);
-      console.debug({updatedNotifications});
+      const updatedNotificationsWithNewBillId = await Promise.all(promises);
+      console.debug({updatedNotificationsWithNewBillId});
     } catch (err) {
       console.error(err);
     }
+  };
+
+  public deleteNotificationsForBill = async (billID: string) => {
+    const triggerNotifications = await this.getReminderNotificationsForBill(
+      billID,
+    );
+
+    await notifee.cancelTriggerNotifications(
+      triggerNotifications.map(triggerNotif => triggerNotif.notification.id!),
+    );
   };
 
   public clearAllNotifications = async () => {

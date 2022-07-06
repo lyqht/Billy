@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useCallback, useRef, useState} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
@@ -12,10 +12,22 @@ import SyncService from '../services/SyncService';
 
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
-  const {upcomingBills, missedBills, reminders, lastSyncDate, user} =
-    useBilly();
+  const {
+    upcomingBills,
+    missedBills,
+    reminders,
+    lastSyncDate,
+    user,
+    syncLocally,
+  } = useBilly();
   const userIsPresent = user ? true : false;
   const [refreshing, setRefreshing] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      syncLocally();
+    }, []),
+  );
 
   const listRef = useRef<List>(null);
 

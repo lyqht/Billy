@@ -11,6 +11,7 @@ export interface Context {
   lastSyncDate?: string;
   user: User | null;
   setCurrentBills: (bills: Bill[]) => void;
+  syncLocally: () => void;
 }
 
 const defaultContext: Context = {
@@ -20,6 +21,7 @@ const defaultContext: Context = {
   reminders: {},
   user: null,
   setCurrentBills: () => {},
+  syncLocally: () => {},
 };
 
 const BillyContext = createContext<Context>(defaultContext);

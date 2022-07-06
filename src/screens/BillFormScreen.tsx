@@ -41,6 +41,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'BillForm'> & {
   bill?: Bill;
 };
 interface FormData {
+  id?: number;
+  tempID?: string;
   payee: string;
   amount: string;
   category: string;
@@ -65,22 +67,28 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
   const styles = useStyleSheet(themedStyles);
   const navigator = useNavigation<NavigationProps>();
   let bill = defaultBill;
+  let editMode: boolean = false;
+  let reminderDates: ReminderFormData[] = [];
 
   if (route.params && route.params.bill !== undefined) {
-    const {payee, category, amount, deadline} = route.params.bill;
+    editMode = true;
+    const {payee, category, amount, deadline, id, tempID} = route.params.bill;
     bill = {
       ...bill,
+      id,
+      tempID,
       payee,
       category: category ?? '',
       deadline: dayjs(deadline).toDate(),
       amount: `${amount}`,
     };
+
+    reminderDates = route.params.bill.relativeReminderDates;
   }
 
   const [showReminderForm, setShowReminderForm] = useState(false);
-  const [relativeReminderDates, setRelativeReminderDates] = useState<
-    ReminderFormData[]
-  >([]);
+  const [relativeReminderDates, setRelativeReminderDates] =
+    useState(reminderDates);
   const [showWarningTooltips, setShowWarningTooltips] = useState<boolean[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -123,20 +131,28 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
     setLoading(true);
     const {amount, deadline, payee} = getValues();
     const billToSubmit: Partial<Bill> = {
+      tempID: bill.tempID,
+      id: bill.id,
       deadline: deadline.toISOString(),
       amount: parseFloat(amount),
       category: getValues().category,
       payee: getValues().payee,
     };
 
-    const {id: billID, ...toastParams} = await BillService.addBill(
-      billToSubmit,
-    );
+    const {id, ...toastParams} = editMode
+      ? await BillService.editBill(billToSubmit)
+      : await BillService.addBill(billToSubmit);
+    const billID = `${id}`;
 
     if (toastParams.type !== 'error') {
       const notifPromises: Promise<void>[] = [];
+      if (editMode) {
+        await NotificationService.deleteNotificationsForBill(billID);
+      }
+
       relativeReminderDates.forEach(({value, timeUnit}) => {
         const reminderDate = getReminderDate(deadline, value, timeUnit);
+
         if (dayjs(reminderDate).isAfter(dayjs())) {
           notifPromises.push(
             NotificationService.createPendingBillNotification({
@@ -210,7 +226,9 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
     <SafeAreaView>
       <Layout style={styles.container}>
         <ScrollView>
-          <Text category="h2">New Bill</Text>
+          <Text category="h2">
+            {bill.id || bill.tempID ? 'Edit Bill' : 'New Bill'}
+          </Text>
           <View style={styles.formField}>
             <Controller
               name="payee"
