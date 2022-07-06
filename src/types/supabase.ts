@@ -421,7 +421,7 @@ export interface paths {
 
 export interface definitions {
   Bill: {
-    /** Format: date */
+    /** Format: timestamp with time zone */
     deadline: string;
     /** Format: text */
     payee: string;
@@ -436,7 +436,7 @@ export interface definitions {
      */
     id: number;
     /** Format: uuid */
-    userId?: string;
+    userId: string;
     /** Format: date */
     completedDate?: string;
     /** Format: date */
@@ -546,7 +546,7 @@ export interface parameters {
   limit: string;
   /** @description Bill */
   "body.Bill": definitions["Bill"];
-  /** Format: date */
+  /** Format: timestamp with time zone */
   "rowFilter.Bill.deadline": string;
   /** Format: text */
   "rowFilter.Bill.payee": string;
