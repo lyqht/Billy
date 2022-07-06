@@ -51,4 +51,5 @@ Please state your device model, and steps to replicate.
   - feel free to add templates for the community to contribute to Billy more easily
 - **GitHub Actions**
   - There's E2E Detox tests for Billy, but I haven't integrated it as part of the CICD yet (I also haven't write a lot of it). If you can help to contribute tests or create a workflow that runs the tests & save failing screenshots as artifacts, that will be great.
+  - For this project, I've also created the [GitHub Action to generate Supabase database types](https://github.com/lyqht/generate-supabase-db-types-github-action), which is used by some devs. You can work on that too if you like!
 
