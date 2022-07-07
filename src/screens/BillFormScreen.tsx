@@ -79,7 +79,7 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
       tempID,
       payee,
       category: category ?? '',
-      deadline: dayjs(deadline).toDate(),
+      deadline: dayjs(deadline).local().toDate(),
       amount: `${amount}`,
     };
 
