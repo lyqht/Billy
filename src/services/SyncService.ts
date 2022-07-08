@@ -5,6 +5,7 @@ import BillService from './BillService';
 import Cache from './Cache';
 import NotificationService from './NotificationService';
 import UserService from './UserService';
+import NetInfo from '@react-native-community/netinfo';
 
 const LOGGER_PREFIX = '[SyncService]';
 
@@ -26,9 +27,18 @@ class SyncService {
   syncAllData = async (): Promise<void> => {
     console.debug(`${LOGGER_PREFIX} Attempting to sync data...`);
 
-    // TODO: add internet check
+    const networkState = await NetInfo.fetch();
+    if (!networkState.isConnected) {
+      console.debug(
+        `${LOGGER_PREFIX} User is not connected to internet, not syncing.`,
+      );
+      return;
+    }
+
     if (UserService.getUser() === null) {
-      console.debug(`${LOGGER_PREFIX} No user found, not syncing to cloud`);
+      console.debug(
+        `${LOGGER_PREFIX} User does not have an account, not syncing to cloud`,
+      );
       return;
     }
 
