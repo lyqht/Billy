@@ -1,24 +1,30 @@
 import {useNavigation} from '@react-navigation/native';
 import {Button, Card, Icon, Modal, Text} from '@ui-kitten/components';
-import React from 'react';
-import {Linking, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {Bill} from '../../models/Bill';
 import {NavigationProps} from '../../routes';
+import BillService from '../../services/BillService';
 
-export const FeedbackButton: React.FC = ({}) => {
-  let navigation = useNavigation<NavigationProps>();
-  if (!navigation.getState().routeNames.includes('Login')) {
-    navigation = navigation.getParent();
-  }
+type Props = {
+  bill: Bill;
+};
+
+export const DeleteBillButton: React.FC<Props> = ({bill}) => {
+  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = React.useState(false);
+  const navigation = useNavigation<NavigationProps>();
 
   return (
     <View>
       <Button
         status={'danger'}
-        accessoryLeft={<Icon name="heart" />}
-        onPress={() => setVisible(true)}
+        accessoryLeft={<Icon name="trash-2-outline" />}
+        onPress={() => {
+          setVisible(true);
+        }}
       >
-        Like the app?
+        Delete bill
       </Button>
       <Modal
         style={styles.container}
@@ -28,37 +34,32 @@ export const FeedbackButton: React.FC = ({}) => {
       >
         <Card disabled={true}>
           <Text category={'h4'} style={styles.descriptionText}>
-            Thank you! ✨
+            Are you sure you want to delete this bill?
           </Text>
           <Text category={'s1'} style={styles.descriptionText}>
-            If you want to support my work, visit my GitHub project to leave a
-            ⭐️ or buy me a cup of tea 🍵
+            This action is irreversible!
           </Text>
-          <Text category={'p1'} style={styles.descriptionText}>
-            Please note that this is an open-source project that is still a
-            work-in-progress, and features may not be stable until the MVP
-            checklist is completed.
-          </Text>
-
-          <Text category={'c1'} style={styles.descriptionText}>
-            © Estee Tey, 2022
-          </Text>
-          <Button
-            style={styles.modalButton}
-            onPress={() => {
-              setVisible(false);
-              Linking.openURL('https://github.com/lyqht/Billy');
-            }}
-          >
-            Visit the project on GitHub ➡️
-          </Button>
-          <Button
-            status={'danger'}
-            style={styles.modalButton}
-            onPress={() => setVisible(false)}
-          >
-            Nah, I'm good.
-          </Button>
+          <View style={styles.row}>
+            <Button
+              status={'danger'}
+              style={styles.modalButton}
+              onPress={() => setVisible(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              status={'basic'}
+              style={styles.modalButton}
+              onPress={() => {
+                BillService.deleteBill(bill.id || bill.tempID!);
+                setLoading(false);
+                setVisible(false);
+                navigation.navigate('Home');
+              }}
+            >
+              {loading ? <ActivityIndicator color="#FFFFFF" /> : 'Confirm'}
+            </Button>
+          </View>
         </Card>
       </Modal>
     </View>
@@ -71,8 +72,14 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   descriptionText: {
-    textAlign: 'left',
+    textAlign: 'center',
     margin: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 24,
   },
   icon: {
     width: 18,
@@ -83,6 +90,6 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   backdrop: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
 });
