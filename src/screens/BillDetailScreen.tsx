@@ -55,7 +55,7 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
       <Layout style={styles.main}>
         <Layout>
           <Text category={'h2'}>Bill Details</Text>
-          <Layout style={[styles.row, styles.div, styles.center]}>
+          <Layout style={[styles.div, styles.center]}>
             <Layout
               testID={'bill-container'}
               style={[styles.center, styles.column, styles.billContainer]}
@@ -73,7 +73,7 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
               </View>
             </Layout>
             <Icon
-              name="arrow-circle-right-outline"
+              name="arrow-circle-down-outline"
               style={[styles.icon, styles.horizontalMargin]}
               fill={theme['color-primary-500']}
             />
@@ -105,7 +105,7 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
           </Layout>
           {bill.completedDate && <Text>Completed on {bill.completedDate}</Text>}
           {bill.archivedDate && <Text>Archived on {bill.archivedDate}</Text>}
-          {relativeReminderDates.length > 0 && (
+          {relativeReminderDates.length > 0 ? (
             <Layout>
               <View style={[styles.row, {alignItems: 'center'}]}>
                 <Text category={'s1'} style={[styles.div, styles.subheader]}>
@@ -132,6 +132,13 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
                 </Layout>
               ))}
             </Layout>
+          ) : (
+            <>
+              <Text category={'p1'} style={[styles.div, styles.subheader]}>
+                You have no reminders set for this bill.
+              </Text>
+              <Text category={'p2'}>To add reminders, edit your bill.</Text>
+            </>
           )}
         </Layout>
         <Layout>
@@ -176,12 +183,14 @@ const themedStyles = StyleService.create({
     borderRadius: 8,
     borderColor: 'color-success-100',
     borderWidth: 1,
+    width: '100%',
   },
   payeeContainer: {
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'color-warning-100',
     backgroundColor: 'color-warning-200',
+    width: '100%',
   },
   categoryContainer: {
     marginTop: 8,
