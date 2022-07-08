@@ -24,6 +24,7 @@ export interface paths {
           userId?: parameters["rowFilter.Bill.userId"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
           archivedDate?: parameters["rowFilter.Bill.archivedDate"];
+          deletedDate?: parameters["rowFilter.Bill.deletedDate"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -82,6 +83,7 @@ export interface paths {
           userId?: parameters["rowFilter.Bill.userId"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
           archivedDate?: parameters["rowFilter.Bill.archivedDate"];
+          deletedDate?: parameters["rowFilter.Bill.deletedDate"];
         };
         header: {
           /** Preference */
@@ -104,6 +106,7 @@ export interface paths {
           userId?: parameters["rowFilter.Bill.userId"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
           archivedDate?: parameters["rowFilter.Bill.archivedDate"];
+          deletedDate?: parameters["rowFilter.Bill.deletedDate"];
         };
         body: {
           /** Bill */
@@ -441,6 +444,8 @@ export interface definitions {
     completedDate?: string;
     /** Format: date */
     archivedDate?: string;
+    /** Format: date */
+    deletedDate?: string;
   };
   FCMToken: {
     /**
@@ -562,6 +567,8 @@ export interface parameters {
   "rowFilter.Bill.completedDate": string;
   /** Format: date */
   "rowFilter.Bill.archivedDate": string;
+  /** Format: date */
+  "rowFilter.Bill.deletedDate": string;
   /** @description FCMToken */
   "body.FCMToken": definitions["FCMToken"];
   /** Format: bigint */
