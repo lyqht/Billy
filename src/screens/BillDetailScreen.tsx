@@ -11,11 +11,14 @@ import {
 } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, SafeAreaView, View} from 'react-native';
-import {defaultCategoryIcons} from '../constants/PayeeOptions';
+import {SafeAreaView, View} from 'react-native';
+import {DeleteBillButton} from '../components/ModalButtons/DeleteBillButton';
+import {
+  defaultCategories,
+  defaultCategoryIcons,
+} from '../constants/PayeeOptions';
 import {ReminderFormData} from '../models/Reminder';
 import {NavigationProps, RootStackParamList} from '../routes';
-import BillService from '../services/BillService';
 import NotificationService from '../services/NotificationService';
 import {Category} from '../types/AutocompleteOption';
 
@@ -29,7 +32,6 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
   const theme = useTheme();
   const styles = useStyleSheet(themedStyles);
   const navigation = useNavigation<NavigationProps>();
-  const [loading, setLoading] = useState(false);
   const [relativeReminderDates, setRelativeReminderDates] = useState<
     ReminderFormData[]
   >([]);
@@ -80,8 +82,8 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
               style={[styles.center, styles.column, styles.payeeContainer]}
             >
               <Text category={'h6'}>{bill.payee}</Text>
-              {bill.category && (
-                <View
+              {bill.category ? (
+                <Layout
                   style={[styles.row, styles.center, styles.categoryContainer]}
                 >
                   <Text
@@ -90,13 +92,15 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
                   >
                     {bill.category}
                   </Text>
-                  <Icon
-                    name={defaultCategoryIcons[bill.category as Category]}
-                    style={[styles.icon]}
-                    fill={theme['color-basic-700']}
-                  />
-                </View>
-              )}
+                  {defaultCategories.includes(bill.category) && (
+                    <Icon
+                      name={defaultCategoryIcons[bill.category as Category]}
+                      style={[styles.icon]}
+                      fill={theme['color-basic-700']}
+                    />
+                  )}
+                </Layout>
+              ) : null}
             </Layout>
           </Layout>
           {bill.completedDate && <Text>Completed on {bill.completedDate}</Text>}
@@ -140,21 +144,9 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
               })
             }
           >
-            Edit Bill
+            Edit bill
           </Button>
-          <Button
-            status={'danger'}
-            style={styles.div}
-            accessoryLeft={<Icon name="trash-2-outline" />}
-            onPress={() => {
-              setLoading(true);
-              BillService.deleteBill(bill.id || bill.tempID!);
-              setLoading(false);
-              navigation.navigate('Home');
-            }}
-          >
-            {loading ? <ActivityIndicator color="#FFFFFF" /> : 'Delete Bill'}
-          </Button>
+          <DeleteBillButton bill={bill} />
         </Layout>
       </Layout>
     </SafeAreaView>
