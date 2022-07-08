@@ -21,6 +21,7 @@ import {ReminderFormData} from '../models/Reminder';
 import {NavigationProps, RootStackParamList} from '../routes';
 import NotificationService from '../services/NotificationService';
 import {Category} from '../types/AutocompleteOption';
+import Colors from '../constants/customColors';
 
 type BillDetailsScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -55,12 +56,24 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
       <Layout style={styles.main}>
         <Layout>
           <Text category={'h2'}>Bill Details</Text>
-          <Layout style={[styles.div, styles.center]}>
+          <Layout
+            style={[
+              styles.div,
+              styles.center,
+              styles.row,
+              styles.billDetailsContainer,
+            ]}
+          >
             <Layout
               testID={'bill-container'}
               style={[styles.center, styles.column, styles.billContainer]}
             >
-              <Text category={'h4'} style={styles.contentTitle}>
+              <Text
+                category={'h4'}
+                style={styles.contentTitle}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 ${bill.amount}
               </Text>
               <View style={[styles.center]}>
@@ -73,15 +86,22 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
               </View>
             </Layout>
             <Icon
-              name="arrow-circle-down-outline"
+              name="arrow-circle-right-outline"
               style={[styles.icon, styles.horizontalMargin]}
-              fill={theme['color-primary-500']}
+              fill={theme['color-basic-700']}
             />
             <Layout
               testID="payee-container"
               style={[styles.center, styles.column, styles.payeeContainer]}
             >
-              <Text category={'h6'}>{bill.payee}</Text>
+              <Text
+                category={'h6'}
+                style={styles.contentTitle}
+                numberOfLines={2}
+                adjustsFontSizeToFit
+              >
+                {bill.payee}
+              </Text>
               {bill.category ? (
                 <Layout
                   style={[styles.row, styles.center, styles.categoryContainer]}
@@ -164,6 +184,7 @@ const themedStyles = StyleService.create({
   main: {
     padding: 16,
     height: '100%',
+    width: '100%',
     justifyContent: 'space-between',
   },
   center: {
@@ -175,31 +196,38 @@ const themedStyles = StyleService.create({
     paddingVertical: 16,
     marginVertical: 8,
   },
+  billDetailsContainer: {
+    maxWidth: '100%',
+    maxHeight: 125,
+  },
   contentTitle: {
     marginBottom: 8,
+    flexShrink: 1,
   },
   billContainer: {
-    backgroundColor: 'color-success-200',
+    backgroundColor: Colors.lightGreen,
+    borderColor: Colors.darkGreen,
     borderRadius: 8,
-    borderColor: 'color-success-100',
     borderWidth: 1,
-    width: '100%',
+    padding: 16,
+    height: '100%',
+    width: '40%',
   },
   payeeContainer: {
+    padding: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'color-warning-100',
-    backgroundColor: 'color-warning-200',
-    width: '100%',
+    borderColor: 'color-warning-500',
+    backgroundColor: '#ffecb8',
+    height: '100%',
+    width: '40%',
   },
   categoryContainer: {
-    marginTop: 8,
-    paddingVertical: 4,
+    marginTop: 6,
+    paddingVertical: 2,
     paddingHorizontal: 8,
     borderRadius: 12,
-    borderWidth: 2,
-    borderColor: 'color-basic-400',
-    backgroundColor: 'color-basic-300',
+    backgroundColor: '#ffb459',
   },
   div: {
     marginVertical: 16,
