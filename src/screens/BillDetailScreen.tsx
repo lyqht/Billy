@@ -22,6 +22,8 @@ import {NavigationProps, RootStackParamList} from '../routes';
 import NotificationService from '../services/NotificationService';
 import {Category} from '../types/AutocompleteOption';
 import Colors from '../constants/customColors';
+import BillService from '../services/BillService';
+import {Bill} from '../models/Bill';
 
 type BillDetailsScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -29,10 +31,11 @@ type BillDetailsScreenProps = NativeStackScreenProps<
 >;
 
 const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
-  const {bill} = route.params;
+  const {bill: passedBill} = route.params;
   const theme = useTheme();
   const styles = useStyleSheet(themedStyles);
   const navigation = useNavigation<NavigationProps>();
+  const [bill, setBill] = useState<Bill>(passedBill);
   const [relativeReminderDates, setRelativeReminderDates] = useState<
     ReminderFormData[]
   >([]);
@@ -40,9 +43,15 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
   useFocusEffect(
     useCallback(() => {
       const getNotifs = async () => {
+        const retrievedBill = (await BillService.getBills()).find(b =>
+          passedBill.id
+            ? b.id === passedBill.id
+            : b.tempID === passedBill.tempID,
+        )!;
+        setBill(retrievedBill);
         setRelativeReminderDates(
           await NotificationService.getRelativeReminderNotificationDatesForBill(
-            `${bill.id ?? bill.tempID}`,
+            `${retrievedBill.id ?? retrievedBill.tempID}`,
           ),
         );
       };
@@ -104,11 +113,20 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
               </Text>
               {bill.category ? (
                 <Layout
-                  style={[styles.row, styles.center, styles.categoryContainer]}
+                  style={[
+                    styles.row,
+                    styles.center,
+                    styles.categoryContainer,
+                    defaultCategories.includes(bill.category)
+                      ? {paddingLeft: 14, paddingRight: 4}
+                      : {},
+                  ]}
                 >
                   <Text
                     category={'s1'}
                     style={{color: theme['color-basic-700']}}
+                    numberOfLines={1}
+                    adjustsFontSizeToFit
                   >
                     {bill.category}
                   </Text>
@@ -225,8 +243,8 @@ const themedStyles = StyleService.create({
   categoryContainer: {
     marginTop: 6,
     paddingVertical: 2,
-    paddingHorizontal: 8,
-    borderRadius: 12,
+    paddingHorizontal: 16,
+    borderRadius: 4,
     backgroundColor: '#ffb459',
   },
   div: {
