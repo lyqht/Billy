@@ -51,7 +51,7 @@ export const DeleteBillButton: React.FC<Props> = ({bill}) => {
               status={'basic'}
               style={styles.modalButton}
               onPress={() => {
-                BillService.deleteBill(bill.id || bill.tempID!);
+                BillService.setBillAsDeleted(bill);
                 setLoading(false);
                 setVisible(false);
                 navigation.navigate('Home');

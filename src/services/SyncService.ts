@@ -32,7 +32,7 @@ class SyncService {
       return;
     }
 
-    const bills = await BillService.getBills();
+    const bills = Cache.getBills() || [];
     const unsyncBills = getUnsyncBills(bills);
     console.debug(
       `${LOGGER_PREFIX} Number of unsync bills: ${unsyncBills.length}`,
@@ -65,7 +65,7 @@ class SyncService {
     }
 
     await this.replaceUnsyncBillsTempIDWithCloudID(newIDMap);
-    const updatedBills: Bill[] = (await BillService.getBills()).map(bill => {
+    const updatedBills: Bill[] = bills.map(bill => {
       const {tempID, ...billDetails} = bill;
       return {
         ...billDetails,
@@ -87,8 +87,10 @@ class SyncService {
         console.error(`${LOGGER_PREFIX} ${error}`);
         throw new Error('Error syncing to cloud');
       }
+      console.debug({data});
       await BillService.getBillsFromDB();
-    } catch {
+    } catch (err) {
+      console.error(`${LOGGER_PREFIX} ${err}`);
       throw new Error('Error syncing to cloud');
     }
   };

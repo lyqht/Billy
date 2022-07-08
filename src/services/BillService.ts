@@ -15,7 +15,8 @@ class BillService {
       let {data, error} = await supabase
         .from<Bill>('Bill')
         .select('*')
-        .eq('userId', user.id);
+        .eq('userId', user.id)
+        .is('deletedDate', null);
 
       if (error) {
         throw new Error('Error retrieving bills');
@@ -32,7 +33,9 @@ class BillService {
 
   getBills = async (): Promise<Bill[]> => {
     const billsFromCache = Cache.getBills();
-    let result: Bill[] = billsFromCache || [];
+    let result: Bill[] = billsFromCache
+      ? billsFromCache.filter(bill => !bill.deletedDate)
+      : [];
     return result;
   };
 
@@ -131,31 +134,17 @@ class BillService {
 
   setBillAsArchived = async (bill: Bill): Promise<void> => {
     const archivedDate = dayjs().toDate().toISOString();
-
-    const user = Cache.getUser();
-    if (user && bill.id) {
-      const {error} = await supabase
-        .from<Bill>('Bill')
-        .update({archivedDate})
-        .eq('id', bill.id);
-
-      if (error) {
-        throw Error(error.message);
-      }
-      await this.getBillsFromDB();
-    } else {
-      const bills = await this.getBills();
-      const billIndex = bills.findIndex(b =>
-        b.id ? b.id === bill.id : b.tempID === bill.tempID,
-      );
-      if (billIndex === -1) {
-        throw Error('Cannot find bill');
-      }
-
-      const updatedBills = [...bills];
-      updatedBills[billIndex].archivedDate = archivedDate;
-      Cache.setBills(updatedBills);
+    const bills = await this.getBills();
+    const billIndex = bills.findIndex(b =>
+      b.id ? b.id === bill.id : b.tempID === bill.tempID,
+    );
+    if (billIndex === -1) {
+      throw Error('Cannot find bill');
     }
+
+    const updatedBills = [...bills];
+    updatedBills[billIndex].archivedDate = archivedDate;
+    Cache.setBills(updatedBills);
   };
 
   setBillsAsArchived = async (missedBills: Bill[]): Promise<void> => {
@@ -177,6 +166,21 @@ class BillService {
     }
   };
 
+  setBillAsDeleted = async (bill: Bill): Promise<void> => {
+    const deletedDate = dayjs().toDate().toISOString();
+    const bills = await this.getBills();
+    const billIndex = bills.findIndex(b =>
+      b.id ? b.id === bill.id : b.tempID === bill.tempID,
+    );
+    if (billIndex === -1) {
+      throw Error('Cannot find bill');
+    }
+
+    const updatedBills = [...bills];
+    updatedBills[billIndex].deletedDate = deletedDate;
+    Cache.setBills(updatedBills);
+  };
+
   uploadFile = async (
     file: any,
     filename: string,
@@ -191,10 +195,6 @@ class BillService {
     }
 
     return data;
-  };
-
-  deleteBill = async (id: BillID): Promise<void> => {
-    //TODO:
   };
 }
 
