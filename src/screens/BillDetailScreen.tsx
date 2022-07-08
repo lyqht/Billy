@@ -11,7 +11,7 @@ import {
 } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, {useCallback, useState} from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {ActivityIndicator, SafeAreaView, View} from 'react-native';
 import {defaultCategoryIcons} from '../constants/PayeeOptions';
 import {ReminderFormData} from '../models/Reminder';
 import {NavigationProps, RootStackParamList} from '../routes';
@@ -29,6 +29,7 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
   const theme = useTheme();
   const styles = useStyleSheet(themedStyles);
   const navigation = useNavigation<NavigationProps>();
+  const [loading, setLoading] = useState(false);
   const [relativeReminderDates, setRelativeReminderDates] = useState<
     ReminderFormData[]
   >([]);
@@ -146,10 +147,13 @@ const BillDetailScreen: React.FC<BillDetailsScreenProps> = ({route}) => {
             style={styles.div}
             accessoryLeft={<Icon name="trash-2-outline" />}
             onPress={() => {
+              setLoading(true);
               BillService.deleteBill(bill.id || bill.tempID!);
+              setLoading(false);
+              navigation.navigate('Home');
             }}
           >
-            Delete Bill
+            {loading ? <ActivityIndicator color="#FFFFFF" /> : 'Delete Bill'}
           </Button>
         </Layout>
       </Layout>

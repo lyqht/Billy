@@ -3,7 +3,7 @@ import {Button, Card, Icon, Layout, Modal, Text} from '@ui-kitten/components';
 import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 
-import {FeedbackButton} from '../components/PromptButtons/FeedbackButton';
+import {FeedbackButton} from '../components/ModalButtons/FeedbackButton';
 import {Quote} from '../components/Quote';
 import {useBilly} from '../contexts/useBillyContext';
 import {TabNavigationProps} from '../routes';

@@ -3,7 +3,7 @@ import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
 import React, {useCallback, useRef, useState} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
-import {RegisterPromptButton} from '../components/PromptButtons/RegisterPromptButton';
+import {RegisterPromptButton} from '../components/ModalButtons/RegisterPromptButton';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import {useBilly} from '../contexts/useBillyContext';
 import {showToast} from '../helpers/Toast';
