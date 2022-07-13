@@ -104,8 +104,8 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
     defaultValues: {
       payee: bill.payee,
       category: bill.category,
-      amount: `${bill.amount}`,
-      deadline: dayjs(bill.deadline).toDate(),
+      amount: bill.amount,
+      deadline: bill.deadline,
     },
   });
 
@@ -115,7 +115,7 @@ const BillFormScreen: React.FC<Props> = ({route}) => {
   useEffect(() => {
     // according to react-hook-form's video here: https://www.youtube.com/watch?v=3qLd69WMqKk
     // watch is not intended to be used like this, but it does work so i'm leaving it LOL
-    if (defaultPayees.includes(currentPayee)) {
+    if (defaultPayees.includes(currentPayee) && !editMode) {
       setValue('category', getCategoryForPayee(currentPayee));
     }
 
