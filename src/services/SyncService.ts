@@ -75,7 +75,7 @@ class SyncService {
     }
 
     await this.replaceUnsyncBillsTempIDWithCloudID(newIDMap);
-    const updatedBills: Bill[] = bills.map(bill => {
+    const updatedBills: Bill[] = Cache.getBills()!.map(bill => {
       const {tempID, ...billDetails} = bill;
       return {
         ...billDetails,
