@@ -16,8 +16,8 @@ platform :android do
     )
 
     add_git_tag(
-      grouping: options[:lane] + "/builds",
-      includes_lane: false,
+      grouping: "builds",
+      includes_lane: true,
       prefix: "android",
       build_number: options[:current_build_number],
       force: true,

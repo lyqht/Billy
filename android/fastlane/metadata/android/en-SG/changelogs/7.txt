@@ -1,0 +1,7 @@
+New features:
+- View bill details by clicking on the bills on Upcoming Bills screen
+- Edit Bills & Notifications
+- Delete Bills
+
+Bug fixes:
+- Set all bills as archived fixed

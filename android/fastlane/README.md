@@ -47,6 +47,14 @@ Create a new app bundle for release
 
 Submit a new bundle to Play Store: Internal Track
 
+### android alpha
+
+```sh
+[bundle exec] fastlane android alpha
+```
+
+Submit a new bundle to Play Store: Closed Testing Track
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
