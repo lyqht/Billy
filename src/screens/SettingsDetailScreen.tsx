@@ -1,7 +1,7 @@
 import {Layout, Text} from '@ui-kitten/components';
 import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {PurgeDataButton} from '../components/PromptButtons/PurgeDataButton';
+import {PurgeDataButton} from '../components/ModalButtons/PurgeDataButton';
 
 const SettingsDetailScreen: React.FC = () => {
   return (

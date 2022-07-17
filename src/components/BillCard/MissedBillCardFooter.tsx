@@ -1,6 +1,6 @@
 import {Button, Icon} from '@ui-kitten/components';
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 
 interface MissedBillCardFooterProps {
   onMarkAcknowledged: () => void;
@@ -9,6 +9,7 @@ interface MissedBillCardFooterProps {
 const MissedBillCardFooter: React.FC<MissedBillCardFooterProps> = ({
   onMarkAcknowledged,
 }) => {
+  const [loading, setLoading] = useState(false);
   return (
     <View>
       <Button
@@ -17,10 +18,12 @@ const MissedBillCardFooter: React.FC<MissedBillCardFooterProps> = ({
         status="danger"
         accessoryRight={<Icon name="archive" />}
         onPress={() => {
+          setLoading(true);
           onMarkAcknowledged();
+          setLoading(false);
         }}
       >
-        Archive this bill
+        {loading ? <ActivityIndicator color="#FFFFFF" /> : 'Archive this bill'}
       </Button>
     </View>
   );

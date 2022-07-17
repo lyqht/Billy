@@ -24,12 +24,27 @@ export const useBilly = (): Context => {
     setUser(await UserService.getUser());
   };
 
+  const syncLocally = async () => {
+    console.debug('[BillyContext] Refreshing states...');
+    const currentBills = await BillService.getBills();
+    setUpcomingBills(getUpcomingBills(currentBills));
+    setMissedBills(getMissedBills(currentBills));
+    getBillIdToNumRemindersMap(currentBills).then(retrievedReminders => {
+      setReminders(retrievedReminders);
+    });
+
+    if (currentBills.length > 0) {
+      setLatestBillDate(getLastBillDate(currentBills).format('DD MMM YYYY'));
+    }
+  };
+
   useEffect(() => {
     init();
 
-    console.debug('Adding cache listener');
+    console.debug('[BillyContext] Adding cache listener');
     const listener = Cache.getStorage().addOnValueChangedListener(
       changedKey => {
+        console.debug(`[BillyContext] Cache updated for ${changedKey}`);
         if (changedKey === STORAGE_KEYS.AUTH_TOKEN) {
           setUser(UserService.getUser());
         } else if (changedKey === STORAGE_KEYS.BILLS) {
@@ -41,21 +56,13 @@ export const useBilly = (): Context => {
     );
 
     return () => {
-      console.debug('Removing cache listener');
+      console.debug('[BillyContext] Removing cache listener');
       listener.remove();
     };
   }, []);
 
   useEffect(() => {
-    setUpcomingBills(getUpcomingBills(bills));
-    setMissedBills(getMissedBills(bills));
-    getBillIdToNumRemindersMap(bills).then(retrievedReminders => {
-      setReminders(retrievedReminders);
-    });
-
-    if (bills.length > 0) {
-      setLatestBillDate(getLastBillDate(bills).format('DD MMM YYYY'));
-    }
+    syncLocally();
   }, [bills]);
 
   const setCurrentBills = useCallback((items: Bill[]) => {
@@ -71,5 +78,6 @@ export const useBilly = (): Context => {
     lastSyncDate,
     user,
     setCurrentBills,
+    syncLocally,
   };
 };

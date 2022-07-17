@@ -2,9 +2,10 @@ import dayjs from 'dayjs';
 import {ToastShowParams} from 'react-native-toast-message';
 import {v4} from 'uuid';
 import supabase from '../api/supabase';
-import {Bill, UnsyncBill} from '../models/Bill';
+import {Bill, BillID} from '../models/Bill';
 import Cache from './Cache';
 import UserService from './UserService';
+
 class BillService {
   getBillsFromDB = async (): Promise<Bill[]> => {
     const user = Cache.getUser();
@@ -14,7 +15,8 @@ class BillService {
       let {data, error} = await supabase
         .from<Bill>('Bill')
         .select('*')
-        .eq('userId', user.id);
+        .eq('userId', user.id)
+        .is('deletedDate', null);
 
       if (error) {
         throw new Error('Error retrieving bills');
@@ -31,54 +33,74 @@ class BillService {
 
   getBills = async (): Promise<Bill[]> => {
     const billsFromCache = Cache.getBills();
-    let result: Bill[] = billsFromCache || [];
+    let result: Bill[] = billsFromCache
+      ? billsFromCache.filter(bill => !bill.deletedDate)
+      : [];
     return result;
+  };
+
+  editBill = async (bill: Partial<Bill>) => {
+    const bills = await this.getBills();
+    const updatedBills: Partial<Bill>[] = [...bills];
+    const billID = bill.id ?? bill.tempID;
+
+    console.debug('Editing Bill');
+    const billToUpdateIndex = bills.findIndex(b =>
+      bill.id ? bill.id === b.id : bill.tempID === b.tempID,
+    );
+    updatedBills[billToUpdateIndex] = {
+      ...updatedBills[billToUpdateIndex],
+      ...bill,
+    };
+
+    Cache.setBills(updatedBills);
+
+    return {
+      type: 'success',
+      text1: 'Bill saved!',
+      id: billID,
+    };
   };
 
   addBill = async (
     bill: Partial<Bill>,
   ): Promise<ToastShowParams & {id: string}> => {
-    const user = Cache.getUser();
     const bills = await this.getBills();
+    const updatedBills: Partial<Bill>[] = [...bills];
 
+    console.debug('Adding Bill');
+    const tempID = v4();
+    const updatedBill = {...bill, tempID};
+    updatedBills.push(updatedBill);
+
+    console.debug('Updating bills locally');
+    Cache.setBills(updatedBills);
+
+    return {
+      type: 'success',
+      text1: 'Bill saved!',
+      id: tempID,
+    };
+  };
+
+  addBillToCloud = async (bill: Bill): Promise<Bill | null> => {
+    const user = UserService.getUser();
     if (user) {
-      const updatedBill = {...bill, userId: user.id};
+      console.debug('Adding bill to cloud');
+      const {tempID, ...billDetails} = bill;
+      const updatedBill = {...billDetails, userId: user.id};
       const {data, error} = await supabase
         .from<Bill>('Bill')
-        .insert(updatedBill);
-
+        .upsert(updatedBill);
+      console.debug('API returned');
       if (error) {
-        console.debug({error});
-        return {
-          type: 'error',
-          text1: 'Ops!',
-          text2:
-            'This bill has been saved locally, but failed to sync to cloud. We will try this again in the background!',
-          id: v4(),
-        };
+        console.error(error);
+        return null;
       }
-
-      Cache.setBills([...bills, ...data]);
-      Cache.setLastSyncDateAsNow();
-
-      return {
-        type: 'success',
-        text1: 'Bill saved!',
-        id: `${data[0].id}`,
-      };
-    } else {
-      console.debug('Updating bills locally');
-      const tempID = v4();
-      const updatedBill: UnsyncBill = {...bill, tempID};
-      const updatedBills = [...bills, updatedBill];
-
-      Cache.setBills(updatedBills);
-      return {
-        type: 'success',
-        text1: 'Bill saved!',
-        id: tempID,
-      };
+      console.debug('Added bill successfully to cloud:', data);
+      return data[0];
     }
+    return null;
   };
 
   setBillAsComplete = async (
@@ -112,31 +134,51 @@ class BillService {
 
   setBillAsArchived = async (bill: Bill): Promise<void> => {
     const archivedDate = dayjs().toDate().toISOString();
+    const bills = await this.getBills();
+    const billIndex = bills.findIndex(b =>
+      b.id ? b.id === bill.id : b.tempID === bill.tempID,
+    );
+    if (billIndex === -1) {
+      throw Error('Cannot find bill');
+    }
 
-    const user = Cache.getUser();
-    if (user && bill.id) {
-      const {error} = await supabase
-        .from<Bill>('Bill')
-        .update({archivedDate})
-        .eq('id', bill.id);
+    const updatedBills = [...bills];
+    updatedBills[billIndex].archivedDate = archivedDate;
+    Cache.setBills(updatedBills);
+  };
 
-      if (error) {
-        throw Error(error.message);
-      }
-      await this.getBillsFromDB();
-    } else {
-      const bills = await this.getBills();
-      const billIndex = bills.findIndex(b =>
+  setBillsAsArchived = async (missedBills: Bill[]): Promise<void> => {
+    const archivedDate = dayjs().toDate().toISOString();
+    const bills = await this.getBills();
+    const updatedBills = [...bills];
+
+    for (const bill of missedBills) {
+      const billIndex = updatedBills.findIndex(b =>
         b.id ? b.id === bill.id : b.tempID === bill.tempID,
       );
       if (billIndex === -1) {
         throw Error('Cannot find bill');
       }
 
-      const updatedBills = [...bills];
       updatedBills[billIndex].archivedDate = archivedDate;
+
       Cache.setBills(updatedBills);
     }
+  };
+
+  setBillAsDeleted = async (bill: Bill): Promise<void> => {
+    const deletedDate = dayjs().toDate().toISOString();
+    const bills = await this.getBills();
+    const billIndex = bills.findIndex(b =>
+      b.id ? b.id === bill.id : b.tempID === bill.tempID,
+    );
+    if (billIndex === -1) {
+      throw Error('Cannot find bill');
+    }
+
+    const updatedBills = [...bills];
+    updatedBills[billIndex].deletedDate = deletedDate;
+    Cache.setBills(updatedBills);
   };
 
   uploadFile = async (

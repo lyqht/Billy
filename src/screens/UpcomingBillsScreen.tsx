@@ -1,9 +1,9 @@
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {Button, Divider, Icon, Layout, List, Text} from '@ui-kitten/components';
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {RefreshControl, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BillCard, BillCardType} from '../components/BillCard/BillCard';
-import {RegisterPromptButton} from '../components/PromptButtons/RegisterPromptButton';
+import {RegisterPromptButton} from '../components/ModalButtons/RegisterPromptButton';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import {useBilly} from '../contexts/useBillyContext';
 import {showToast} from '../helpers/Toast';
@@ -12,10 +12,22 @@ import SyncService from '../services/SyncService';
 
 const UpcomingBillsScreen: React.FC = () => {
   const navigator = useNavigation<NavigationProps>();
-  const {upcomingBills, missedBills, reminders, lastSyncDate, user} =
-    useBilly();
+  const {
+    upcomingBills,
+    missedBills,
+    reminders,
+    lastSyncDate,
+    user,
+    syncLocally,
+  } = useBilly();
   const userIsPresent = user ? true : false;
   const [refreshing, setRefreshing] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      syncLocally();
+    }, []),
+  );
 
   const listRef = useRef<List>(null);
 
@@ -60,7 +72,7 @@ const UpcomingBillsScreen: React.FC = () => {
               ) : (
                 <Text category="p1">Not synced yet</Text>
               )}
-              {userIsPresent && (
+              {!userIsPresent && (
                 <RegisterPromptButton
                   description={
                     'Billy can only sync to the cloud when you have a registered account.'
@@ -72,7 +84,7 @@ const UpcomingBillsScreen: React.FC = () => {
           <Button
             size="small"
             accessoryRight={<Icon name="plus-outline" />}
-            onPress={() => navigator.navigate('BillForm')}
+            onPress={() => navigator.navigate('BillForm', {})}
             style={styles.addBillButton}
           >
             <Text category={'label'}>Add Bill</Text>

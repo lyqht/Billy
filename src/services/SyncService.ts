@@ -1,68 +1,113 @@
-import {v4} from 'uuid';
+import supabase from '../api/supabase';
 import {getUnsyncBills} from '../helpers/BillFilter';
+import {Bill, UnsyncBill} from '../models/Bill';
 import BillService from './BillService';
 import Cache from './Cache';
-import {
-  clearAllNotifications,
-  getReminderNotificationsForBill,
-  updateNotificationsWithNewBillId,
-} from './NotificationService';
+import NotificationService from './NotificationService';
 import UserService from './UserService';
+import NetInfo from '@react-native-community/netinfo';
+
+const LOGGER_PREFIX = '[SyncService]';
 
 class SyncService {
-  addTempIDToUnsyncedBills = async () => {
-    const bills = await BillService.getBills();
-    const unsyncBills = getUnsyncBills(bills);
-    if (unsyncBills.length > 0) {
-      const unsyncBillIndexes = unsyncBills.map(bill =>
-        bills.findIndex(b => Object.is(b, bill)),
-      );
-      unsyncBillIndexes.forEach(index => {
-        if (bills[index].tempID === undefined) {
-          bills[index].tempID = v4();
-        }
-      });
-      Cache.setBills(bills);
-    }
+  private replaceUnsyncBillsTempIDWithCloudID = async (
+    newIDMap: Record<string, number>,
+  ) => {
+    const bills = Cache.getBills();
+    const updatedBills: Bill[] = [...bills!];
+    Object.entries(newIDMap).forEach(([tempID, newID]) => {
+      const billIndex = updatedBills.findIndex(bill => bill.tempID === tempID);
+      updatedBills[billIndex].id = newID;
+      updatedBills[billIndex].tempID = undefined;
+    });
+
+    Cache.setBills(updatedBills);
   };
 
   syncAllData = async (): Promise<void> => {
-    console.debug('Attempting to sync data...');
-    this.addTempIDToUnsyncedBills();
+    console.debug(`${LOGGER_PREFIX} Attempting to sync data...`);
 
-    if (UserService.getUser() === null) {
-      console.debug('No user found, not syncing to cloud');
+    const networkState = await NetInfo.fetch();
+    if (!networkState.isConnected) {
+      console.debug(
+        `${LOGGER_PREFIX} User is not connected to internet, not syncing.`,
+      );
       return;
     }
 
-    const bills = await BillService.getBills();
-    const unsyncBills = getUnsyncBills(bills);
-    console.debug(`Number of unsync bills: ${unsyncBills.length}`);
-    for (let bill of unsyncBills) {
-      const newBill = await BillService.addBill({...bill, tempID: undefined});
+    if (UserService.getUser() === null) {
       console.debug(
-        `Bill tempID ${bill.tempID} has been sync to obtain new id ${newBill.id}`,
+        `${LOGGER_PREFIX} User does not have an account, not syncing to cloud`,
       );
+      return;
+    }
 
-      try {
-        const triggerNotifications = await getReminderNotificationsForBill(
-          bill.tempID!,
+    const bills = Cache.getBills() || [];
+    const unsyncBills = getUnsyncBills(bills);
+    console.debug(
+      `${LOGGER_PREFIX} Number of unsync bills: ${unsyncBills.length}`,
+    );
+    const newIDMap: Record<string, number> = {};
+    for (let bill of unsyncBills) {
+      const unsyncBill = bill as UnsyncBill;
+      const newBill = await BillService.addBillToCloud(bill);
+
+      if (newBill) {
+        console.debug(
+          `${LOGGER_PREFIX} Local Bill ${bill.tempID} has been sync to obtain new id on cloud: ${newBill.id}`,
         );
-        await updateNotificationsWithNewBillId(
-          triggerNotifications,
-          newBill.id,
-        );
-      } catch (err) {
-        console.error(err);
+
+        try {
+          const triggerNotifications =
+            await NotificationService.getReminderNotificationsForBill(
+              bill.tempID!,
+            );
+          await NotificationService.updateNotificationsWithNewBillId(
+            triggerNotifications,
+            `${newBill.id}`,
+          );
+        } catch (err) {
+          console.error(err);
+        }
+
+        newIDMap[unsyncBill.tempID] = newBill.id;
       }
     }
 
-    await BillService.getBillsFromDB();
+    await this.replaceUnsyncBillsTempIDWithCloudID(newIDMap);
+    const updatedBills: Bill[] = Cache.getBills()!.map(bill => {
+      const {tempID, ...billDetails} = bill;
+      return {
+        ...billDetails,
+        userId: UserService.getUser()!.id,
+      };
+    });
+    try {
+      // At the moment due to how PostgREST is implemented, upsert does not work as intended
+      // https://github.com/supabase/postgrest-js/issues/173
+      // Hence we could have temporary workaround to split into 2 calls: toUpdate, toCreate
+
+      // However, it seems that even though it is recommended not to use insert with the upsert parameter
+      // this somehow works as intended.
+      const {data, error} = await supabase
+        .from<Bill>('Bill')
+        .insert(updatedBills, {upsert: true});
+
+      if (error) {
+        console.error(`${LOGGER_PREFIX} ${error}`);
+        throw new Error('Error syncing to cloud');
+      }
+      console.debug({data});
+      await BillService.getBillsFromDB();
+    } catch (err) {
+      console.error(`${LOGGER_PREFIX} ${err}`);
+      throw new Error('Error syncing to cloud');
+    }
   };
 
   clearAllData = async (): Promise<void> => {
     await UserService.logOutUser();
-    await clearAllNotifications();
+    await NotificationService.clearAllNotifications();
     Cache.clearAllData();
   };
 }

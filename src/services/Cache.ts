@@ -36,7 +36,9 @@ class Cache {
       this.storage.delete(key);
     }
 
-    console.warn(`Cache does not contain ${key}`);
+    console.debug(
+      `Tried to remove item from cache, but does not contain ${key}`,
+    );
   }
 
   // -------------------------------------

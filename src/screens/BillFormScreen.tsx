@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   Button,
   Icon,
@@ -19,10 +20,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ReminderForm from '../components/BillForm/ReminderForm';
 import {CustomAutoComplete} from '../components/Input/CustomAutocomplete';
 import CustomDatetimePicker from '../components/Input/CustomDatetimePicker';
 import {CustomInput} from '../components/Input/CustomInput';
-import ReminderForm from '../components/BillForm/ReminderForm';
 import {
   defaultCategoryIcons,
   defaultPayees,
@@ -32,16 +33,16 @@ import {getReminderDate} from '../helpers/DateFns';
 import {showToast} from '../helpers/Toast';
 import {Bill} from '../models/Bill';
 import {ReminderFormData} from '../models/Reminder';
-import {NavigationProps} from '../routes';
+import {NavigationProps, RootStackParamList} from '../routes';
 import BillService from '../services/BillService';
-import {
-  createBaseNotification,
-  createTimestampNotification,
-} from '../services/NotificationService';
-interface Props {
+import NotificationService from '../services/NotificationService';
+
+type Props = NativeStackScreenProps<RootStackParamList, 'BillForm'> & {
   bill?: Bill;
-}
+};
 interface FormData {
+  id?: number;
+  tempID?: string;
   payee: string;
   amount: string;
   category: string;
@@ -53,14 +54,41 @@ interface ReminderWarningTooltipProps {
   index: number;
 }
 
-const BillFormScreen: React.FC<Props> = () => {
+const defaultBill: FormData = {
+  payee: '',
+  category: '',
+  amount: '',
+  deadline: dayjs().hour(22).minute(0).toDate(),
+  reminderDates: [],
+};
+
+const BillFormScreen: React.FC<Props> = ({route}) => {
   const theme = useTheme();
   const styles = useStyleSheet(themedStyles);
   const navigator = useNavigation<NavigationProps>();
+  let bill = defaultBill;
+  let editMode: boolean = false;
+  let reminderDates: ReminderFormData[] = [];
+
+  if (route.params && route.params.bill !== undefined) {
+    editMode = true;
+    const {payee, category, amount, deadline, id, tempID} = route.params.bill;
+    bill = {
+      ...bill,
+      id,
+      tempID,
+      payee,
+      category: category ?? '',
+      deadline: dayjs(deadline).local().toDate(),
+      amount: `${amount}`,
+    };
+
+    reminderDates = route.params.bill.relativeReminderDates;
+  }
+
   const [showReminderForm, setShowReminderForm] = useState(false);
-  const [relativeReminderDates, setRelativeReminderDates] = useState<
-    ReminderFormData[]
-  >([]);
+  const [relativeReminderDates, setRelativeReminderDates] =
+    useState(reminderDates);
   const [showWarningTooltips, setShowWarningTooltips] = useState<boolean[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -74,10 +102,10 @@ const BillFormScreen: React.FC<Props> = () => {
   } = useForm<FormData>({
     mode: 'onBlur',
     defaultValues: {
-      payee: '',
-      category: '',
-      amount: '',
-      deadline: dayjs().hour(22).minute(0).toDate(),
+      payee: bill.payee,
+      category: bill.category,
+      amount: bill.amount,
+      deadline: bill.deadline,
     },
   });
 
@@ -87,7 +115,7 @@ const BillFormScreen: React.FC<Props> = () => {
   useEffect(() => {
     // according to react-hook-form's video here: https://www.youtube.com/watch?v=3qLd69WMqKk
     // watch is not intended to be used like this, but it does work so i'm leaving it LOL
-    if (defaultPayees.includes(currentPayee)) {
+    if (defaultPayees.includes(currentPayee) && !editMode) {
       setValue('category', getCategoryForPayee(currentPayee));
     }
 
@@ -101,32 +129,43 @@ const BillFormScreen: React.FC<Props> = () => {
 
   const onSubmit = async () => {
     setLoading(true);
-    const {amount, deadline} = getValues();
-    const bill: Partial<Bill> = {
-      ...getValues(),
+    const {amount, deadline, payee} = getValues();
+    const billToSubmit: Partial<Bill> = {
+      tempID: bill.tempID,
+      id: bill.id,
       deadline: deadline.toISOString(),
       amount: parseFloat(amount),
+      category: getValues().category,
+      payee: getValues().payee,
     };
 
-    const {id, ...toastParams} = await BillService.addBill(bill);
+    const {id, ...toastParams} = editMode
+      ? await BillService.editBill(billToSubmit)
+      : await BillService.addBill(billToSubmit);
+    const billID = `${id}`;
 
     if (toastParams.type !== 'error') {
-      const reminderDates = relativeReminderDates
-        .map(({value, timeUnit}) => getReminderDate(deadline, value, timeUnit))
-        .filter(date => dayjs(date).isAfter(dayjs()));
+      const notifPromises: Promise<void>[] = [];
+      if (editMode) {
+        await NotificationService.deleteNotificationsForBill(billID);
+      }
 
-      const notifPromises = reminderDates.map(date =>
-        createTimestampNotification(
-          dayjs(date).startOf('minutes').toDate(),
-          createBaseNotification(
-            id,
-            'Your bill is due!',
-            `You have a pending bill to ${currentPayee} due on ${dayjs(
-              deadline,
-            ).format('DD/MM/YYYY')}`,
-          ),
-        ),
-      );
+      relativeReminderDates.forEach(({value, timeUnit}) => {
+        const reminderDate = getReminderDate(deadline, value, timeUnit);
+
+        if (dayjs(reminderDate).isAfter(dayjs())) {
+          notifPromises.push(
+            NotificationService.createPendingBillNotification({
+              billID,
+              payee,
+              deadline: deadline.toISOString(),
+              value,
+              timeUnit,
+              reminderDate: reminderDate.toISOString(),
+            }),
+          );
+        }
+      });
 
       try {
         await Promise.all(notifPromises);
@@ -136,8 +175,8 @@ const BillFormScreen: React.FC<Props> = () => {
         console.error(err);
         showToast({
           type: 'error',
-          text1: 'Ops! Billy cannot create notifications 😥',
-          text2: 'Check if the notification dates are valid.',
+          text1: 'Failed to create notifications 😥',
+          text2: 'Check if any of the notification dates are in the past.',
         });
       } finally {
         setLoading(false);
@@ -187,7 +226,9 @@ const BillFormScreen: React.FC<Props> = () => {
     <SafeAreaView>
       <Layout style={styles.container}>
         <ScrollView>
-          <Text category="h2">New Bill</Text>
+          <Text category="h2">
+            {bill.id || bill.tempID ? 'Edit Bill' : 'New Bill'}
+          </Text>
           <View style={styles.formField}>
             <Controller
               name="payee"

@@ -1,7 +1,7 @@
 import {Button, Icon, Text} from '@ui-kitten/components';
 import dayjs from 'dayjs';
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {UpcomingBill} from '../../types/BillStatus';
 
 interface BillCardFooterProps extends UpcomingBill {
@@ -14,6 +14,7 @@ const UpcomingBillCardFooter: React.FC<BillCardFooterProps> = ({
   onMarkComplete,
   onMarkIncomplete,
 }) => {
+  const [loading, setLoading] = useState(false);
   return completedDate ? (
     <View>
       <Button
@@ -35,10 +36,12 @@ const UpcomingBillCardFooter: React.FC<BillCardFooterProps> = ({
       status="primary"
       accessoryRight={<Icon name="checkmark-circle-2" />}
       onPress={() => {
+        setLoading(true);
         onMarkComplete();
+        setLoading(false);
       }}
     >
-      Mark as complete
+      {loading ? <ActivityIndicator color="#FFFFFF" /> : 'Mark as complete'}
     </Button>
   );
 };

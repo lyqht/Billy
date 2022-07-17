@@ -24,7 +24,7 @@
 Billy is your mobile companion app to help you manage your upcoming bills and remind you when they're due. Say goodbye to late payment fees!
 
 <div align="center">
-  <img width="300" src="./docs/static/demo/overview_v0.0.1.gif"></img>
+  <img src="./docs/static/img/billy_features.png" alt="Add expenses and reminders at the New Bill Screen, Track your Bills at the Home Page/Upcoming Bills Screen, and Bar chart analytics of your expenses by month."></img>
 </div>
 
 <br />
