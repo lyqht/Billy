@@ -1,8 +1,6 @@
 name: Update database types
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Generate Supabase Database types
-      uses: lyqht/generate-supabase-db-types-github-action@v0.0.2
+      uses: lyqht/generate-supabase-db-types-github-action@v0.1.0
       with:
           SUPABASE_URL: ${{secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
