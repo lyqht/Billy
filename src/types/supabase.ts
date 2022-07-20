@@ -230,7 +230,6 @@ export interface paths {
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
           computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
-          relativeTime?: parameters["rowFilter.FixedReminder.relativeTime"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -285,7 +284,6 @@ export interface paths {
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
           computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
-          relativeTime?: parameters["rowFilter.FixedReminder.relativeTime"];
         };
         header: {
           /** Preference */
@@ -304,7 +302,6 @@ export interface paths {
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
           computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
-          relativeTime?: parameters["rowFilter.FixedReminder.relativeTime"];
         };
         body: {
           /** FixedReminder */
@@ -420,6 +417,23 @@ export interface paths {
       };
     };
   };
+  "/rpc/dispatch_github_action": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
 }
 
 export interface definitions {
@@ -487,8 +501,6 @@ export interface definitions {
      * This is a Foreign Key to `Bill.id`.<fk table='Bill' column='id'/>
      */
     billID: number;
-    /** Format: json */
-    relativeTime?: string;
   };
   /** @description Interval Triggers */
   RecurringReminder: {
@@ -591,8 +603,6 @@ export interface parameters {
   "rowFilter.FixedReminder.computedDate": string;
   /** Format: bigint */
   "rowFilter.FixedReminder.billID": string;
-  /** Format: json */
-  "rowFilter.FixedReminder.relativeTime": string;
   /** @description RecurringReminder */
   "body.RecurringReminder": definitions["RecurringReminder"];
   /** Format: bigint */
