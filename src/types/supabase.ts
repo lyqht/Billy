@@ -228,8 +228,8 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.FixedReminder.id"];
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
-          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
+          value?: parameters["rowFilter.FixedReminder.value"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -282,8 +282,8 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.FixedReminder.id"];
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
-          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
+          value?: parameters["rowFilter.FixedReminder.value"];
         };
         header: {
           /** Preference */
@@ -300,8 +300,8 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.FixedReminder.id"];
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
-          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
+          value?: parameters["rowFilter.FixedReminder.value"];
         };
         body: {
           /** FixedReminder */
@@ -493,14 +493,14 @@ export interface definitions {
      * @default now()
      */
     created_at?: string;
-    /** Format: timestamp without time zone */
-    computedDate: string;
     /**
      * Format: bigint
      * @description Note:
      * This is a Foreign Key to `Bill.id`.<fk table='Bill' column='id'/>
      */
     billID: number;
+    /** Format: bigint */
+    value?: number;
   };
   /** @description Interval Triggers */
   RecurringReminder: {
@@ -599,10 +599,10 @@ export interface parameters {
   "rowFilter.FixedReminder.id": string;
   /** Format: timestamp with time zone */
   "rowFilter.FixedReminder.created_at": string;
-  /** Format: timestamp without time zone */
-  "rowFilter.FixedReminder.computedDate": string;
   /** Format: bigint */
   "rowFilter.FixedReminder.billID": string;
+  /** Format: bigint */
+  "rowFilter.FixedReminder.value": string;
   /** @description RecurringReminder */
   "body.RecurringReminder": definitions["RecurringReminder"];
   /** Format: bigint */
