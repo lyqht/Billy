@@ -11,6 +11,13 @@ export enum Category {
   Videos = 'Videos',
   Music = 'Music',
   Utilities = 'Utilities',
+  TownCouncil = 'Town Councils',
+  Insurance = 'Insurance Companies',
+  Government = 'Government Agencies',
+  Education = 'Educational Institution',
+  CreditCard = 'Credit Cards / DBS Cashline',
+  CountryRecreationClubs = 'Country Clubs / Recreational Clubs',
+  BrokerageSecurity = 'Brokerage / Securities Firms',
 }
 
 export type PayeeWithCategory = {
