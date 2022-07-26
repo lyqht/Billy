@@ -1,4 +1,6 @@
+import {sortBy, uniqBy} from 'lodash-es';
 import {Category, PayeeWithCategory} from '../types/AutocompleteOption';
+import sgBillingOrganisations from './sgBillingOrganisations.json';
 
 const defaultCategoryIcons = {
   [Category.Electricity]: 'flash-outline',
@@ -12,56 +14,48 @@ const defaultCategoryIcons = {
 
 const defaultCategories = Object.keys(defaultCategoryIcons);
 
-const defaultPayeesWithCategory: PayeeWithCategory[] = [
-  {
-    payee: 'Singtel',
-    category: Category.Telecommunications,
-  },
-  {
-    payee: 'M1',
-    category: Category.Telecommunications,
-  },
-  {
-    payee: 'Starhub',
-    category: Category.Telecommunications,
-  },
-  {
-    payee: 'Senoko',
-    category: Category.Electricity,
-  },
-  {
-    payee: 'Geneco',
-    category: Category.Electricity,
-  },
-  {
-    payee: 'HDB',
-    category: Category.Mortage,
-  },
-  {
-    payee: 'SP',
-    category: Category.Utilities,
-  },
-  {
-    payee: 'Sembcorp',
-    category: Category.Waste,
-  },
-  {
-    payee: 'Youtube',
-    category: Category.Videos,
-  },
-  {
-    payee: 'Netflix',
-    category: Category.Videos,
-  },
-  {
-    payee: 'Spotify',
-    category: Category.Music,
-  },
+const cloudPlatformPayees = [
   {
     payee: 'Supabase',
-    category: Category.Electricity,
+    category: Category.Utilities,
   },
 ];
+
+const sgBillOrganisationPayees = uniqBy(
+  sgBillingOrganisations.map(org => ({
+    payee: org['Billing Organisation'],
+    category: org.Category,
+  })),
+  'payee',
+);
+
+const defaultPayeesWithCategory: PayeeWithCategory[] = sortBy(
+  [
+    ...cloudPlatformPayees,
+    ...sgBillOrganisationPayees,
+    {
+      payee: 'Senoko',
+      category: Category.Electricity,
+    },
+    {
+      payee: 'HDB',
+      category: Category.Mortage,
+    },
+    {
+      payee: 'Youtube',
+      category: Category.Videos,
+    },
+    {
+      payee: 'Netflix',
+      category: Category.Videos,
+    },
+    {
+      payee: 'Spotify',
+      category: Category.Music,
+    },
+  ],
+  'payee',
+);
 
 const defaultPayees = defaultPayeesWithCategory.map(
   payeeWithCategory => payeeWithCategory.payee,

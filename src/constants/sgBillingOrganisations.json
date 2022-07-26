@@ -1,0 +1,730 @@
+[
+  {
+    "Billing Organisation": "DBS Vickers Securities (Singapore) Pte Ltd",
+    "Bill Reference Number": "DBS Vickers Trading account number",
+    "Field Length": "7 Digits",
+    "Example": "80XX XXX Please indicate \"0\" for payment limit.",
+    "Category": "Brokerage / Securities Firms"
+  },
+  {
+    "Billing Organisation": "67 Pall Mall Singapore Pte. Ltd.",
+    "Bill Reference Number": "Membership No.",
+    "Field Length": "9 Characters (all numeric)",
+    "Example": "012345678",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "SENTOSA GOLF CLUB",
+    "Bill Reference Number": "Membership Number",
+    "Field Length": "7 Alphanumeric Characters (Maximum)",
+    "Example": "A12345 / A12345X / AB1234",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "Singapore Swimming Club",
+    "Bill Reference Number": "Account No. with billing corporation as shown on statement",
+    "Field Length": "5 Characters (2 Alphabet 3 Digits)",
+    "Example": "TA123",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "Singapore Island Country Club",
+    "Bill Reference Number": "Club No. as provided by billing organisation",
+    "Field Length": "5 Characters (1 Alphabet 4 Digits)",
+    "Example": "A0123400 as A1234",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "Temasek Club",
+    "Bill Reference Number": "NRIC No. with Prefix",
+    "Field Length": "8 Characters (1 Alphabet 7 Digits)",
+    "Example": "S1234567A",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "The Keppel Club",
+    "Bill Reference Number": "Membership No.",
+    "Field Length": "6 Characters (2 Alphabet 4 Digits)",
+    "Example": "NG1234",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "Warren Golf & Country Club",
+    "Bill Reference Number": "Member's Club No. as shown on membership card or statement",
+    "Field Length": "9 Characters (2 Alphabet 6 Digits with a hyphen)",
+    "Example": "Social Member ST1234-00",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "Warren Golf & Country Club",
+    "Bill Reference Number": "Member's Club No. as shown on membership card or statement",
+    "Field Length": "9 Characters (2 Alphabet 6 Digits with a hyphen)",
+    "Example": "Golfing, Ladies, Ordinary Member GF1234-00",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "Warren Golf & Country Club",
+    "Bill Reference Number": "Member's Club No. as shown on membership card or statement",
+    "Field Length": "11 Characters (3 Alphabet 7 Digits with a hyphen)",
+    "Example": "Corporate Member CM0021N1-00",
+    "Category": "Country Clubs / Recreational Clubs"
+  },
+  {
+    "Billing Organisation": "American Express Card",
+    "Bill Reference Number": "For credit cards (3762 1 xxx...), input first 11 digits of the card no (without Hyphens)",
+    "Field Length": "11 Digits",
+    "Example": "3762 123456 78901 input the bill reference no. as 37621234567",
+    "Category": "Credit Cards / DBS Cashline"
+  },
+  {
+    "Billing Organisation": "American Express Card",
+    "Bill Reference Number": "For charge cards (3762 0 xxx...), input first 11 digits of the card no (without Hyphens)",
+    "Field Length": "11 Digits",
+    "Example": "3762 123456 78901 input the bill reference no. as 37621234567",
+    "Category": "Credit Cards / DBS Cashline"
+  },
+  {
+    "Billing Organisation": "American Express Card",
+    "Bill Reference Number": "For corporate cards (3762 2 xxx...), input first 11 digits of the card no (without Hyphens)",
+    "Field Length": "11 Digits",
+    "Example": "3762 123456 78901 input the bill reference no. as 37621234567",
+    "Category": "Credit Cards / DBS Cashline"
+  },
+  {
+    "Billing Organisation": "DBS Cashline (information)",
+    "Bill Reference Number": "10-Digit DBS Cashline account no.",
+    "Field Length": "10 Digits",
+    "Example": "0821234567",
+    "Category": "Credit Cards / DBS Cashline"
+  },
+  {
+    "Billing Organisation": "Busy Bees Singapore",
+    "Bill Reference Number": "DDA Reference Should be Child’s Birth Certificate along with indication of CDA or GRO",
+    "Field Length": "12 Characters (5 Alphabets 7 digits)",
+    "Example": "T1234567ACDA or T1234567AGRO",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Brighton Montessori",
+    "Bill Reference Number": "DDA Reference Should be Child’s Birth Certificate along with indication of CDA or GRO",
+    "Field Length": "12 Characters (5 Alphabets 7 digits)",
+    "Example": "T1234567ACDA or T1234567AGRO",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Pat's Schoolhouse",
+    "Bill Reference Number": "DDA Reference Should be Child’s Birth Certificate along with indication of CDA or GRO",
+    "Field Length": "12 Characters (5 Alphabets 7 digits)",
+    "Example": "T1234567ACDA or T1234567AGRO",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Odyssey Preschool",
+    "Bill Reference Number": "DDA Reference Should be Child’s Birth Certificate along with indication of CDA or GRO",
+    "Field Length": "12 Characters (5 Alphabets 7 digits)",
+    "Example": "T1234567ACDA or T1234567AGRO",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Learning Vision",
+    "Bill Reference Number": "DDA Reference Should be Child’s Birth Certificate along with indication of CDA or GRO",
+    "Field Length": "12 Characters (5 Alphabets 7 digits)",
+    "Example": "T1234567ACDA or T1234567AGRO",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Ministry of Education",
+    "Bill Reference Number": "NRIC or FIN as per Student ID",
+    "Field Length": "9 Characters (2 Alphabet 7 digits)",
+    "Example": "T0123456A/ G1234567W",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "MOE Kindergartens",
+    "Bill Reference Number": "DDA Reference should be Birth Certificate number of enrolled MK child",
+    "Field Length": "9 Characters (2 Alphabets 7 digits)",
+    "Example": "T1234567A",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Nanyang Polytechnic",
+    "Bill Reference Number": "Admission Number",
+    "Field Length": "7 Alphanumeric Characters",
+    "Example": "120899P",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "PAP Community Foundation (PCF)",
+    "Bill Reference Number": "DDA Reference Should be Child’s Birth Certificate along with indication of CDA or GRO",
+    "Field Length": "12 characters",
+    "Example": "T1234567ACDA OR T1234567AGRO",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Raffles Girls' School (Secondary)",
+    "Bill Reference Number": "NRIC or FIN as per Student ID",
+    "Field Length": "9 Characters (2 alphabets 7 digits)",
+    "Example": "T0812345ZG1954321A",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Raffles Institution",
+    "Bill Reference Number": "NRIC or FIN No.",
+    "Field Length": "9 Characters (2 Alphabet 7 Digits)",
+    "Example": "S7812345I / F1234567J",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Singapore American School Limited",
+    "Bill Reference Number": "Student ID number",
+    "Field Length": "5 characters",
+    "Example": "12345",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Singapore Institute of Technology (SIT)",
+    "Bill Reference Number": "Student ID",
+    "Field Length": "7 Characters",
+    "Example": "1600101",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Singapore Management University",
+    "Bill Reference Number": "NRIC or FIN as per Campus ID",
+    "Field Length": "9 Characters (2 Alphabet 7 digits)",
+    "Example": "S7712345I/F1234578A",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Singapore Polytechnic",
+    "Bill Reference Number": "Student ID No.",
+    "Field Length": "7 Digits",
+    "Example": "2000001",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Temasek Polytechnic",
+    "Bill Reference Number": "Admission Number",
+    "Field Length": "8 Alphanumeric Characters",
+    "Example": "2012345P",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS (BB)",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA account",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS THOMSON",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA account",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS WOODLANDS",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA account",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS (BTSC)",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA account",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS TAMPINES",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA account",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS BT TIMAH",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA account",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS INT PSCH",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA account",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS ASIA",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID",
+    "Field Length": "5",
+    "Example": "82345",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS TPY",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA accounts",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS (1A)",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA accounts",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "ZOO-PHONICS YISHUN",
+    "Bill Reference Number": "DDA Reference should be Child’s Student ID followed by \"1\" for CDA accounts or \"2\" for non-CDA accounts",
+    "Field Length": "6",
+    "Example": "823451 OR 823452",
+    "Category": "Educational Institution"
+  },
+  {
+    "Billing Organisation": "Health Promotion Board",
+    "Bill Reference Number": "Please refer to the DDA reference number that is included in your hiSG notification email.",
+    "Field Length": "7 Digits",
+    "Example": "1010123",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "IRAS - Income Tax*",
+    "Bill Reference Number": "NRIC or FIN No.",
+    "Field Length": "9 Characters",
+    "Example": "S7812345I / F1234567J",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "IRAS - Property Tax*",
+    "Bill Reference Number": "Reference No. provided by billing organisation",
+    "Field Length": "8 Characters",
+    "Example": "0357568G",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "KK HOSPITAL",
+    "Bill Reference Number": "Patient’s NRIC or FIN No.",
+    "Field Length": "9 Characters (2 Alphabet 7 Digits)",
+    "Example": "S7812345I / F1234567J",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "NHC Outpatient",
+    "Bill Reference Number": "Patient’s NRIC or FIN No.",
+    "Field Length": "9 Characters (2 Alphabet 7 Digits)",
+    "Example": "S1234567A / F1234567J",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "SENGKANG GENERAL HOSPITAL",
+    "Bill Reference Number": "Patient's NRIC or FIN or MRN No.",
+    "Field Length": "12 Characters (2 Alphabets 9 Digits)",
+    "Example": "S1234567A / F1234567J/ X0123456789B",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "SGHNEEDYPATIENTSFUND",
+    "Bill Reference Number": "NRIC or FIN No.",
+    "Field Length": "9 Characters (2 Alphabet 7 Digits)",
+    "Example": "S7812345I / F1234568J",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "Singapore Food Agency",
+    "Bill Reference Number": "Customer reference number, usually UEN, NRIC or FIN",
+    "Field Length": "10 characters (Max) (All in CAPS)",
+    "Example": "UEN: 201511111A NRIC/FIN: S1234567A",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "Singhealth Polyclinics",
+    "Bill Reference Number": "NRIC No. as per Bank Account Holder NRIC",
+    "Field Length": "9 Characters (2 Alphabets 7 Digits)",
+    "Example": "S1234567A",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "SNEC Outpatient",
+    "Bill Reference Number": "Patient’s NRIC or FIN No.",
+    "Field Length": "9 Characters (2 Alphabet 7 Digits)",
+    "Example": "S1234567A / F1234567J",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "WOODBRIDGE CHARITY",
+    "Bill Reference Number": "NRIC or FIN No.",
+    "Field Length": "9 Characters (2 Alphabet 7 Digits)",
+    "Example": "S1234567A / F1234567J",
+    "Category": "Government Agencies"
+  },
+  {
+    "Billing Organisation": "AIA*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "i. 10 Character Policy Format: X999999999 where the first character is an alphabet, followed by 9 numeric.",
+    "Example": "L123456780",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AIA*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "For Loan, replace the first alphabet as “R”, followed by 9 numeric.",
+    "Example": "R123456780",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AIA*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "For HealthShield policy with Essential Rider, please enter only the HealthShield policy number with prefix “H”.",
+    "Example": "H123456780",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AIA*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "ii. 9 Numeric Policy Format: 999999999 policy number should be ranged between 000014570 and 000926361",
+    "Example": "000014995 000335759",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AIA*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "For Loan, to add alphabet “R” as the first character, followed by 9 numeric.",
+    "Example": "R000123456",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AXA Life Insurance (Singapore) Pte Ltd*",
+    "Bill Reference Number": "Policy No. with the billing organisation.",
+    "Field Length": "i. 999999 where there are 6 digits",
+    "Example": "i. 012345",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AXA Life Insurance (Singapore) Pte Ltd*",
+    "Bill Reference Number": "Policy No. with the billing organisation.",
+    "Field Length": "ii. X99999 where X can be 'H', M' or 'P' followed by 5 digits",
+    "Example": "ii. H12345",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AXA Life Insurance (Singapore) Pte Ltd*",
+    "Bill Reference Number": "Policy No. with the billing organisation.",
+    "Field Length": "iii. 99999999 where there are 8 digits",
+    "Example": "iii. 00112233",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "AXA Life Insurance (Singapore) Pte Ltd*",
+    "Bill Reference Number": "Policy No. with the billing organisation.",
+    "Field Length": "iv. 999-9999999 where the first 3 digits can be 501, 601, 701, 800, 801, 811, 821, 831, 841, 851",
+    "Example": "iv. 501-1234567",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "CHINA LIFE INSURANCE (SINGAPORE) PTE. LTD.*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "8 Digits",
+    "Example": "12345678",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "CHINA TAIPING INSURANCE (SINGAPORE) PTE. LTD.",
+    "Bill Reference Number": "10 digit Policy Number (Numeral) - Only Applicable for Life Insurance Policy",
+    "Field Length": "10 Digits",
+    "Example": "0123456789",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Great Eastern Life*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "8 or 10 Digits (Max)",
+    "Example": "",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Great American Insurance Company*",
+    "Bill Reference Number": "Policy Number",
+    "Field Length": "12 characters Example of policy number: PATRA00000000100 *Remove 1st two characters and last two characters",
+    "Example": "TRA000000001",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Manulife Singapore",
+    "Bill Reference Number": "Insurance Policy Number",
+    "Field Length": "(i) 10 digit policy format: 14XXXXXXXX (ii) 8 digit policy format: 70XXXXXX",
+    "Example": "14XXXXXXXX 24XXXXXXXX 10XXXXXX 70XXXXXX 80XXXXXX",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "MSIG Insurance (s) Pte Ltd*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "",
+    "Example": "",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "NTUC INCOME INSURANCE CO-OPERATIVE LTD*",
+    "Bill Reference Number": "Insurance Policy No.",
+    "Field Length": "",
+    "Example": "",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Prudential Assurance*",
+    "Bill Reference Number": "Contract no., NOT beginning with '7' or '8'",
+    "Field Length": "8 Digits",
+    "Example": "",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Singlife (Health)*",
+    "Bill Reference Number": "MINDEF & MHA Group Insurance",
+    "Field Length": "0686xxxxxxxx where ‘xxxxxxxx” denotes your 8-digit Client Reference No",
+    "Example": "068612345678",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Singlife (Health)*",
+    "Bill Reference Number": "Public Officers Group Insurance",
+    "Field Length": "PGxxxxxxxx where ‘xxxxxxxx” denotes your 8-digit Client Reference No. (Letters all in Uppercase)",
+    "Example": "PG12345678",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Singlife (Health)*",
+    "Bill Reference Number": "Individual Health Policy",
+    "Field Length": "8-digit Policy No.",
+    "Example": "12345678",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Singlife (Life)*",
+    "Bill Reference Number": "Individual Life Policy",
+    "Field Length": "8-alphanumeric Policy No.",
+    "Example": "12345678 A2345678",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Tokio Marine Life Insurance*",
+    "Bill Reference Number": "Policy Number",
+    "Field Length": "5 to 8 characters",
+    "Example": "Life Insurance Policy No (5 to 8 Characters)i. 88888 where there are 5 digits ii. 888888 where there are 6 digits iii. 88888888 where there are 8 digits (inclusive of zeros in front) iv. XX8888 where XX can be IS, IM, ES, EM, TR or RR followed by 4 digitsv. D9999999 starting with D followed by 7 digits",
+    "Category": "Insurance Companies"
+  },
+  {
+    "Billing Organisation": "Ablr",
+    "Bill Reference Number": "NRIC or FIN No.",
+    "Field Length": "9 Characters",
+    "Example": "S7812345I / F1234567J",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "Care for The Disabled Limited",
+    "Bill Reference Number": "NRIC No. with Prefix",
+    "Field Length": "9",
+    "Example": "S1234567A",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "Certis CISCO SafeBox",
+    "Bill Reference Number": "Account No as shown in the middle section of the SDB Agreement Form.",
+    "Field Length": "Up to 12 Digits",
+    "Example": "123456789012 / 12345678",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "CordLife Group Limited",
+    "Bill Reference Number": "Collection Kit no. for Child DevelopmentAccounts (CDA)",
+    "Field Length": "9 Characters (Alphanumeric, without hyphens)",
+    "Example": "For SG-0-012345,input as SG0012345",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "CordLife Group Limited",
+    "Bill Reference Number": "“N” prefix + Collection Kit no. for Non-CDA Accounts",
+    "Field Length": "10 Characters (Alphanumeric, without hyphens)",
+    "Example": "For SG-0-012345,input as NSG0012345",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "Credit Culture Pte Ltd",
+    "Bill Reference Number": "Customer GIRO reference number, starting with GI.",
+    "Field Length": "10 Characters (GI, followed by 4 numeric, followed by 4 alphanumeric)",
+    "Example": "GI180713A9",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "Fundbox Pte Ltd",
+    "Bill Reference Number": "Agreement No. as shown on the top left section of your Agreement Document",
+    "Field Length": "2 ALPHABET followed by 9 DIGITS",
+    "Example": "EK190502559",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "HitPay Payment Solution Pte Ltd",
+    "Bill Reference Number": "Please refer to DDA reference displayed on HitPay payment checkout page or included in email sent by HitPay Payment Solutions Pte Ltd",
+    "Field Length": "11",
+    "Example": "RP123456789",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "Metis Global SG",
+    "Bill Reference Number": "Trust Plan No.",
+    "Field Length": "10",
+    "Example": "RPRO12345S",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "NETS - NETS Cheque",
+    "Bill Reference Number": "NETS Cheque Ref. No.",
+    "Field Length": "12 Characters (12 Digits)",
+    "Example": "912345679999",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "NKF",
+    "Bill Reference Number": "Individual: NRIC/ FIN or Passport No.",
+    "Field Length": "11 Characters (Max)",
+    "Example": "S1234567A/ F1234567A",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "NTUC Membership",
+    "Bill Reference Number": "NRIC or FIN No.",
+    "Field Length": "9 Characters",
+    "Example": "S7812345I / F1234567J",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "PAP Community Foundation (PCF)",
+    "Bill Reference Number": "DDA reference should be elderly client NRIC",
+    "Field Length": "9 Characters",
+    "Example": "S1234567A",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "TECK WEI CREDIT PL",
+    "Bill Reference Number": "Vehicle Number",
+    "Field Length": "8 Characters (Alphanumerics)",
+    "Example": "SGK1234B / FE1234K",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "Toyota Financial",
+    "Bill Reference Number": "Agreement Number",
+    "Field Length": "",
+    "Example": "",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "UNIQCASH PTE LTD",
+    "Bill Reference Number": "NRIC or FIN",
+    "Field Length": "9 Characters (2 Alphabet 7 digits)",
+    "Example": "S0123456A / G1234567W",
+    "Category": "Other Agencies"
+  },
+  {
+    "Billing Organisation": "ES Power by Environmental Solutions (Asia) Pte Ltd",
+    "Bill Reference Number": "Account No. as shown on the utilities invoice",
+    "Field Length": "7 digits. Account No. starting with “1”",
+    "Example": "1012345",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "FLO ENERGY SINGAPORE",
+    "Bill Reference Number": "Flo Account Number, as shown on the top right section of the Utilities invoice",
+    "Field Length": "10 characters (2 characters and 8 Digits)",
+    "Example": "SG01015099",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "Geneco - Seraya Energy",
+    "Bill Reference Number": "10 characters account number with prefix ‘GC’.",
+    "Field Length": "10 characters",
+    "Example": "GC1234567C",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "Keppel Electric Pte Ltd",
+    "Bill Reference Number": "Your Keppel Account No. If you do not have an Account No., refer to your welcome email",
+    "Field Length": "10 digits (Account No.) / 11 digits (Email Bill Reference No.)",
+    "Example": "1234567890 / 98765432101",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "M1 Limited",
+    "Bill Reference Number": "9 numeric digit \"Account No\" shown on the M1 Limited invoice",
+    "Field Length": "9 Numeric Digits",
+    "Example": "",
+    "Category": "Telecommunications"
+  },
+  {
+    "Billing Organisation": "MyRepublic Pte Ltd",
+    "Bill Reference Number": "Customer Identification No. or NRIC No.",
+    "Field Length": "8 Characters (1 alphabet & 7 digits) or 9 characters (2 alphabets & 7 digits)",
+    "Example": "C1000000 / SXXXXXXXZ",
+    "Category": "Telecommunications"
+  },
+  {
+    "Billing Organisation": "Pacificlight Energy Pte Ltd",
+    "Bill Reference Number": "PLE Account No. as shown at the top right section of the Bill",
+    "Field Length": "8 Characters (8 numeric)",
+    "Example": "12345678",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "Singapore Telecommunications Ltd",
+    "Bill Reference Number": "Account No. with billing organisation as shown on statement",
+    "Field Length": "8 Digits",
+    "Example": "",
+    "Category": "Telecommunications"
+  },
+  {
+    "Billing Organisation": "SP Services",
+    "Bill Reference Number": "Utilities Contract Account No. as shown at the top right section of the utilities invoice",
+    "Field Length": "10 Characters (9 Digits 1 Alphanumeric)",
+    "Example": "1234567890 / 123456789-",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "StarHub Ltd",
+    "Bill Reference Number": "Account No. with StarHub Ltd as displayed on your right hand corner of your bill",
+    "Field Length": "Numeric with decimals, ending with a letter.",
+    "Example": "Eg: 1.12345678A",
+    "Category": "Telecommunications"
+  },
+  {
+    "Billing Organisation": "Sembcorp Power Pte Ltd",
+    "Bill Reference Number": "Account No. with Sembcorp Power Pte Ltd as displayed on statement/invoice",
+    "Field Length": "10 Characters (1 Uppercase alphabet & 9 digits)",
+    "Example": "H123456782 / B000000018",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "Sunseap Energy Pte Ltd",
+    "Bill Reference Number": "Sunseap Account number as shown on top right of your invoice.",
+    "Field Length": "Sunseap Account number as shown on top right of your invoice.",
+    "Example": "23012345",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "Union Power Pte Ltd",
+    "Bill Reference Number": "MSSL Number",
+    "Field Length": "10 Digits / 13 Digits",
+    "Example": "9308014458 9308014458-013",
+    "Category": "Utilities"
+  },
+  {
+    "Billing Organisation": "Marine Parade Town Council",
+    "Bill Reference Number": "Reference No. as show on statement",
+    "Field Length": "12 Characters (1 Alphabet 11 Digits)",
+    "Example": "C12345678900",
+    "Category": "Town Councils"
+  }
+]

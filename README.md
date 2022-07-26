@@ -45,6 +45,7 @@ For now, this project is developed solely by [Estee Tey](https://www.github.com/
 - [Notifee](https://github.com/invertase/notifee) for creating notifications
 - [Victory](https://github.com/FormidableLabs/victory) for creating charts
 - [Custom GitHub action for generating Supabase database types](https://blog.esteetey.dev/how-to-create-and-test-a-github-action-that-generates-types-from-supabase-database)
+- [Custom Web Scraper for getting Singapore Billing Organisations](https://github.com/lyqht/sg-bill-org-scraper) for populating payee options
 
 If you are interested on other aspects of how this app is built (e.g. how the app is bootstrapped, tech architecture, mockup etc), check out [Billy's documentation](https://lyqht.github.io/Billy/).
 
