@@ -8,14 +8,16 @@
 </div>
 
 <div align="center">
+    <a href="https://play.google.com/store/apps/details?id=com.lyqht.billy">Beta Track release on Google Play ▶️</a> 
+</div>
+
+<div align="center">
   <p>
     <a href="#introduction-">Introduction 🌱</a>
     •
+    <a href="./CONTRIBUTING.md">Contributing ✨</a>
+    •
     <a href="#tech-notes-">Tech Notes 🗒</a>
-    •
-    <a href="#setup-instructions-">Setup instructions ⚙️</a>
-    •
-    <a href="./CONTRIBUTING.md">Contributing </a>
   </p>
 </div>
 
@@ -29,10 +31,8 @@ Billy is your mobile companion app to help you manage your upcoming bills and re
 
 <br />
 
-For now, this project is developed solely by [Estee Tey](https://www.github.com/lyqht). 
-
 - If you are keen on how the app idea came about, you can refer to the [section on how it started](https://lyqht.github.io/Billy/docs/roadmap/how_it_started).
-- Live progress on this project can be tracked via [the dev's tweets](https://twitter.com/search?q=Billy%20(from%3Aestee_tey)&src=typed_query&f=top).  
+- Live progress on this project can be tracked via [the main dev's tweets](https://twitter.com/search?q=Billy%20(from%3Aestee_tey)&src=typed_query&f=top).  
 - For more in-depth details on planned & implemented features, you could refer to [ROADMAP.md](https://github.com/lyqht/Billy/blob/main/docs/docs/roadmap/checklist.mdx).
 
 ## Tech Notes 🗒
