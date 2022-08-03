@@ -21,7 +21,7 @@ export interface paths {
           amount?: parameters["rowFilter.Bill.amount"];
           category?: parameters["rowFilter.Bill.category"];
           id?: parameters["rowFilter.Bill.id"];
-          userId?: parameters["rowFilter.Bill.userId"];
+          user?: parameters["rowFilter.Bill.user"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
           archivedDate?: parameters["rowFilter.Bill.archivedDate"];
           deletedDate?: parameters["rowFilter.Bill.deletedDate"];
@@ -80,7 +80,7 @@ export interface paths {
           amount?: parameters["rowFilter.Bill.amount"];
           category?: parameters["rowFilter.Bill.category"];
           id?: parameters["rowFilter.Bill.id"];
-          userId?: parameters["rowFilter.Bill.userId"];
+          user?: parameters["rowFilter.Bill.user"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
           archivedDate?: parameters["rowFilter.Bill.archivedDate"];
           deletedDate?: parameters["rowFilter.Bill.deletedDate"];
@@ -103,7 +103,7 @@ export interface paths {
           amount?: parameters["rowFilter.Bill.amount"];
           category?: parameters["rowFilter.Bill.category"];
           id?: parameters["rowFilter.Bill.id"];
-          userId?: parameters["rowFilter.Bill.userId"];
+          user?: parameters["rowFilter.Bill.user"];
           completedDate?: parameters["rowFilter.Bill.completedDate"];
           archivedDate?: parameters["rowFilter.Bill.archivedDate"];
           deletedDate?: parameters["rowFilter.Bill.deletedDate"];
@@ -228,8 +228,9 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.FixedReminder.id"];
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
-          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
+          value?: parameters["rowFilter.FixedReminder.value"];
+          timeUnit?: parameters["rowFilter.FixedReminder.timeUnit"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -282,8 +283,9 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.FixedReminder.id"];
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
-          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
+          value?: parameters["rowFilter.FixedReminder.value"];
+          timeUnit?: parameters["rowFilter.FixedReminder.timeUnit"];
         };
         header: {
           /** Preference */
@@ -300,8 +302,9 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.FixedReminder.id"];
           created_at?: parameters["rowFilter.FixedReminder.created_at"];
-          computedDate?: parameters["rowFilter.FixedReminder.computedDate"];
           billID?: parameters["rowFilter.FixedReminder.billID"];
+          value?: parameters["rowFilter.FixedReminder.value"];
+          timeUnit?: parameters["rowFilter.FixedReminder.timeUnit"];
         };
         body: {
           /** FixedReminder */
@@ -453,7 +456,7 @@ export interface definitions {
      */
     id: number;
     /** Format: uuid */
-    userId: string;
+    user: string;
     /** Format: date */
     completedDate?: string;
     /** Format: date */
@@ -493,14 +496,16 @@ export interface definitions {
      * @default now()
      */
     created_at?: string;
-    /** Format: timestamp without time zone */
-    computedDate: string;
     /**
      * Format: bigint
      * @description Note:
      * This is a Foreign Key to `Bill.id`.<fk table='Bill' column='id'/>
      */
     billID: number;
+    /** Format: bigint */
+    value: number;
+    /** Format: text */
+    timeUnit: string;
   };
   /** @description Interval Triggers */
   RecurringReminder: {
@@ -574,7 +579,7 @@ export interface parameters {
   /** Format: bigint */
   "rowFilter.Bill.id": string;
   /** Format: uuid */
-  "rowFilter.Bill.userId": string;
+  "rowFilter.Bill.user": string;
   /** Format: date */
   "rowFilter.Bill.completedDate": string;
   /** Format: date */
@@ -599,10 +604,12 @@ export interface parameters {
   "rowFilter.FixedReminder.id": string;
   /** Format: timestamp with time zone */
   "rowFilter.FixedReminder.created_at": string;
-  /** Format: timestamp without time zone */
-  "rowFilter.FixedReminder.computedDate": string;
   /** Format: bigint */
   "rowFilter.FixedReminder.billID": string;
+  /** Format: bigint */
+  "rowFilter.FixedReminder.value": string;
+  /** Format: text */
+  "rowFilter.FixedReminder.timeUnit": string;
   /** @description RecurringReminder */
   "body.RecurringReminder": definitions["RecurringReminder"];
   /** Format: bigint */
