@@ -26,6 +26,8 @@ import UserService from '../services/UserService';
 import {LoginMode} from '../types/LoginMode';
 import BillyHero from '../../assets/BillyHero.png';
 
+const LOGGER_PREFIX = '[Login]';
+
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 interface FormData {
@@ -69,12 +71,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({route}) => {
           await UserService.signInUser(email, password);
           break;
       }
-      await SyncService.syncAllData();
-      navigation.navigate('Home');
     } catch (err) {
+      console.error(`${LOGGER_PREFIX} ${JSON.stringify(err)}`);
       setErrorText(`${err}, please try again later.`);
     }
 
+    await SyncService.syncAllData();
+    navigation.navigate('Home');
     setLoading(false);
   };
 

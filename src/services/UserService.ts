@@ -10,7 +10,7 @@ class UserService {
     });
 
     if (error) {
-      console.debug({error});
+      console.error(JSON.stringify(error));
       throw Error(error.message);
     }
 

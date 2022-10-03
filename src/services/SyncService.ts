@@ -74,34 +74,40 @@ class SyncService {
       }
     }
 
-    await this.replaceUnsyncBillsTempIDWithCloudID(newIDMap);
-    const updatedBills: Bill[] = Cache.getBills()!.map(bill => {
-      const {tempID, ...billDetails} = bill;
-      return {
-        ...billDetails,
-        userId: UserService.getUser()!.id,
-      };
-    });
-    try {
-      // At the moment due to how PostgREST is implemented, upsert does not work as intended
-      // https://github.com/supabase/postgrest-js/issues/173
-      // Hence we could have temporary workaround to split into 2 calls: toUpdate, toCreate
+    if (Object.keys(newIDMap).length > 0) {
+      await this.replaceUnsyncBillsTempIDWithCloudID(newIDMap);
+    }
 
-      // However, it seems that even though it is recommended not to use insert with the upsert parameter
-      // this somehow works as intended.
-      const {data, error} = await supabase
-        .from<Bill>('Bill')
-        .insert(updatedBills, {upsert: true});
+    const retrievedBills = Cache.getBills();
+    if (retrievedBills) {
+      const updatedBills: Bill[] = Cache.getBills()!.map(bill => {
+        const {tempID, ...billDetails} = bill;
+        return {
+          ...billDetails,
+          userId: UserService.getUser()!.id,
+        };
+      });
+      try {
+        // At the moment due to how PostgREST is implemented, upsert does not work as intended
+        // https://github.com/supabase/postgrest-js/issues/173
+        // Hence we could have temporary workaround to split into 2 calls: toUpdate, toCreate
 
-      if (error) {
-        console.error(`${LOGGER_PREFIX} ${error}`);
+        // However, it seems that even though it is recommended not to use insert with the upsert parameter
+        // this somehow works as intended.
+        const {data, error} = await supabase
+          .from<Bill>('Bill')
+          .insert(updatedBills, {upsert: true});
+
+        if (error) {
+          console.error(`${LOGGER_PREFIX} ${JSON.stringify(error)}`);
+          throw new Error('Error syncing to cloud');
+        }
+        console.debug({data});
+        await BillService.getBillsFromDB();
+      } catch (err) {
+        console.error(`${LOGGER_PREFIX} ${JSON.stringify(err)}`);
         throw new Error('Error syncing to cloud');
       }
-      console.debug({data});
-      await BillService.getBillsFromDB();
-    } catch (err) {
-      console.error(`${LOGGER_PREFIX} ${err}`);
-      throw new Error('Error syncing to cloud');
     }
   };
 
