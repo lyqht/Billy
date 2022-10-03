@@ -49,24 +49,6 @@ Billy is your mobile companion app to help you manage your upcoming bills and re
 
 If you are interested on other aspects of how this app is built (e.g. how the app is bootstrapped, tech architecture, mockup etc), check out [Billy's documentation](https://lyqht.github.io/Billy/).
 
-## Set up instructions ⚙️
+## Contributing
 
-### Install dependencies
-
-Install the node modules & pods 
-
-```
-npm i
-npx pod-install # if you want to build for ios
-```
-
-Then run 1 of the commands 
-```
-npm run ios
-npm run android
-```
-
-You would need the Supabase project related environment variables as mentioned in `.env.sample`. You can create your own Supabase project and replace those values.
-
-### Detox
-You need node 16.13.0 for detox that depends on jest-circus runner.
+Please refer to [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines and setup instructions.
