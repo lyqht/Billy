@@ -1,4 +1,8 @@
 import ReactPlayer from 'react-player/file'
+import addBillForLoginUser from '@site/static/demo/add_bill_for_login_user.mp4';
+import addBillForNonLoginUser from '@site/static/demo/add_bill_for_non_login_user.mp4';
+import autocomplete from '@site/static/demo/autocomplete.mp4';
+import signUpUser from '@site/static/demo/sign_up_user.mp4';
 
 # Demo
 
@@ -7,25 +11,25 @@ import ReactPlayer from 'react-player/file'
 <br />
 Add bill for login user
 <div style={{marginVertical: 16, backgroundColor: 'black', display: 'grid', placeItems: 'center'}}>
-    <ReactPlayer controls='true' playing url='/demo/add_bill_for_login_user.mp4' />
+    <ReactPlayer controls={true} playing url={addBillForLoginUser} />
 </div>
 
 <br />
 Add bill for non login user
 <div style={{marginVertical: 16, backgroundColor: 'black', display: 'grid', placeItems: 'center'}}>
-    <ReactPlayer controls='true' playing url='/demo/add_bill_for_non_login_user.mp4' />
+    <ReactPlayer controls={true} playing url={addBillForNonLoginUser} />
 </div>
 
 <br />
 Autocomplete category when user selects a predefined payee
 <div style={{marginVertical: 16, backgroundColor: 'black', display: 'grid', placeItems: 'center'}}>
-    <ReactPlayer controls='true' playing url='/demo/autocomplete.mp4' />
+    <ReactPlayer controls={true} playing url={autocomplete} />
 </div>
 
 <br />
 Sign up user
 <div style={{marginVertical: 16, backgroundColor: 'black', display: 'grid', placeItems: 'center'}}>
-    <ReactPlayer controls='true' playing url='/demo/sign_up_user.mp4' />    
+    <ReactPlayer controls={true} playing url={signUpUser} />
 </div>
 
 
