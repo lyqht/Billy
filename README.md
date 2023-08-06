@@ -32,8 +32,8 @@ Billy is your mobile companion app to help you manage your upcoming bills and re
 <br />
 
 - If you are keen on how the app idea came about, you can refer to the [section on how it started](https://lyqht.github.io/Billy/docs/roadmap/how_it_started).
-- Live progress on this project can be tracked via [the main dev's tweets](https://twitter.com/search?q=Billy%20(from%3Aestee_tey)&src=typed_query&f=top).  
 - For more in-depth details on planned & implemented features, you could refer to [ROADMAP.md](https://github.com/lyqht/Billy/blob/main/docs/docs/roadmap/checklist.mdx).
+- Previous progress on this project can be tracked via [the main dev's tweets](https://twitter.com/search?q=Billy%20(from%3Aestee_tey)&src=typed_query&f=top). Note that this project is no longer updated. 
 
 ## Tech Notes 🗒
 
